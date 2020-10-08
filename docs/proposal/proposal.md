@@ -10,9 +10,9 @@
 |                     |                   |
 |---------------------|-------------------|
 |Project Title:       | xxxxxx            |
-|Student 1 Name:      | xxxxxx            |
-|Student 1 ID:        | xxxxxx            |
-|Student 2 Name:      | xxxxxx            |
+|Student 1 Name:      | Gerard Slowey     |
+|Student 1 ID:        | 17349433          |
+|Student 2 Name:      | Michael Savage    |
 |Student 2 ID:        | xxxxxx            |
 |Project Supervisor:  | xxxxxx            |
 
