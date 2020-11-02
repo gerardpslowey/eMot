@@ -1,9 +1,5 @@
 # School of Computing &mdash; Year 4 Project Proposal Form
 
-> Edit (then commit and push) this document to complete your proposal form.
-> Make use of figures / diagrams where appropriate.
->
-> Do not rename this file.
 
 ## SECTION A
 
@@ -14,13 +10,8 @@
 |Student 1 ID:        | 17349433          |
 |Student 2 Name:      | Michael Savage    |
 |Student 2 ID:        | xxxxxx            |
-|Project Supervisor:  | xxxxxx            |
+|Project Supervisor:  | Jennifer Foster   |
 
-> Ensure that the Supervisor formally agrees to supervise your project; this is only recognised once the
-> Supervisor assigns herself/himself via the project Dashboard.
->
-> Project proposals without an assigned
-> Supervisor will not be accepted for presentation to the Approval Panel.
 
 ## SECTION B
 
@@ -35,17 +26,47 @@
 
 > Describe the general area covered by the project.
 
+Our project covers the general areas of data extraction, natural language processing, sentiment analysis, machine learnin, cloud computing and server-client communication. 
+
+The resulting project will use a combination of the aforementioned technologies to analyse the web browsing activity of a user to extract sentiment from the sites that they have visited.
+
 ### Outline
 
 > Outline the proposed project.
+
+Our project is a client-server based application that will use natural language processing with sentiment analysis and machine learning. The aim of the application will be to help prevent end users from overwhelming themselves with negative content that is being viewed online.
+
+The application will run locally in the background on the users machine (windows or linux). By recording the sites visited by the user, we aim to gauge the sentiment of the material they are reading or focusing on. This will be carried out by scraping text from websites using the recorded URLs.
+
+Based on the browsing habits of the user a material sentiment graphical bar will indicate to the user the sentiment of the material they have been focusing using colours. If the user focuses primarily on negative material the progress bar will fill up quicker and eventually the user will be prompted to take a break from reading online material. 
+
 
 ### Background
 
 > Where did the ideas come from?
 
+This concept stemmed from the recent increase in time being spent online, due to the Covid-19 pandemic. Activities such as working from home can lead to loneliness and social isolation for many people. Combined this with focused attention on negatively skewed Covid-19 news can lead to a very bleak perspective of the future.
+
+With reduced opportunities to combat these problems due to restrictions, it can be difficult to ‘escape’ the doom and gloom associated which may lead to negative mental health.
+
+
 ### Achievements
 
 > What functions will the project provide? Who will the users be?
+
+There are several main functions that our project offers:
+- A local application on the users machine responsible for:
+  - Recording the links clicked by the user / access the users browser history with their consent.
+  - Storing and manipulating these links in a database.
+- A web link scraper / crawler provided with relevant links from the database.
+- Natural language processing of the scraped data.
+- Analyses and scoring of the data.
+- Interfacing with and notifying the user notified of their reading sentiment via graphical representation.
+
+
+- This project will allow a user to regulate their browsing of online articles and pages without getting overwhelemed by negative content. Because the project tracks the sentiment of the material being viewed the user will be able to balance the sentiment of the material they read. 
+
+This project could arguably be used by any person browsing the web. Once the application is running on the local machine and an internet connection exists, the user can let the application do all the work.
 
 ### Justification
 
@@ -54,6 +75,8 @@
 ### Programming language(s)
 
 > List the proposed language(s) to be used.
+
+Python
 
 ### Programming tools / Tech stack
 
@@ -85,11 +108,12 @@
 
 ## Example
 
-> Example: Here's how you can include images in markdown documents...
+<!-- Example: Here's how you can include images in markdown documents...
 
-<!-- Basically, just use HTML! -->
+Basically, just use HTML! 
 
 <p align="center">
   <img src="./res/cat.png" width="300px">
 </p>
 
+-->
