@@ -4,7 +4,7 @@
 ## SECTION A
 
 
-|Project Title:       | Sentiment Insight |
+|Project Title:       |       Emot        |
 |---------------------|-------------------|
 |Student 1 Name:      | Gerard Slowey     |
 |Student 1 ID:        | 17349433          |
