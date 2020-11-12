@@ -26,7 +26,7 @@
 
 - Our project is a locally hosted application that will use natural language processing with sentiment analysis and machine learning. 
 
-- The aim of the application will be to help prevent end users from overwhelming themselves with negative textual content that is being viewed online.
+- The aim of the application will be to help us learn and understand sentiment analysis while incorporating aspects of machine learning. The resulting project should also highlight to the user the sentiment of the material that they are viewing online.
 
 - The application will run in the background on the users machine (windows or linux). By recording the sites visited by the user, we aim to gauge the sentiment of the material they are reading or focusing on. 
 
@@ -38,11 +38,9 @@
 
 ### Background
 
-- This concept stemmed from the recent increase in time being spent online, due to the Covid-19 pandemic. Activities such as working from home can lead to loneliness and social isolation for many people. 
+- This idea developed from our increase in online media consumption due to studying and working from home. We want to be aware of our browsing habits and be able to avoid wasting our time on negative material.
 
-- Combining this with focused attention on negatively skewed Covid-19 or political news can lead to a very bleak perspective of the future.
-
-- With reduced opportunities to combat these problems due to government restrictions, it can be difficult to escape the daily doom and gloom which may in turn lead to negative mental health.
+- In 3rd Year, we breifly studied Sentiment Analysis in Java programming and we really enjoyed this module. We want to apply these concepts and build an interesting project.
 
 ### Achievements
 
@@ -110,13 +108,12 @@ Our project will consist of the following tools:
 
 ### Breakdown of work
 
-#### Michael
-
 Both team members will divide the work on:
 - Machine Learning for sentiment.
 - Testing our code, program perfromance and accuracy.
 
-Michael will primarily in charge of:
+#### Michael
+
 - Text scraping using Scrapy.
 - Using Tkinter GUI to run the program.
 - Setting up SQLite.
