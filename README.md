@@ -1,8 +1,7 @@
-# CA400 template repo
+# eMot - Web Browsing Sentiment Analysis
 
-This is a template for CA400 projects.
-
-You should replace all of this file with a README describing your own project.
+eMot is a customisable client based emotion classifier. The system uses data extraction, natural language processing, emotion classification, and machine learning to judge the sentiment of textual material being
+read online by a user.
 
 ## Additional resources
 
