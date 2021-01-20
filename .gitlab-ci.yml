@@ -2,4 +2,4 @@ demo_job_1:
     tags:
         - sql
     script:
-        - echo "Hello World"
+        - echo Hello World
