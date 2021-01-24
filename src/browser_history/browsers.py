@@ -1,7 +1,7 @@
 # Functions to define all supported browsers and their functionality.
 
 import datetime
-from browser_history.generic import Browser, ChromiumBasedBrowser
+from generic import Browser, ChromiumBasedBrowser
 
 # Google Chrome on Windows, Linux and Mac
 class Chrome(ChromiumBasedBrowser):
@@ -24,14 +24,19 @@ class Firefox(Browser):
     profile_support = True
 
     history_file = "places.sqlite"
-    bookmarks_file = "places.sqlite"
 
     history_SQL = """
-        SELECT datetime(visit_date/1000000, 'unixepoch', 'localtime') AS 'visit_time', url
-        FROM moz_historyvisits
-        INNER JOIN moz_places
-        ON moz_historyvisits.place_id = moz_places.id
-        WHERE visit_date IS NOT NULL AND url LIKE 'http%' AND title IS NOT NULL
+        SELECT 
+            datetime(visit_date/1000000, 'unixepoch', 'localtime') AS 'visit_time', 
+            url
+        FROM 
+            moz_historyvisits
+        INNER JOIN 
+            moz_places
+        ON 
+            moz_historyvisits.place_id = moz_places.id
+        WHERE 
+            visit_date IS NOT NULL AND url LIKE 'http%' AND title IS NOT NULL
     """
 
 # Safari on MAC
@@ -39,17 +44,21 @@ class Safari(Browser):
     name = "Safari"
 
     mac_path = "Library/Safari"
-
+    history_file = "History.db"
     profile_support = False
 
-    history_file = "History.db"
-
     history_SQL = """
-        SELECT datetime(visit_time + 978307200, 'unixepoch', 'localtime') as visit_time, url
-        FROM history_visits
-        INNER JOIN history_items
-        ON history_items.id = history_visits.history_item
-        ORDER BY visit_time DESC
+        SELECT 
+            datetime(visit_time + 978307200, 'unixepoch', 'localtime') as visit_time, 
+            url
+        FROM 
+            history_visits
+        INNER JOIN 
+            history_items
+        ON 
+            history_items.id = history_visits.history_item
+        ORDER BY 
+            visit_time DESC
     """
 
 # Edge on Windows and Mac

@@ -11,53 +11,25 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Tuple
 from urllib.parse import urlparse
-
-import browser_history.utils as utils
+import utils as utils
 
 HistoryVar = List[Tuple[datetime.datetime, str]]
 
 # A generic class to support all major browsers with minimal configuration.
+# Currently, only browsers which save the history in SQLite files are supported.
 class Browser(ABC):
-    # Currently, only browsers which save the history in SQLite files are supported.
 
     # Boolean indicating whether the browser supports multiple profiles.
-    profile_support: bool = False
+    profile_support = False
 
     # List of possible prefixes for the profile directories.
     # Keep empty to check all subdirectories in the browser path.
-    profile_dir_prefixes: typing.Optional[typing.List[typing.Any]] = None
+    # profile_dir_prefixes: typing.Optional[typing.List[typing.Any]] = None
 
-    # Gets a datetime object of the current time as per the users timezone.
-    _local_tz: typing.Optional[datetime.tzinfo] = (datetime.datetime.now().astimezone().tzinfo)
 
-    # History directory.
-    history_dir: Path
-
-    @property
-    @abstractmethod
-    def name(self) -> str:
-        """
-        A name for the browser. Not used anywhere except for logging and errors.
-        """
-
-    @property
-    @abstractmethod
-    def history_file(self) -> str:
-        """
-        Name of the (SQLite) file which stores the history.
-        """
-
-    @property
-    @abstractmethod
-    def history_SQL(self) -> str:
-        """
-        SQL query required to extract history from the ``history_file``.
-        The query must return two columns: ``visit_time`` and ``url``.
-        The ``visit_time`` must be processed using the `datetime` function with the modifier ``localtime``.
-        """
-
-    def __init__(self, plat: typing.Optional[utils.Platform] = None):
+    def __init__(self, plat = None):
         self.profile_dir_prefixes = []
+        
         if plat is None:
             plat = utils.get_platform()
         homedir = Path.home()
@@ -113,7 +85,7 @@ class Browser(ABC):
         return profile_dirs
 
     # Returns path of the history file for the given profile_dir
-    def history_path_profile(self, profile_dir: Path):
+    def history_path_profile(self, profile_dir):
         # The profile_dir should be one of the outputs from profiles method
         # profile_dir: Profile directory (should be a single name, relative to history_dir)
         # returns path to history file of the profile
@@ -124,7 +96,7 @@ class Browser(ABC):
 
     # Returns a list of file paths, for all profiles
     def paths(self, profile_file):
-        return [self.history_dir / profile_dir / profile_file for profile_dir in self.profiles(profile_file=profile_file)]
+        return [self.history_dir / profile_dir / profile_file for profile_dir in self.profiles(profile_file)]
 
     # Returns history of profiles given by `profile_dirs`
     def history_profiles(self, profile_dirs):
@@ -151,10 +123,10 @@ class Browser(ABC):
         """
         # Path to history database
         if history_paths is None:
-            history_paths = self.paths(profile_file = self.history_file)
+            history_paths = self.paths(self.history_file)
         
         # Fetch history
-        output_object = Outputs(fetch_type = "history")
+        output_object = Outputs("history")
         
         # Make temporary directory
         with tempfile.TemporaryDirectory() as tmpdirname:
@@ -167,7 +139,7 @@ class Browser(ABC):
                 # Execute sql command
                 cursor.execute(self.history_SQL)
                 # Format datetime to custom
-                date_histories = [(datetime.datetime.strptime(d, "%Y-%m-%d %H:%M:%S").replace(tzinfo=self._local_tz), url) for d, url in cursor.fetchall()]
+                date_histories = [(datetime.datetime.strptime(d, "%Y-%m-%d %H:%M:%S"), url) for d, url in cursor.fetchall()]
                 output_object.histories.extend(date_histories)
                 
                 # Sorting
@@ -210,8 +182,13 @@ class ChromiumBasedBrowser(Browser, ABC):
     bookmarks_file = "Bookmarks"
 
     history_SQL = """
-        SELECT datetime(visits.visit_time/1000000-11644473600, 'unixepoch', 'localtime') as 'visit_time', urls.url
-        FROM visits INNER JOIN urls ON visits.url = urls.id
-        WHERE visits.visit_duration > 0
-        ORDER BY visit_time DESC
+        SELECT 
+            datetime(visits.visit_time/1000000-11644473600, 'unixepoch', 'localtime') as 'visit_time', 
+            urls.url
+        FROM 
+            visits INNER JOIN urls ON visits.url = urls.id
+        WHERE 
+            visits.visit_duration > 0
+        ORDER BY 
+            visit_time DESC
         """
