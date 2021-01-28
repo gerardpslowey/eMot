@@ -1,5 +1,4 @@
 # This module defines the generic base class and the functionality.
-
 from abc import ABC, abstractmethod
 import datetime
 import os
@@ -11,7 +10,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Tuple
 from urllib.parse import urlparse
-import utils as utils
+import utils
 
 HistoryVar = List[Tuple[datetime.datetime, str]]
 

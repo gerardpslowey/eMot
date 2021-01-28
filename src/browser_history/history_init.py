@@ -1,5 +1,5 @@
 import inspect
-from . import browsers, generic, utils
+import browsers, generic, utils
 
 # This method provides a list of all browsers implemented.
 # Returns a list containing implemented browser classes
