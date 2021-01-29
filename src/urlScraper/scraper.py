@@ -1,12 +1,17 @@
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Comment
 import re
+import os
+import sys
+import json
+import random
 
 # tags in html that we don't need to search through.
 blacklist = [
     '[document]',
     'noscript',
     'header',
+    'footer',
     'html',
     'meta',
     'head', 
@@ -17,15 +22,24 @@ blacklist = [
 ]
 
 def main():
-    url = 'http://quotes.toscrape.com/'
-    file = 'text.txt'
+    url = input("Enter a URL (must include 'https') : ")
+    file = os.path.join(sys.path[0]) + '\\text.txt'
+
+    #ua = get_UA()               # random user agent from GET request.
     soup = get_soup(url)
     text = get_text(soup)
     write_to_file(file, text)
 
+# def get_UA():
+#     with open(os.path.join(sys.path[0], 'user-agents.json')) as json_file:
+#         data = json.load(json_file)
+#         num = random.randint(0, len(data))
+#         return json.dumps(data[num]['ua'])
+
 
 def get_soup(url):
     r = requests.get('http://localhost:8050/render.html', params={'url':url, 'wait':2})
+    #print(r.status_code)
     soup = BeautifulSoup(r.text, 'html.parser')
     return soup
 
@@ -48,6 +62,9 @@ def get_text(soup):
         u"\u200d"
         u"\u2640-\u2642"
         "]+", flags=re.UNICODE)
+
+    for comments in soup.findAll(text=lambda text:isinstance(text, Comment)):
+        comments.extract()
 
     text = soup.find_all(text=True)
     info = [emoji_pattern.sub(r'',t.strip()) for t in text if t.parent.name not in blacklist]
