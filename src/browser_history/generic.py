@@ -1,6 +1,6 @@
 # This module defines the generic base class and the functionality.
 from abc import ABC, abstractmethod
-import datetime
+from datetime import datetime
 import os
 import shutil
 import sqlite3
@@ -12,7 +12,7 @@ from typing import Any, Callable, Dict, List, Tuple
 from urllib.parse import urlparse
 import utils
 
-HistoryVar = List[Tuple[datetime.datetime, str]]
+HistoryVar = List[Tuple[datetime, str]]
 
 # A generic class to support all major browsers with minimal configuration.
 # Currently, only browsers which save the history in SQLite files are supported.
@@ -60,27 +60,27 @@ class Browser(ABC):
         # This should be history_file.
         # profile_file is a string
         # return type list(str)
-
         if not os.path.exists(self.history_dir):
             utils.logger.info("%s browser is not installed", self.name)
             return []
         
         if not self.profile_support:
             return ["."]
+        
         profile_dirs = []
-        
         for files in os.walk(str(self.history_dir)):
-            for item in files[2]:
-                if os.path.split(os.path.join(files[0], item))[-1] == profile_file:
-                    path = str(files[0]).split(str(self.history_dir), maxsplit=1)[-1]
-                    if path.startswith(os.sep):
-                        path = path[1:]
+
+            #Generator expression to reduce cognitive complexity.
+            paths = (str(files[0]).split(str(self.history_dir), maxsplit=1)[-1] for item in files[2] if os.path.split(os.path.join(files[0], item))[-1] == profile_file)
+
+            for path in paths:
+                if path.startswith(os.sep):             # os.sep checks if '/' or '\' used
+                    path = path[1:]
+                        
+                if path.endswith(os.sep):               # Endwith '/' or '\' ?
+                    path = path[:-1]
                     
-                    if path.endswith(os.sep):
-                        path = path[:-1]
-                    
-                    profile_dirs.append(path)
-        
+                profile_dirs.append(path)
         return profile_dirs
 
     # Returns path of the history file for the given profile_dir
@@ -138,7 +138,7 @@ class Browser(ABC):
                 # Execute sql command
                 cursor.execute(self.history_SQL)
                 # Format datetime to custom
-                date_histories = [(datetime.datetime.strptime(d, "%Y-%m-%d %H:%M:%S"), url) for d, url in cursor.fetchall()]
+                date_histories = [(d, url) for d, url in cursor.fetchall()]
                 output_object.histories.extend(date_histories)
                 
                 # Sorting
@@ -152,7 +152,7 @@ class Browser(ABC):
 class Outputs:
 
     # List of tuples of timestamp & URL
-    histories: List[Tuple[datetime.datetime, str]]
+    histories: List[Tuple[datetime, str]]
 
     # Dictionary which maps fetch_type to the respective variables and formatting fields.
     field_map: Dict[str, Dict[str, Any]]
