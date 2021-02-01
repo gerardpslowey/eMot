@@ -4,6 +4,9 @@ __pycache__/*
 *.pyc
 *$py.class
 
+# Text Files
+*.txt
+
 # VSCode
 .vscode/
 *.code-workspace
