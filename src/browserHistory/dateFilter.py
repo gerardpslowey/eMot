@@ -18,7 +18,7 @@ class DateFilter:
         return self.strformat(datetime.now() - timedelta(days=7))
 
     def month(self):
-        return self.strformat(datetime.now() + relativedelta(months=+1))
+        return self.strformat(datetime.now() + relativedelta(months=-1))
 
     def year(self):
         return self.strformat(datetime.now() + relativedelta(years=-1))

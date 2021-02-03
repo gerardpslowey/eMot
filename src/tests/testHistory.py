@@ -2,8 +2,8 @@ import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.absolute()))
 
-from browser_history.browsers import Chrome, Firefox, Safari, Edge, Opera, Brave
-from date_filter import DateFilter
+from browserHistory.browsers import Chrome, Firefox, Safari, Edge, Opera, Brave
+from dateFilter import DateFilter
 
 def main():
     print("Time filters include 'hour', 'day', 'week', 'month', or 'year' or '' (all time).")
@@ -13,7 +13,7 @@ def main():
     browser = input('Enter the browser: ')
 
     #Check if input not empty and in the possible options.
-    if filtr and filtr in DateFilter.times:
+    if filtr in DateFilter.times:
         date_filter = getattr(DateFilter(), filtr)()
 
     #if blank, then use all dates
@@ -27,7 +27,7 @@ def main():
         outputs = f.fetch_history()
         his = outputs.histories
 
-        selected = his[:50]
+        selected = his[:15]
 
         for date, url in selected:
             if date > date_filter:

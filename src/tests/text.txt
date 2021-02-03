@@ -1,0 +1,13 @@
+Web Scraper Test Sites Toggle navigation Web Scraper Cloud Scraper Pricing Learn Documentation Video Tutorials How to Test Sites Forum Install Login Test Sites Here are some sites that you can use for training while learning how to
+			use the Web Scraper. E-commerce site E-commerce site with multiple categories, subcategories.
+					All items are loaded in one page. E-commerce site with pagination links E-commerce site with multiple categories, subcategories.
+					Standard links are used for pagination. E-commerce site with popup links E-commerce site with multiple categories, subcategories.
+					Links to product pages are made with popup links. E-commerce site with AJAX pagination links E-commerce site with multiple categories, subcategories.
+					Dynamic links that use data without reloading the page for
+					pagination. E-commerce site with "Load more" buttons E-commerce site with multiple categories, subcategories.
+					Instead of using pagination this site uses a "Load more"
+					button to load more items. E-commerce site that loads items while scrolling E-commerce site with multiple categories, subcategories.
+					Instead of using pagination this site loads items when user
+					scrolls the page down. Table playground This page contains multiple tables. You can train using Table
+					selector here. Products Web Scraper browser extension Web Scraper Cloud Company Contact Website Privacy Policy Browser Extension Privacy Policy Media kit Jobs Resources Blog Documentation Video Tutorials Screenshots Test Sites Forum CONTACT US info@webscraper.io Rupniecibas iela 30, Riga, Latvia, LV-1045 Copyright © 2021 Web Scraper | All rights
+					reserved | Made by zoom59 x We use cookies to make your Web Scraper experience better. Learn more . Accept & Continue 
