@@ -4,7 +4,6 @@ from queue import Queue
 # Implement threading
 import threading
 import concurrent.futures as futures
-from multiprocessing.pool import ThreadPool
 
 # Resolve import errors
 import os
@@ -19,7 +18,6 @@ import browser_history
 from urlScraper import scraper
 
 MAX_WORKERS = 10
-
 
 def add_to_queue(urls, q):
     for url in urls:
@@ -48,13 +46,6 @@ def main():
 
     # add_to_queue(urls, queue)
 
-    # set up for threads to work
-    # t = threading.Thread(target=scrape, args=(queue, )) 
-    # t.daemon = True
-    # t.start() 
-    # t.join()
-    # print("Finished scraping!")
-
     with futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         links = list()
         for url in urls:
@@ -63,6 +54,8 @@ def main():
         results = list()
         for link in futures.as_completed(links):
             results.append(link.result())
+
+    print("Finished scraping!")
 
 if __name__ == "__main__":
     main()
