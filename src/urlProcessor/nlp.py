@@ -1,10 +1,8 @@
-import spacy
-import os
-import sys
+import spacy, sys
+from pathlib import Path
 
-# change directory to be able import from fileMod
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from urlProcessor.fileMod import FileMod
+sys.path.append(str(Path(__file__).parent.absolute())) 
+from fileMod import FileMod
 
 nlp = spacy.load("en_core_web_sm")
 

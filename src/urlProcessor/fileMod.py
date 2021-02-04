@@ -1,6 +1,4 @@
-import os
-import sys
-file = os.path.dirname(__file__) + '/../text.txt'
+file = 'text.txt'
 
 class FileMod:
 

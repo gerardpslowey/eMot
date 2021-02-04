@@ -1,13 +1,9 @@
-import requests
+import requests, re, sys, json, random
 from bs4 import BeautifulSoup, Comment
-import re
-import os
-import sys
-import json
-import random
+from pathlib import Path
 
-# go back a directory
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+# go back to parent directory
+sys.path.append(str(Path(__file__).parent.parent.absolute())) 
 from urlProcessor.fileMod import FileMod
 
 # tags in html that we don't need to search through.
@@ -25,15 +21,16 @@ blacklist = [
     'nav',
 ]
 
-# Main included if you want to test this for one link.
 def main():
     # url = input("Enter a URL (must include 'https') : ")
     FileMod().erase_file()
     url = 'https://webscraper.io/test-sites'
+    print(f'testing {url}..')
 
     soup = get_soup(url)
     text = get_text(soup)
     FileMod().write_file(text)
+    print('finished!')
 
 def get_soup(url):
     r = requests.get('http://localhost:8050/render.html', params={'url':url, 'wait':2})

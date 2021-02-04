@@ -1,9 +1,8 @@
 import sys
 from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent.absolute()))
 
-from browserHistory.browsers import Chrome, Firefox, Safari, Edge, Opera, Brave
-from dateFilter import DateFilter
+from .browsers import Chrome, Firefox, Safari, Edge, Opera, Brave
+from .dateFilter import DateFilter
 
 class GetHistory():
     

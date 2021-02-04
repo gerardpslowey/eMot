@@ -1,9 +1,10 @@
 import sys
 from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent.absolute()))
 
+# go back to parent directory
+sys.path.append(str(Path(__file__).parent.parent.absolute())) 
 from browserHistory.browsers import Chrome, Firefox, Safari, Edge, Opera, Brave
-from dateFilter import DateFilter
+from browserHistory.dateFilter import DateFilter
 
 def main():
     print("Time filters include 'hour', 'day', 'week', 'month', or 'year' or '' (all time).")

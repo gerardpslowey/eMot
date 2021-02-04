@@ -1,16 +1,12 @@
 # This module defines the generic base class and the functionality.
 from abc import ABC, abstractmethod
 from datetime import datetime
-import os
-import shutil
-import sqlite3
-import tempfile
-import typing
+import os, shutil, sqlite3, tempfile, typing
 from collections import defaultdict
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Tuple
 from urllib.parse import urlparse
-import utils
+from . import utils
 
 HistoryVar = List[Tuple[datetime, str]]
 

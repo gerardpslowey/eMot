@@ -6,9 +6,7 @@ import sys
 import json
 import random
 
-# change directory to be able import from fileMod
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from urlProcessor.fileMod import FileMod
+from .fileMod import FileMod
 
 # tags in html that we don't need to search through.
 blacklist = [
