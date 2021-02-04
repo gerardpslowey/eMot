@@ -101,8 +101,6 @@ class Browser(ABC):
     # Returns history of all available profiles stored in SQL
     def fetch_history(self, history_paths=None, sort=True, desc=False):
         """
-        The returned datetimes are timezone-aware with the local timezone set by default.
-
         The history files are first copied to a temporary location and then queried
         This might lead to some additional overhead and results returned might not be the latest if the browser is in use
         This is done because the SQlite files are locked by the browser when in use.
