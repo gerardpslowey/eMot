@@ -1,27 +1,6 @@
-import requests
-from bs4 import BeautifulSoup, Comment
-import re
-import os
-import sys
-import json
-import random
-
+import requests, re, os, sys
+from bs4 import BeautifulSoup, Comment, Doctype
 from .fileMod import FileMod
-
-# tags in html that we don't need to search through.
-blacklist = [
-    '[document]',
-    'noscript',
-    'header',
-    'footer',
-    'html',
-    'meta',
-    'head', 
-    'input',
-    'script',
-    'style',
-    'nav',
-]
 
 class Scraper:
 
@@ -37,28 +16,17 @@ class Scraper:
         return soup
 
     def get_text(self,soup):
-        emoji_pattern = re.compile("["
-            u"\U0001F600-\U0001F64F"  # emoticons
-            u"\U0001F300-\U0001F5FF"  # symbols & pictographs
-            u"\U0001F680-\U0001F6FF"  # transport & map symbols
-            u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
-            u"\U0001F1F2-\U0001F1F4"  # Macau flag
-            u"\U0001F1E6-\U0001F1FF"  # flags
-            u"\U0001F600-\U0001F64F"
-            u"\U00002702-\U000027B0"
-            u"\U000024C2-\U0001F251"
-            u"\U0001f926-\U0001f937"
-            u"\U0001F1F2"
-            u"\U0001F1F4"
-            u"\U0001F620"
-            u"\u200d"
-            u"\u2640-\u2642"
-            "]+", flags=re.UNICODE)
+        blacklist = ['[document]','script', 'noscript', 'title','style','figure','img','iframe','nav','meta', 'header','head','footer']
 
-        for comments in soup.findAll(text=lambda text:isinstance(text, Comment)):
-            comments.extract()
+        #get rid of the unwanted text in the above tags list.
+        [junk.decompose() for junk in soup(blacklist)]
+        [item.extract() for item in soup.contents if isinstance(item, Doctype)]
+                
+        comments = soup.findAll(text=lambda text: isinstance(text, Comment))
+        [comment.extract() for comment in comments]
 
-        text = soup.find_all(text=True)
-        info = [emoji_pattern.sub(r'',t.strip()) for t in text if t.parent.name not in blacklist]
+        tokens = [token.strip() for token in soup.find_all(text=True)] 
+        r = re.compile('^[A-Za-z0-9]+')
+        info = list(filter(r.match,tokens))
 
         return info
