@@ -1,6 +1,5 @@
 import sys
 from pathlib import Path
-
 from .browsers import Chrome, Firefox, Safari, Edge, Opera, Brave
 from .dateFilter import DateFilter
 
@@ -29,10 +28,9 @@ class GetHistory():
             outputs = f.fetch_history()
             his = outputs.histories
 
-            selected = his[:15]
             urlDict = {}
 
-            for date, url in selected:
+            for date, url in his:
                 if date > date_filter:
                     urlDict[date] = url
 

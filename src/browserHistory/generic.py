@@ -21,7 +21,6 @@ class Browser(ABC):
     # Keep empty to check all subdirectories in the browser path.
     # profile_dir_prefixes: typing.Optional[typing.List[typing.Any]] = None
 
-
     def __init__(self, plat = None):
         self.profile_dir_prefixes = []
         

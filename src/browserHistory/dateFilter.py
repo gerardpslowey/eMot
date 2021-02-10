@@ -1,9 +1,6 @@
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
-# To use dateutil install the following:
-#   pip install python-dateutil
-
 class DateFilter:
 
     times = ['hour','day','week','month','year']

@@ -1,11 +1,6 @@
-import requests
-from bs4 import BeautifulSoup, Comment
-import re
-import os
-import sys
-import json
-import random
+import requests, re, os, sys, json, random
 
+from bs4 import BeautifulSoup, Comment
 from .fileMod import FileMod
 
 # tags in html that we don't need to search through.
