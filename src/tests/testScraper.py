@@ -15,7 +15,7 @@ def main():
     print(f'testing {url}..')
 
     soup = get_soup(url)
-    text = get_text(soup)
+    get_text(soup)
     #FileMod().write_file(text)
     print('finished!')
 
