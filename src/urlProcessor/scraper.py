@@ -1,6 +1,8 @@
-import requests, re, os, sys
+import spacy, requests, re, os, sys
 from bs4 import BeautifulSoup, Comment, Doctype
 from .fileMod import FileMod
+
+nlp = spacy.load("en_core_web_sm")
 
 class Scraper:
 
@@ -25,8 +27,15 @@ class Scraper:
         comments = soup.findAll(text=lambda text: isinstance(text, Comment))
         [comment.extract() for comment in comments]
 
-        tokens = [token.strip() for token in soup.find_all(text=True)] 
-        r = re.compile('^[A-Za-z0-9]+')
-        info = list(filter(r.match,tokens))
+        tokenized_data = []
+        for token in soup.find_all(text=True):
+            token = token.strip() 
+            if str(token):
+                tokens = token.split()
+                for token in tokens:
+                    tokenized_data.append(token)
 
-        return info
+        docs = nlp(" ".join(tokenized_data))
+        cleaned = [word.lemma_ for word in docs if word.is_alpha and not word.is_stop and not word.is_punct and not word.like_email]
+
+        return cleaned

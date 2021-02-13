@@ -35,16 +35,17 @@ def get_text(soup):
     comments = soup.findAll(text=lambda text: isinstance(text, Comment))
     [comment.extract() for comment in comments]
 
-    tokens = [token.strip() for token in soup.find_all(text=True)] 
-    r=re.compile('^[A-Za-z0-9]+')
-    text=list(filter(r.match,tokens))
+    tokenized_data = []
+    for token in soup.find_all(text=True):
+        token = token.strip() 
+        if str(token):
+            tokens = token.split()
+            for token in tokens:
+                tokenized_data.append(token)
 
-
-    tokens =[]
-    for token in text:
-        token = nlp(token)
-        tokens.append(token.text)
-    print(tokens)
+    docs = nlp(" ".join(tokenized_data))
+    cleaned = [word.lemma_ for word in docs if word.is_alpha and not word.is_stop and not word.is_punct and not word.like_email]
+    print(cleaned)
 
 if __name__ == "__main__":
     main()
