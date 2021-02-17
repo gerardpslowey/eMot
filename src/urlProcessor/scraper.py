@@ -13,19 +13,20 @@ class Scraper:
 
     def get_soup(self,url):
         r = requests.get('http://localhost:8050/render.html', params={'url':url, 'wait':2})
-        # print(f'{url} status code = {r.status_code}')
-        soup = BeautifulSoup(r.text, 'html.parser')
+        
+        soup = BeautifulSoup(r.text, 'html.parser') if r.status_code == 200 else ''
         return soup
 
-    def get_text(self,soup):
-        blacklist = ['[document]','script', 'noscript', 'title','style','figure','img','iframe','nav','meta', 'header','head','footer']
+    def get_status(self, url):
+        r = requests.get('http://localhost:8050/render.html', params={'url':url, 'wait':2})
+        return r.status_code
 
-        #get rid of the unwanted text in the above tags list.
-        [junk.decompose() for junk in soup(blacklist)]
-        [item.extract() for item in soup.contents if isinstance(item, Doctype)]
-                
-        comments = soup.findAll(text=lambda text: isinstance(text, Comment))
-        [comment.extract() for comment in comments]
+    def get_text(self,soup):
+        blacklist = ['[document]','script','noscript','title','style','figure','img','iframe','nav','meta','header','head','footer']
+
+        #get rid of the unwanted text in Comments, Doctype and the above tags list.
+        [junk.decompose() for junk in soup(blacklist)]    
+        [comment.extract() for comment in soup.findAll(text=lambda text: isinstance(text, (Comment, Doctype)))]
 
         tokenized_data = []
         for token in soup.find_all(text=True):
