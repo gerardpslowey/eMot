@@ -1,7 +1,6 @@
 # Functions to define all supported browsers and their functionality.
-
-import datetime
-from generic import Browser, ChromiumBasedBrowser
+import datetime, os, sys
+from .generic import Browser, ChromiumBasedBrowser
 
 # Google Chrome on Windows, Linux and Mac
 class Chrome(ChromiumBasedBrowser):

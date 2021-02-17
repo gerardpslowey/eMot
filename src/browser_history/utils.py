@@ -1,6 +1,4 @@
-import enum
-import platform
-import logging
+import enum, platform, logging
 
 logger = logging.getLogger(__name__)
 handler = logging.StreamHandler()
