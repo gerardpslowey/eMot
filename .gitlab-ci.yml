@@ -1,0 +1,11 @@
+demo_job_1:
+    tags:
+        - sql
+    script:
+        - echo Hello World
+        
+demo_job_2:
+    tags:
+        - scraper
+    script:
+        - echo Test Complete
