@@ -8,7 +8,8 @@ def main():
     print(f'testing {url}..')
     test1 = Scraper()
     test1.scrape(url)
-    print('finished!\n\n')
+    print('finished!')
+    print("==============================")
 
     url = 'https://webscraper.io/test-sites/e-commerce/allinone'
     print(f'testing {url}..')

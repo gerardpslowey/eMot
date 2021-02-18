@@ -6,14 +6,7 @@ from dateutil.relativedelta import relativedelta
 
 class GetHistory():
     
-    def get_history(self):
-
-        print("Time filters include 'hour', 'day', 'week', 'month', or 'year' or '' (all time).")
-        filtr = input('Filter the date: ')
-
-        print("Browser options include 'Chrome', 'Firefox', 'Safari', 'Edge', 'Opera', and 'Brave'.")
-        browser = input('Enter the browser: ')
-
+    def get_history(self, filtr, browser):
         #if blank, then use all dates
         df = '' if not filtr else self.date_filter(filtr)
 
@@ -21,15 +14,12 @@ class GetHistory():
             f = globals()[browser]()                    # browser
             outputs = f.fetch_history()
             his = outputs.histories
-
             urlDict = {}
 
             for date, url in his:
                 if date > df:
                     urlDict[date] = url
-
             return urlDict
-
         except Exception as e:
             print(f"{e} : Make sure your browser choice is valid and spelled correctly.")
 

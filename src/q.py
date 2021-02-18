@@ -21,7 +21,12 @@ def main():
 
     FileMod().erase_file()
     queue = Queue()
-    urls = GetHistory().get_history()
+
+    print("Time filters include 'hour', 'day', 'week', 'month', or 'year' or '' (all time).")
+    filtr = input('Filter the date: ')
+    print("Browser options include 'Chrome', 'Firefox', 'Safari', 'Edge', 'Opera', and 'Brave'.")
+    browser = input('Enter the browser: ')
+    urls = GetHistory().get_history(filtr, browser)
     print("History Retrieved: " + str(len(urls)))
 
     filtered_urls = filter_blacklisted_url(urls.values(), blacklist)
