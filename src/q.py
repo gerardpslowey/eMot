@@ -19,7 +19,7 @@ MAX_WORKERS = 10
 def main():
     blacklist = ['www.facebook.com', 'mail.google.com', 'www.twitter.com', 'discord.com', 'www.reddit.com', 'gitlab.computing.dcu.ie', 'github.com', 'www.messenger.com']
 
-    FileMod().erase_file()
+    # FileMod().erase_file()
     queue = Queue()
 
     print("Time filters include 'hour', 'day', 'week', 'month', or 'year' or '' (all time).")
@@ -30,6 +30,7 @@ def main():
     print("History Retrieved: " + str(len(urls)))
 
     filtered_urls = filter_blacklisted_url(urls.values(), blacklist)
+    print("URLS remaining after filtering: " + str(len(filtered_urls)))
 
     add_to_queue(filtered_urls, queue)
 

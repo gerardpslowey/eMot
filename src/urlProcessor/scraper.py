@@ -9,10 +9,11 @@ class Scraper:
     def scrape(self,url):
         soup = self.get_soup(url)
         text = self.get_text(soup)
-        FileMod().write_file(text)
+        FileMod().write_to_csv(text)
 
     def get_soup(self,url):
         r = requests.get('http://localhost:8050/render.html', params={'url':url, 'wait':2})
+        
         soup = BeautifulSoup(r.text, 'html.parser') if r.status_code == 200 else ''
         return soup
 
@@ -36,6 +37,6 @@ class Scraper:
                     tokenized_data.append(token)
 
         docs = nlp(" ".join(tokenized_data))
-        cleaned = [word.lemma_.lower() for word in docs if word.is_alpha and not word.is_stop and not word.is_punct and not word.like_email]
+        cleaned = [word.lemma_ for word in docs if word.is_alpha and not word.is_stop and not word.is_punct and not word.like_email]
 
         return cleaned
