@@ -3,3 +3,9 @@ demo_job_1:
         - sql
     script:
         - echo Hello World
+        
+demo_job_2:
+    tags:
+        - scraper
+    script:
+        - echo Test Complete

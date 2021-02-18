@@ -1,13 +1,58 @@
-# Add files names (and patterns) you want git to ignore here.
+# Byte-compiled / optimized / DLL files
+__pycache__/*
+*.py[cod]
+*.pyc
+*$py.class
 
-# Ignore java .class files.
-*.class
+# Text Files
+*.txt
 
-# Ignore compiled C/C++ files.
-*.o
+# VSCode
+*.vscode/*
+*.code-workspace
+.history/
 
-# Ignore everything in the build directory.
+# Distribution / packaging
+.Python
 build/
+dist/
+downloads/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
 
-# Do not store node modules in your repo.
-node_modules/
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+text.txt
+
+# Scrapy stuff:
+.scrapy
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# Environments
+.env
+.venv
+env/
+venv/
