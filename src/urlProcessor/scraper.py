@@ -5,13 +5,15 @@ from .fileMod import FileMod
 nlp = spacy.load("en_core_web_sm")
 
 class Scraper:
-
-    def scrape(self,url):
+    
+    def scrape(self, url):
+        print("scraping site: " + url + "\n")
         soup = self.get_soup(url)
         text = self.get_text(soup)
-        FileMod().write_to_csv(text)
+        print(f'task {url} finished\n') 
+        return text
 
-    def get_soup(self,url):
+    def get_soup(self, url):
         r = requests.get('http://localhost:8050/render.html', params={'url':url, 'wait':2})
         
         soup = BeautifulSoup(r.text, 'html.parser') if r.status_code == 200 else ''
@@ -21,12 +23,15 @@ class Scraper:
         r = requests.get('http://localhost:8050/render.html', params={'url':url, 'wait':2})
         return r.status_code
 
-    def get_text(self,soup):
+    def get_text(self, soup):
         blacklist = ['[document]','script','noscript','title','style','figure','img','iframe','nav','meta','header','head','footer']
 
-        #get rid of the unwanted text in Comments, Doctype and the above tags list.
-        [junk.decompose() for junk in soup(blacklist)]    
-        [comment.extract() for comment in soup.findAll(text=lambda text: isinstance(text, (Comment, Doctype)))]
+        # get rid of the unwanted text in Comments, Doctype and the above tags list.
+        for junk in soup(blacklist):
+            junk.decompose() 
+
+        for comment in soup.findAll(text=lambda text: isinstance(text, (Comment, Doctype))):
+            comment.extract()
 
         tokenized_data = []
         for token in soup.find_all(text=True):
