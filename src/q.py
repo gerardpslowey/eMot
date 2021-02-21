@@ -25,7 +25,7 @@ def add_to_queue(urls, q):
     return(q)
     
 def main():
-    blacklist = ['www.google.com', 'www.google.ie', 'www.facebook.com', 'docs.google.com', 'mail.google.com', 'www.twitter.com', 'discord.com', 'www.reddit.com', 'gitlab.computing.dcu.ie', 'github.com', 'www.messenger.com']
+    blacklist = ['www.google.com', 'www.google.ie', 'www.facebook.com', 'docs.google.com', 'mail.google.com', 'www.twitter.com', 'discord.com', 'www.reddit.com', 'gitlab.computing.dcu.ie', 'github.com', 'www.messenger.com', 'www.youtube.com']
 
     print("Time filters include 'hour', 'day', 'week', 'month', or 'year' or '' (all time).")
     filtr = input('Filter the date: ')

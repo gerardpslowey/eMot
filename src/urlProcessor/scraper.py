@@ -3,6 +3,11 @@ from bs4 import BeautifulSoup, Comment, Doctype
 from .fileMod import FileMod
 
 nlp = spacy.load("en_core_web_sm")
+sentencizer = nlp.add_pipe("sentencizer")
+
+# Construction from class
+from spacy.pipeline import Sentencizer
+sentencizer = Sentencizer()
 
 class Scraper:
     
@@ -14,17 +19,16 @@ class Scraper:
         return text
 
     def get_soup(self, url):
-        r = requests.get('http://localhost:8050/render.html', params={'url':url, 'wait':2})
-        
+        r = requests.get('http://localhost:8050/render.html', params={'url':url, 'wait':3})
         soup = BeautifulSoup(r.text, 'html.parser') if r.status_code == 200 else ''
         return soup
 
     def get_status(self, url):
-        r = requests.get('http://localhost:8050/render.html', params={'url':url, 'wait':2})
+        r = requests.get('http://localhost:8050/render.html', params={'url':url, 'wait':3})
         return r.status_code
 
     def get_text(self, soup):
-        blacklist = ['[document]','script','noscript','title','style','figure','img','iframe','nav','meta','header','head','footer']
+        blacklist = ['[document]','script','noscript','title','style','figure','img','iframe','nav','meta','header','head','footer', 'cookie']
 
         # get rid of the unwanted text in Comments, Doctype and the above tags list.
         for junk in soup(blacklist):
@@ -36,12 +40,13 @@ class Scraper:
         tokenized_data = []
         for token in soup.find_all(text=True):
             token = token.strip() 
-            if str(token):
-                tokens = token.split()
-                for token in tokens:
-                    tokenized_data.append(token)
+            if str(token) and 'cookie' not in str(token) and 'our partners' not in str(token):
+                tokenized_data.append(token)
 
-        docs = nlp(" ".join(tokenized_data))
-        cleaned = [word.lemma_ for word in docs if word.is_alpha and not word.is_stop and not word.is_punct and not word.like_email]
+        return tokenized_data
 
-        return cleaned
+        # docs = nlp(" ".join(tokenized_data))
+        # cleaned = [word.lemma_ for word in docs if word.is_alpha and not word.is_stop and not word.is_punct and not word.like_email]
+
+        # return cleaned
+        
