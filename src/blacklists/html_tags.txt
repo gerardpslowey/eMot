@@ -1,0 +1,14 @@
+[document]
+script
+noscript
+title
+style
+figure
+img
+iframe
+nav
+meta
+header
+head
+footer
+cookie

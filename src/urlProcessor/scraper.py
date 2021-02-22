@@ -27,9 +27,15 @@ class Scraper:
         r = requests.get('http://localhost:8050/render.html', params={'url':url, 'wait':3})
         return r.status_code
 
-    def get_text(self, soup):
-        blacklist = ['[document]','script','noscript','title','style','figure','img','iframe','nav','meta','header','head','footer', 'cookie']
+    def get_blacklist(self):
+        blacklist = []
+        with open('../blacklists/html_tags.txt','r') as myfile:
+            for line in myfile:
+                blacklist.append(line.strip())
+        return blacklist
 
+    def get_text(self, soup):
+        blacklist = self.get_blacklist()
         # get rid of the unwanted text in Comments, Doctype and the above tags list.
         for junk in soup(blacklist):
             junk.decompose() 

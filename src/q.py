@@ -23,9 +23,16 @@ def add_to_queue(urls, q):
 
     print("URLs added to queue")
     return(q)
+
+def get_blacklist():
+    blacklist = []
+    with open('blacklists/urls.txt','r') as myfile:
+        for line in myfile:
+            blacklist.append(line.strip())
+    return blacklist
     
 def main():
-    blacklist = ['www.google.com', 'www.google.ie', 'www.facebook.com', 'docs.google.com', 'mail.google.com', 'www.twitter.com', 'discord.com', 'www.reddit.com', 'gitlab.computing.dcu.ie', 'github.com', 'www.messenger.com', 'www.youtube.com']
+    blacklist = get_blacklist()
 
     print("Time filters include 'hour', 'day', 'week', 'month', or 'year' or '' (all time).")
     filtr = input('Filter the date: ')

@@ -1,0 +1,13 @@
+www.google.com
+www.google.ie
+www.facebook.com
+docs.google.com
+mail.google.com
+www.twitter.com
+discord.com
+www.reddit.com
+gitlab.computing.dcu.ie
+github.com
+www.messenger.com
+www.youtube.com
+stackoverflow.com
