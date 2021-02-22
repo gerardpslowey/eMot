@@ -3,11 +3,11 @@ from bs4 import BeautifulSoup, Comment, Doctype
 from .fileMod import FileMod
 
 nlp = spacy.load("en_core_web_sm")
-sentencizer = nlp.add_pipe("sentencizer")
+# sentencizer = nlp.add_pipe("sentencizer")
 
 # Construction from class
-from spacy.pipeline import Sentencizer
-sentencizer = Sentencizer()
+# from spacy.pipeline import Sentencizer
+# sentencizer = Sentencizer()
 
 class Scraper:
     
@@ -43,10 +43,10 @@ class Scraper:
             if str(token) and 'cookie' not in str(token) and 'our partners' not in str(token):
                 tokenized_data.append(token)
 
-        return tokenized_data
+        # return tokenized_data
 
-        # docs = nlp(" ".join(tokenized_data))
-        # cleaned = [word.lemma_ for word in docs if word.is_alpha and not word.is_stop and not word.is_punct and not word.like_email]
+        docs = nlp(" ".join(tokenized_data))
+        cleaned = [word.lemma_ for word in docs if word.is_alpha and not word.is_stop and not word.is_punct and not word.like_email]
 
-        # return cleaned
+        return cleaned
         

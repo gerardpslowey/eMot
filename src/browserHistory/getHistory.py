@@ -26,23 +26,23 @@ class GetHistory():
     def date_filter(self, times):
 
         #def hour()
-        if times == 'hour':
+        if times == 'Hour':
             return self.strformat(datetime.now() - timedelta(hours=1))
 
         #def day()
-        elif times == 'day':
+        elif times == 'Day':
             return self.strformat(datetime.now() - timedelta(1))
 
         #def week()
-        elif times == 'week':
+        elif times == 'Week':
             return self.strformat(datetime.now() - timedelta(days=7))
 
         #def month()
-        elif times == 'month':
+        elif times == 'Month':
             return self.strformat(datetime.now() + relativedelta(months=-1))
 
         # def year()
-        elif times == 'year':
+        elif times == 'Year':
             return self.strformat(datetime.now() + relativedelta(years=-1))
 
         else:
@@ -50,5 +50,3 @@ class GetHistory():
 
     def strformat(self, time):
         return time.strftime("%Y-%m-%d %H:%M:%S")   #makes the date a string
-
-

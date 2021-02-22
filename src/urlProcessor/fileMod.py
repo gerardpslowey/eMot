@@ -16,8 +16,8 @@ class FileMod:
     def write_to_csv(self, chunks):
         text = []
         
-        with open('scraped.csv', mode='a', newline='', encoding="utf-8") as scraped_text:
-            writer = csv.writer(scraped_text, delimiter=' ')
+        with open('scraped.csv', mode='a', encoding="utf-8") as scraped_text:
+            writer = csv.writer(scraped_text, delimiter=',')
 
             for chunk in chunks:
                 if(len(chunk)!=0):
