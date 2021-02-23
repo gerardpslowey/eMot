@@ -11,14 +11,17 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>eMot</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="emotText">
     <property name="geometry">
      <rect>
       <x>270</x>
-      <y>30</y>
+      <y>60</y>
       <width>251</width>
       <height>121</height>
      </rect>
@@ -163,19 +166,6 @@
      <string>Go!</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="preferencesButton">
-    <property name="geometry">
-     <rect>
-      <x>510</x>
-      <y>457</y>
-      <width>93</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Preferences</string>
-    </property>
-   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -191,13 +181,31 @@
      <string>File</string>
     </property>
     <addaction name="actionNew"/>
+    <addaction name="actionPreferences"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuNew"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionNew">
    <property name="text">
     <string>New</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="text">
+    <string>Preferences</string>
    </property>
   </action>
  </widget>

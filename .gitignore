@@ -24,6 +24,7 @@ __pycache__/*
 *.so
 
 # VSCode
+.vscode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -79,6 +80,9 @@ coverage.xml
 .pytest_cache/
 cover/
 scraped.csv
+word_count.csv
+word_negative.csv
+word_positive.csv
 
 # Translations
 *.mo

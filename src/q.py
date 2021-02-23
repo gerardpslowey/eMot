@@ -4,14 +4,12 @@ from queue import Queue
 # Implement threading
 import threading, concurrent.futures as futures
 
-# Get browser history from different folder by changing the Path
-import os, sys
-from pathlib import Path
+# Get browser history
+import os, sys, csv
 from browserHistory.getHistory import GetHistory
 
-# Scraper and file modification
+# Scraper and url filter
 from urlProcessor.scraper import Scraper
-from urlProcessor.fileMod import FileMod 
 from urlProcessor.urlFilter import filter_blacklisted_url
 
 MAX_WORKERS = 5
@@ -26,18 +24,32 @@ def add_to_queue(urls, q):
 
 def get_blacklist():
     blacklist = []
-    with open('blacklists/urls.txt','r') as myfile:
+    with open('blacklists/urls_blacklist.txt','r') as myfile:
         for line in myfile:
             blacklist.append(line.strip())
     return blacklist
+
+def write_to_csv(data):
+    text = []
+    
+    with open('sentimentAnalyser/scraped.csv', mode='a', encoding="utf-8") as scraped_text:
+        writer = csv.writer(scraped_text, delimiter=',')
+
+        for item in data:
+            if(len(item)!=0):
+                text.append(item)
+                
+        if len(text) != 0:
+            writer.writerow(text)
     
 def main():
     blacklist = get_blacklist()
 
     print("Time filters include 'hour', 'day', 'week', 'month', or 'year' or '' (all time).")
-    filtr = input('Filter the date: ')
+    filtr = input('Filter the date: ').capitalize()
     print("Browser options include 'Chrome', 'Firefox', 'Safari', 'Edge', 'Opera', and 'Brave'.")
-    browser = input('Enter the browser: ')
+    browser = input('Enter the browser: ').capitalize()
+
     urls = GetHistory().get_history(filtr, browser)
     print("History Retrieved: " + str(len(urls)))
 
@@ -60,7 +72,7 @@ def main():
             data = future.result()
 
             # store scraped data
-            FileMod().write_to_csv(data)
+            write_to_csv(data)
 
     print("Finished scraping!")
 
