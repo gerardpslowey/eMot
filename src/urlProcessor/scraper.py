@@ -37,13 +37,15 @@ class Scraper:
                 blacklist.append(line.strip())
         return blacklist
 
-    def cleaned(self,data):
+    def cleaned(self, data):
         docs = nlp(data)
         clean = []
         for word in docs:
             if word.lemma_ != '-PRON-' and not word.is_stop and not word.is_punct:
                 clean.append(word.lemma_)
-        return ' '.join(clean)
+
+        return clean
+        # return ' '.join(clean)
 
     def get_text(self, soup, blacklist):
         # get rid of the unwanted text in Comments, Doctype and the above tags list.
@@ -57,9 +59,15 @@ class Scraper:
         for token in soup.find_all(text=True):
             token = token.strip().lower()
             if str(token) and 'we and our partners use' not in token and 'our privacy policy' not in token:
-                tokenized_data.append(self.cleaned(token))
+                cleaned = self.cleaned(token)
+                tokenized_data.append(cleaned)
 
-        return tokenized_data
+            flat_list = []
+            for sublist in tokenized_data:
+                for item in sublist:
+                    flat_list.append(item)
+
+        return flat_list
 
 
 if __name__ == '__main__':

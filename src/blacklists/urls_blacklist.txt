@@ -11,3 +11,5 @@ github.com
 www.messenger.com
 www.youtube.com
 stackoverflow.com
+dcu-ie.zoom.us
+www.bing.com
