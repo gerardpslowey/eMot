@@ -1,12 +1,15 @@
 import spacy, requests, re, os, sys
+import cProfile, io, pstats
 from bs4 import BeautifulSoup, Comment, Doctype
 
 nlp = spacy.load("en_core_web_sm")
-# sentencizer = nlp.add_pipe("sentencizer")
+sentencizer = nlp.add_pipe("sentencizer", first=True)
 
-# Construction from class
-# from spacy.pipeline import Sentencizer
-# sentencizer = Sentencizer()
+def main():
+    url = 'https://www.independent.ie/opinion/letters/new-opening-hours-very-little-use-when-the-pubs-are-closed-40125545.html'
+    tags_list = '../blacklists/tags_blacklist.txt'
+    print(Scraper().scrape(url, tags_list))
+
 
 class Scraper:
     
@@ -34,6 +37,14 @@ class Scraper:
                 blacklist.append(line.strip())
         return blacklist
 
+    def cleaned(self,data):
+        docs = nlp(data)
+        clean = []
+        for word in docs:
+            if word.lemma_ != '-PRON-' and not word.is_stop and not word.is_punct:
+                clean.append(word.lemma_)
+        return ' '.join(clean)
+
     def get_text(self, soup, blacklist):
         # get rid of the unwanted text in Comments, Doctype and the above tags list.
         for junk in soup(blacklist):
@@ -44,14 +55,23 @@ class Scraper:
 
         tokenized_data = []
         for token in soup.find_all(text=True):
-            token = token.strip() 
-            if str(token) and 'cookie' not in str(token) and 'our partners' not in str(token):
-                tokenized_data.append(token)
+            token = token.strip().lower()
+            if str(token) and 'we and our partners use' not in token and 'our privacy policy' not in token:
+                tokenized_data.append(self.cleaned(token))
 
-        # return tokenized_data
+        return tokenized_data
 
-        docs = nlp(" ".join(tokenized_data))
-        cleaned = [word.lemma_ for word in docs if word.is_alpha and not word.is_stop and not word.is_punct and not word.like_email]
 
-        return cleaned
-        
+if __name__ == '__main__':
+    pr = cProfile.Profile()
+    pr.enable()
+
+    my_result = main()
+
+    pr.disable()
+    s = io.StringIO()
+    ps = pstats.Stats(pr, stream=s).sort_stats('tottime')
+    ps.print_stats()
+
+    with open('test.txt', 'w+') as f:
+        f.write(s.getvalue())

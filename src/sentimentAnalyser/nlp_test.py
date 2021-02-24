@@ -40,9 +40,7 @@ with open('scraped.csv', encoding='utf-8') as f:
                     word_count_negative[word] += 1
                 else:
                     word_count_negative[word] = 1
-            # else:
-            #     no match, do nothing
-			
+
     # sort on word count values in reverse
     list_dict = sorted(word_count_dict.items(), key=lambda x:x[1], reverse=True)
     list_positive = sorted(word_count_positive.items(), key=lambda x:x[1], reverse=True)
