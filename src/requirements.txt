@@ -2,4 +2,3 @@ bs4
 python-dateutil
 requests
 spacy
-re

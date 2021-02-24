@@ -8,7 +8,12 @@ __pycache__/*
 *.txt
 
 # VSCode
-*.vscode/*
+.vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 *.code-workspace
 .history/
 
@@ -42,7 +47,10 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
-text.txt
+scraped.csv
+word_count.csv
+word_negative.csv
+word_positive.csv
 
 # Scrapy stuff:
 .scrapy

@@ -4,6 +4,11 @@ sys.path.append(str(Path(__file__).parent.parent.absolute()))
 
 from urlProcessor.urlFilter import base, filter_blacklisted_url
 
+def main():
+    test_base()
+    print("\n")
+    test_blacklist_checker()
+
 def test_base():
     urls = ['https://www.stackoverflow.com/questions', 'https://mail.google.com/very_important/email']
 
@@ -18,6 +23,4 @@ def test_blacklist_checker():
     print(result)
 
 if __name__ == '__main__':
-    test_base()
-    print("\n")
-    test_blacklist_checker()
+    main()
