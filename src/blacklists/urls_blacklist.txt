@@ -3,6 +3,7 @@ www.google.ie
 www.facebook.com
 docs.google.com
 mail.google.com
+accounts.google.com
 www.twitter.com
 discord.com
 www.reddit.com
