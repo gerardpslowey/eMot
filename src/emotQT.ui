@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Emot</class>
- <widget class="QMainWindow" name="Emot">
+ <class>emotMainWindow</class>
+ <widget class="QMainWindow" name="emotMainWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -165,6 +165,29 @@
     <property name="text">
      <string>Go!</string>
     </property>
+   </widget>
+   <widget class="QScrollArea" name="scrollArea">
+    <property name="geometry">
+     <rect>
+      <x>189</x>
+      <y>380</y>
+      <width>411</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="widgetResizable">
+     <bool>true</bool>
+    </property>
+    <widget class="QWidget" name="scrollAreaWidgetContents">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>409</width>
+       <height>149</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

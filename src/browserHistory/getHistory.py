@@ -1,14 +1,17 @@
-import sys
-from pathlib import Path
 from .browsers import Chrome, Firefox, Safari, Edge, Opera, Brave
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
 class GetHistory():
     
-    def get_history(self, filtr, browser):
+    def get_history(self, browser, filtr):
         #if blank, then use all dates
-        df = '' if not filtr else self.date_filter(filtr)
+        print(browser, filtr)
+
+        if not filtr or filtr == 'All':
+            df = '' 
+        else:
+            df = self.date_filter(filtr)
 
         try:
             f = globals()[browser]()                    # browser
@@ -21,7 +24,7 @@ class GetHistory():
                     urlDict[date] = url
             return urlDict
         except Exception as e:
-            print(f"{e} : Make sure your browser choice is valid and spelled correctly.")
+            print(f"{e}: Make sure your browser or filter choice is valid and spelled correctly.")
 
     def date_filter(self, times):
 
