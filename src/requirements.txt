@@ -2,3 +2,7 @@ bs4
 python-dateutil
 requests
 spacy
+pyqt5==5.15.2
+pyqt5-tools
+scikit-learn
+pandas

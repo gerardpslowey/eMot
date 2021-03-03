@@ -43,7 +43,7 @@ class Scraper:
             if word.lemma_ != '-PRON-' and word.is_alpha and not word.is_stop and not word.is_punct:
                 tokenized_data.append(word.lemma_)
 
-        return tokenized_data
+        # return tokenized_data
 
     def get_text(self, soup, blacklist):
         # get rid of the unwanted text in Comments, Doctype and the above tags list.
@@ -57,10 +57,9 @@ class Scraper:
         for token in soup.find_all(text=True):
             token = token.strip().lower()
             if str(token) and 'we and our partners use' not in token and 'our privacy policy' not in token:
-
                 self.cleaned(token, tokenized_data)
 
-        return tokenized_data
+        return " ".join(tokenized_data)
 
 
 if __name__ == '__main__':
