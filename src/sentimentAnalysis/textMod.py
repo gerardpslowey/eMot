@@ -38,5 +38,5 @@ def pre_process(text):
     emojis=re.findall('(?::|;|=)(?:-)?(?:\)|\(|D|P)',text)
 
     text=re.sub('[\W]+',' ',text.lower()) + ' '.join(emojis).replace('-','')
-    
+
     return text

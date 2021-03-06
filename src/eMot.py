@@ -12,7 +12,11 @@ from browserHistory.getHistory import GetHistory
 from urlProcessor.scraper import Scraper
 from urlProcessor.urlFilter import filter_blacklisted_url
 
-MAX_WORKERS = 5
+import multiprocessing
+
+cpu_cores = multiprocessing.cpu_count()
+MAX_WORKERS = cpu_cores * 2
+# print(MAX_WORKERS)
     
 class Emot:
     def __init__(self, filtr, browser):
@@ -61,12 +65,13 @@ class Emot:
     def write_to_csv(self, data):
         text = []
         
-        with open('sentimentAnalyser/scraped.csv', mode='a', encoding="utf-8") as scraped_text:
+        with open('sentimentAnalysis/scraped.csv', mode='a', encoding="utf-8",  newline='') as scraped_text:
             writer = csv.writer(scraped_text, delimiter=',')
 
             for item in data:
                 if(len(item)!=0):
                     text.append(item)
+                    
             if len(text) != 0:
                 writer.writerow(text)
 

@@ -59,7 +59,7 @@ class Scraper:
             if str(token) and 'we and our partners use' not in token and 'our privacy policy' not in token:
                 self.cleaned(token, tokenized_data)
 
-        return " ".join(tokenized_data)
+        return tokenized_data
 
 
 if __name__ == '__main__':

@@ -2,7 +2,6 @@ import pandas as pd
 import re, textMod, pickle
 from sklearn.linear_model import LogisticRegression
 
-# TODO look into tfidf
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
@@ -43,10 +42,10 @@ def negAndPos(cv, model):
         key=lambda x: x[1])[:10]:
         print(best_negative)
 
-def saveTrainedModel(model):
-    pkl_filename = "pickle_model.pkl"
-    with open(pkl_filename, 'wb') as file:
-        pickle.dump(model, file)   
+def saveFiles(data, filename):
+    with open(filename, 'wb') as file:
+        pickle.dump(data, file)
+
 
 def checkAccuracy(testTransform, y_test, model):
     y_pred_class = model.predict(testTransform)
@@ -62,7 +61,7 @@ def main():
     trainSet = trainSet[trainSet.Sentiment != "other"]    
     trainSet['CustomSentiment'] = trainSet.apply(lambda x: customSentiment(x['Sentiment']), axis=1)
     trainSet['Tweet'] = trainSet['Tweet'].apply(textMod.pre_process)
-    trainSet['Tweet'] = trainSet['Tweet'].apply(textMod.tokenise)
+    # trainSet['Tweet'] = trainSet['Tweet'].apply(textMod.tokenise)
 
     X = trainSet.Tweet
     y = trainSet.CustomSentiment
@@ -80,10 +79,14 @@ def main():
     checkAccuracy(testTransform, y_test, model)
 
     # print the most negative and positive words
-    # negAndPos(cv, model)
+    negAndPos(cv, model)
+
+    model_filename = "LR_Model.pkl"
+    cv_filename = "CV_File.pkl"
 
     # save the model
-    saveTrainedModel(model)
+    saveFiles(model, model_filename)
+    saveFiles(cv, cv_filename)
 
 if __name__ == '__main__':
     main()
