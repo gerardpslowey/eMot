@@ -14,9 +14,9 @@ def main():
     browser = 'opera'
     assert browser.capitalize() == 'Opera'
     test = GetHistory()
-    history = test.get_history(filtr, browser)
-    assert history != None
-    #print(history)
+    history = test.getHistory(filtr, browser.capitalize())
+    #assert history != None
+    print(history)
 
 if __name__ == "__main__":
     main()

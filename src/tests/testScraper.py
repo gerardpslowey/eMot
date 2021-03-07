@@ -10,15 +10,14 @@ def main():
     tags_list = '../blacklists/tags_blacklist.txt'
     test2 = Scraper()
     data = test2.scrape(url,tags_list)
-    #assert data != None
-    print(data)
+    assert data != None
 
 
     # check that a 404 or 503 code doesn't return
     url = 'https://webscraper.io/test-sites/e-commerce/allinone'
     print(f'testing {url}..')
     test3 = Scraper()
-    status_code = test3.get_status(url)
+    status_code = test3.getStatus(url)
     assert status_code == 200
 
 if __name__ == "__main__":

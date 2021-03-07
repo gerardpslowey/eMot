@@ -4,14 +4,12 @@ import re
 
 def base(url): 
     regex = 'https?://([A-Za-z_0-9.-]+).*'
-    alternative = '^(?:http:\/\/|www\.|https:\/\/)([^\/]+)'
-
     url = re.search(regex, url)
     if url:
         return url.group(1)
     else:
         return ''
 
-def filter_blacklisted_url(history_list, blacklisted_sites):
-    filtered_list = [url for url in history_list if base(url) not in blacklisted_sites]
-    return filtered_list
+def filterBlacklistedUrl(history_list, blacklisted_sites):
+    
+    return [url for url in history_list if base(url) not in blacklisted_sites]

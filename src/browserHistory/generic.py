@@ -25,7 +25,7 @@ class Browser(ABC):
         self.profile_dir_prefixes = []
         
         if plat is None:
-            plat = utils.get_platform()
+            plat = utils.getPlatform()
         homedir = Path.home()
 
         error_string = self.name + " browser is not supported on {}"
@@ -79,7 +79,7 @@ class Browser(ABC):
         return profile_dirs
 
     # Returns path of the history file for the given profile_dir
-    def history_path_profile(self, profile_dir):
+    def historyPathProfile(self, profile_dir):
         # The profile_dir should be one of the outputs from profiles method
         # profile_dir: Profile directory (should be a single name, relative to history_dir)
         # returns path to history file of the profile
@@ -93,12 +93,12 @@ class Browser(ABC):
         return [self.history_dir / profile_dir / profile_file for profile_dir in self.profiles(profile_file)]
 
     # Returns history of profiles given by `profile_dirs`
-    def history_profiles(self, profile_dirs):
-        history_paths = [self.history_path_profile(profile_dir) for profile_dir in profile_dirs]
-        return self.fetch_history(history_paths)
+    def historyProfiles(self, profile_dirs):
+        history_paths = [self.historyPathProfile(profile_dir) for profile_dir in profile_dirs]
+        return self.fetchHistory(history_paths)
 
     # Returns history of all available profiles stored in SQL
-    def fetch_history(self, history_paths=None, sort=True, desc=False):
+    def fetchHistory(self, history_paths=None, sort=True, desc=False):
         """
         The history files are first copied to a temporary location and then queried
         This might lead to some additional overhead and results returned might not be the latest if the browser is in use
@@ -159,7 +159,7 @@ class Outputs:
         }
 
     # Returns the history sorted according to the domain-name.
-    def sort_domain(self):
+    def sortDomain(self):
         domain_histories: typing.DefaultDict[typing.Any, List[Any]] = defaultdict(list)
         for entry in self.field_map[self.fetch_type]["var"]:
             domain_histories[urlparse(entry[1]).netloc].append(entry)

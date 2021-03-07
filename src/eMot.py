@@ -10,7 +10,7 @@ from browserHistory.getHistory import GetHistory
 
 # Scraper and url filter
 from urlProcessor.scraper import Scraper
-from urlProcessor.urlFilter import filter_blacklisted_url
+from urlProcessor.urlFilter import filterBlacklistedUrl
 
 import multiprocessing
 
@@ -22,25 +22,25 @@ class Emot:
     def __init__(self, filtr, browser):
         self.filtr = filtr
         self.browser = browser
-        blacklist = self.get_blacklist()
-        urls = self.get_urls(filtr, browser, blacklist)
-        self.start_tasks(urls)
+        blacklist = self.getBlacklist()
+        urls = self.getUrls(filtr, browser, blacklist)
+        self.startTasks(urls)
 
-    def get_blacklist(self):
+    def getBlacklist(self):
         blacklist = []
         with open('blacklists/urls_blacklist.txt','r') as myfile:
             for line in myfile:
                 blacklist.append(line.strip())
         return blacklist
 
-    def get_urls(self, filtr, browser, blacklist):
-        urls = GetHistory().get_history(filtr, browser)
+    def getUrls(self, filtr, browser, blacklist):
+        urls = GetHistory().getHistory(filtr, browser)
         print("History Retrieved: " + str(len(urls)))
-        filtered_urls = filter_blacklisted_url(urls.values(), blacklist)
+        filtered_urls = filterBlacklistedUrl(urls.values(), blacklist)
         print("URLS remaining after filtering: " + str(len(filtered_urls)))
         return filtered_urls
 
-    def start_tasks(self, urls):
+    def startTasks(self, urls):
         queue = Queue()
         for url in set(urls):
             queue.put(url)
@@ -58,13 +58,13 @@ class Emot:
             for future in futures.as_completed(f):
                 data = future.result()
                 # store scraped data
-                self.write_to_csv(data)
+                self.writeToCSV(data)
 
         print("Finished scraping!")
 
-    def write_to_csv(self, data):
-        text = []
+    def writeToCSV(self, data):
         
+        text =[]
         with open('sentimentAnalysis/scraped.csv', mode='a', encoding="utf-8",  newline='') as scraped_text:
             writer = csv.writer(scraped_text, delimiter=',')
 
@@ -74,6 +74,8 @@ class Emot:
                     
             if len(text) != 0:
                 writer.writerow(text)
+
+
 
 def main():
     print("Time filters include 'hour', 'day', 'week', 'month', or 'year' or '' (all time).")

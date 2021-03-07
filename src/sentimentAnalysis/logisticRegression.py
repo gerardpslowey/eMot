@@ -1,11 +1,11 @@
 import pandas as pd
-import re, textMod, pickle
-from sklearn.linear_model import LogisticRegression
+import re, pickle, textMod, numpy as np
+import cProfile, io, pstats
 
+from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.metrics import accuracy_score
-from sklearn.model_selection import train_test_split
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import train_test_split, GridSearchCV
 
 # TODO look into implementing a pipeline
 from sklearn.pipeline import Pipeline
@@ -34,13 +34,15 @@ def negAndPos(cv, model):
     for best_positive in sorted(
         feature_to_coef.items(), 
         key=lambda x: x[1], reverse=True) [:10]: 
-        print(best_positive)
+
+            print(best_positive)
 
     print('Negative Words')
     for best_negative in sorted(
         feature_to_coef.items(),
         key=lambda x: x[1])[:10]:
-        print(best_negative)
+
+            print(best_negative)
 
 def saveFiles(data, filename):
     with open(filename, 'wb') as file:
@@ -55,21 +57,20 @@ def checkAccuracy(testTransform, y_test, model):
 
 def main():
     # read the dataset into a data frame
-    trainSet = pd.read_csv("datasets/train.csv")
+    trainSet = pd.read_csv("../datasets/train.csv")
 
     # remove neutrals for the moment
     trainSet = trainSet[trainSet.Sentiment != "other"]    
     trainSet['CustomSentiment'] = trainSet.apply(lambda x: customSentiment(x['Sentiment']), axis=1)
-    trainSet['Tweet'] = trainSet['Tweet'].apply(textMod.pre_process)
-    # trainSet['Tweet'] = trainSet['Tweet'].apply(textMod.tokenise)
+    trainSet['Tweet'] = trainSet['Tweet'].apply(textMod.preProcess)
 
     X = trainSet.Tweet
     y = trainSet.CustomSentiment
     X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.8)
 
     cv = CountVectorizer()
-    trainFit = cv.fit_transform(X_train)
-    testTransform = cv.transform(X_test)
+    trainFit = cv.fit_transform(X_train.apply(lambda x: np.str_(x)))
+    testTransform = cv.transform(X_test.apply(lambda x: np.str_(x)))
 
     # cValue = calculateCValue(trainFit, y_train)
     model = LogisticRegression()
@@ -89,4 +90,15 @@ def main():
     saveFiles(cv, cv_filename)
 
 if __name__ == '__main__':
-    main()
+    pr = cProfile.Profile()
+    pr.enable()
+
+    my_result = main()
+
+    pr.disable()
+    s = io.StringIO()
+    ps = pstats.Stats(pr, stream=s).sort_stats('tottime')
+    ps.print_stats()
+
+    with open('scikit_cprofile.txt', 'w+') as f:
+        f.write(s.getvalue())

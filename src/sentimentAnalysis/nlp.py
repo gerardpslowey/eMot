@@ -1,6 +1,6 @@
 import re, csv
 
-def save_word_lists():
+def saveWordLists():
     # save the positive words into a list called p_list
     with open('positive-words.txt') as f:
         p_txt = f.read()
@@ -13,7 +13,7 @@ def save_word_lists():
 
     return p_list, n_list
 
-def check_scraped_text(p_list, n_list):
+def checkScrapedText(p_list, n_list):
 
     # create empty dictionaries
     word_count_dict= {}
@@ -26,27 +26,27 @@ def check_scraped_text(p_list, n_list):
         csv_reader = csv.reader(f, delimiter=',')
         for row in csv_reader:
             for word in row:
-                word_counter(word, p_list, n_list, word_count_dict, word_count_positive, word_count_negative, word_count_neutral)
+                wordCounter(word, p_list, n_list, word_count_dict, word_count_positive, word_count_negative, word_count_neutral)
 
         # sort on word count values in reverse
         # list_dict, list_positive, list_negative, list_neutral
         list_dict = sorted(word_count_dict.items(), key=lambda x:x[1], reverse=True)
-        csv_result_writer(list_dict, 'word_count.csv', "Counting words..")
+        csvResultWriter(list_dict, 'word_count.csv', "Counting words..")
 
         list_positive= sorted(word_count_positive.items(), key=lambda x:x[1], reverse=True)
-        csv_result_writer(list_positive, 'word_positive.csv', "Checking positive words..")
+        csvResultWriter(list_positive, 'word_positive.csv', "Checking positive words..")
 
         list_negative = sorted(word_count_negative.items(), key=lambda x:x[1], reverse=True)
-        csv_result_writer(list_negative, 'word_negative.csv', "Checking negative words..")
+        csvResultWriter(list_negative, 'word_negative.csv', "Checking negative words..")
 
         list_neutral = sorted(word_count_neutral.items(), key=lambda x:x[1], reverse=True)
-        csv_result_writer(list_neutral, 'word_neutral.csv', "Checking neutral words..")
+        csvResultWriter(list_neutral, 'word_neutral.csv', "Checking neutral words..")
 
         # calculate stats
         # total_word_count, total_pos_words, total_neg_words, total_neutral_words
-        get_stats(len(word_count_dict), len(word_count_positive), len(word_count_negative), len(word_count_neutral))
+        getStats(len(word_count_dict), len(word_count_positive), len(word_count_negative), len(word_count_neutral))
 
-def word_counter(word, p_list, n_list, wcdict, wcpos, wcneg, wcneut):
+def wordCounter(word, p_list, n_list, wcdict, wcpos, wcneg, wcneut):
     
     # add first count if word is not found, else increment it
     wcdict[word] = 1 if word not in wcdict.keys() else +1
@@ -63,14 +63,14 @@ def word_counter(word, p_list, n_list, wcdict, wcpos, wcneg, wcneut):
     else:
         wcneut[word] = 1 if word not in wcneut.keys() else +1
 
-def csv_result_writer(list_, word_file, message):
+def csvResultWriter(list_, word_file, message):
     with open(word_file, 'w', encoding="utf-8") as f1:
         print(message)
 
         for i in list_:
             f1.write(f'{i[0]}: {i[1]}\n')
 
-def get_stats(total_word_count, total_pos_words, total_neg_words, total_neutral_words):
+def getStats(total_word_count, total_pos_words, total_neg_words, total_neutral_words):
 
     percentage_negative = int(total_neg_words/total_word_count * 100)
     percentage_positive = int(total_pos_words/total_word_count * 100)
@@ -84,8 +84,8 @@ def get_stats(total_word_count, total_pos_words, total_neg_words, total_neutral_
     print("Finished!")
 
 def main():
-    p_list, n_list = save_word_lists()
-    check_scraped_text(p_list, n_list)
+    p_list, n_list = saveWordLists()
+    checkScrapedText(p_list, n_list)
 
 if __name__ == '__main__':
     main()

@@ -16,7 +16,7 @@ class Platform(enum.Enum):
     WINDOWS = 3
 
 # Returns the current platform
-def get_platform():
+def getPlatform():
     system = platform.system()
     if system == "Linux":
         return Platform.LINUX
