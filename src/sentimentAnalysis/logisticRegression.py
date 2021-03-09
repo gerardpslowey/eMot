@@ -10,50 +10,39 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 # TODO look into implementing a pipeline
 from sklearn.pipeline import Pipeline
 
-def customSentiment(sentiment):
-    if sentiment == "neg":
-        return 0
-    else:
-        return 1
-
-def calculateCValue(trainFit, y_train):
+def calculateCValue(x_train_fit, y_train):
     param_grid = {'C': [0.001, 0.01, 0.05, 0.25, 0.5, 1, 10]}
     grid = GridSearchCV(LogisticRegression(), param_grid, cv=5)
-    grid.fit(trainFit, y_train)
+    grid.fit(x_train_fit, y_train)
     print("Best cross-validation score: {:.2f}".format(grid.best_score_))
     print("Best parameters: {}".format(grid.best_params_))
     return grid.best_params_
 
 def negAndPos(cv, model):
     feature_to_coef = {
-    word: 
-        coef for word, coef in zip(cv.get_feature_names(), model.coef_[0])
-    }
+        word: coef for word, coef in zip(cv.get_feature_names(), model.coef_[0])}
 
     print('Positive Words')
-    for best_positive in sorted(
-        feature_to_coef.items(), 
-        key=lambda x: x[1], reverse=True) [:10]: 
-
+    bp =[]
+    for best_positive in sorted(feature_to_coef.items(), key=lambda x: x[1], reverse=True) [:25]: 
             print(best_positive)
+            bp.append(best_positive[0])
 
     print('Negative Words')
-    for best_negative in sorted(
-        feature_to_coef.items(),
-        key=lambda x: x[1])[:10]:
-
+    bn=[]
+    for best_negative in sorted(feature_to_coef.items(), key=lambda x: x[1])[:10]:
             print(best_negative)
+            bn.append(best_negative[0])
+
+    textMod.wordcloud_draw(bp)
+    #wp.wordcloud_draw(bn)
 
 def saveFiles(data, filename):
     with open(filename, 'wb') as file:
         pickle.dump(data, file)
 
-
-def checkAccuracy(testTransform, y_test, model):
-    y_pred_class = model.predict(testTransform)
-    aScore = accuracy_score(y_test, y_pred_class)
-
-    print("Final Model Accuracy: {:.2f}".format(aScore)) 
+def customSentiment(sentiment):
+    return 0 if sentiment == "neg" else 1
 
 def main():
     # read the dataset into a data frame
@@ -66,39 +55,41 @@ def main():
 
     X = trainSet.Tweet
     y = trainSet.CustomSentiment
-    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.8)
 
+    x_train, x_test, y_train, y_test = train_test_split(X, y,
+                                                        test_size=0.2, 
+                                                        shuffle=True)
     cv = CountVectorizer()
-    trainFit = cv.fit_transform(X_train.apply(lambda x: np.str_(x)))
-    testTransform = cv.transform(X_test.apply(lambda x: np.str_(x)))
+    x_train_fit = cv.fit_transform(x_train)
+    x_test_transform = cv.transform(x_test)
 
-    # cValue = calculateCValue(trainFit, y_train)
+    #calculateCValue(x_train_fit, y_train)
     model = LogisticRegression()
-    # train the model to the dataset
-    model.fit(trainFit, y_train)
+    model.fit(x_train_fit, y_train)         # train the model to the dataset
 
-    checkAccuracy(testTransform, y_test, model)
+    y_pred_class = model.predict(x_test_transform)
+    aScore = accuracy_score(y_test, y_pred_class)
+    print("Final Model Accuracy: {:.2f}".format(aScore))
 
-    # print the most negative and positive words
-    negAndPos(cv, model)
+    negAndPos(cv, model)                    # print the most negative and positive words
 
-    model_filename = "LR_Model.pkl"
+    model_filename = "LR_Model.pkl" 
+    saveFiles(model, model_filename)      # save the model
+
     cv_filename = "CV_File.pkl"
-
-    # save the model
-    saveFiles(model, model_filename)
     saveFiles(cv, cv_filename)
 
 if __name__ == '__main__':
-    pr = cProfile.Profile()
-    pr.enable()
+    main()
+    # pr = cProfile.Profile()
+    # pr.enable()
 
-    my_result = main()
+    # my_result = main()
 
-    pr.disable()
-    s = io.StringIO()
-    ps = pstats.Stats(pr, stream=s).sort_stats('tottime')
-    ps.print_stats()
+    # pr.disable()
+    # s = io.StringIO()
+    # ps = pstats.Stats(pr, stream=s).sort_stats('tottime')
+    # ps.print_stats()
 
-    with open('scikit_cprofile.txt', 'w+') as f:
-        f.write(s.getvalue())
+    # with open('scikit_cprofile.txt', 'w+') as f:
+    #     f.write(s.getvalue())
