@@ -17,12 +17,12 @@ class Scraper:
         return text
 
     def getSoup(self, url):
-        r = requests.get('http://localhost:8050/render.html', params={'url':url, 'wait':3})
+        r = requests.get('http://localhost:8050/render.html', params={'url':url, 'wait':3, 'timeout':10})
         soup = BeautifulSoup(r.text, 'html.parser') if r.status_code == 200 else ''
         return soup
 
     def getStatus(self, url):
-        r = requests.get('http://localhost:8050/render.html', params={'url':url, 'wait':3})
+        r = requests.get('http://localhost:8050/render.html', params={'url':url, 'wait':3, 'timeout':10})
         return r.status_code
 
     def getBlacklist(self, tag_list):
