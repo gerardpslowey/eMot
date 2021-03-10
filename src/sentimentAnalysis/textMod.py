@@ -1,21 +1,21 @@
-from spellchecker import SpellChecker
-spell = SpellChecker()
+# from spellchecker import SpellChecker
+# spell = SpellChecker()
 
 import spacy, re, string
 nlp = spacy.load('en_core_web_sm')
 
-from wordcloud import WordCloud
+# from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 
-def spellChecker(sentence):
-    corrected_text = []
-    misspelled_words = spell.unknown(sentence.split())
-    for word in sentence.split():
-        if word in misspelled_words:
-            corrected_text.append(spell.correction(word))
-        else:
-            corrected_text.append(word)
-    return " ".join(corrected_text)
+# def spellChecker(sentence):
+#     corrected_text = []
+#     misspelled_words = spell.unknown(sentence.split())
+#     for word in sentence.split():
+#         if word in misspelled_words:
+#             corrected_text.append(spell.correction(word))
+#         else:
+#             corrected_text.append(word)
+#     return " ".join(corrected_text)
 
 def preProcess(sentence):
     #remove urls
