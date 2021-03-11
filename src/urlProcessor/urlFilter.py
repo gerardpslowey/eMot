@@ -11,5 +11,4 @@ def base(url):
         return ''
 
 def filterBlacklistedUrl(history_list, blacklisted_sites):
-    
     return [url for url in history_list if base(url) not in blacklisted_sites]

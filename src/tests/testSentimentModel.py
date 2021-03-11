@@ -8,7 +8,7 @@ def testSentiment(cv, model):
     "very nice very cool, king of the castle, king of the castle, I have a chair",
     "coronavirus has caused major turmoil recently", 
     "Eoghan mcDermott has left 2fm after six years following allegations of assault",
-    "this is ok"]
+    "this is tragic"]
 
     for review in reviews:
         sent_value = model.predict(cv.transform([review]))[0]
@@ -22,7 +22,6 @@ def loadFiles(filename):
 def main():
     model_filename = "../models/LRModelEmotion.pkl"
     cv_filename = "../models/CVFileEmotions.pkl"
-
     model = loadFiles(model_filename)
     cv = loadFiles(cv_filename)
     testSentiment(cv, model)

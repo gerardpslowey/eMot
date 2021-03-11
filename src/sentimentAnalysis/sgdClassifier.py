@@ -1,4 +1,4 @@
-import pandas as pd, re, textMod, numpy as np
+import pandas as pd, re, numpy as np, pickle
 
 from sklearn.linear_model import SGDClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
@@ -10,6 +10,14 @@ from nltk.corpus import wordnet
 from nltk.corpus import stopwords
 stop = stopwords.words('english')
 import random
+
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent.absolute())) 
+from urlProcessor.textMod import preProcess, removeURLs, removeRepetitions, spellCheck
+
+from tqdm import tqdm
+tqdm.pandas()
 
 def main():
     # read the dataset into a data frame
@@ -28,8 +36,6 @@ def main():
     df['sentiment'].replace(to_replace='hate', value='anger', inplace=True)
     # replace 'worry' for 'fear'
     df['sentiment'].replace(to_replace='worry', value='fear', inplace=True)
-    # see how many tweets we have for each sentiment
-    #print(df.groupby('sentiment')['sentiment'].count().sort_values(ascending=False))
 
     anger = df.loc[df['sentiment'] == 'anger']
     new_anger_comments = []
@@ -40,35 +46,39 @@ def main():
     new_anger['content'] = new_anger_comments
     new_anger['sentiment'] = 'anger'
     anger = anger.append(new_anger)
+    df = df.append(new_anger)
 
-    print(df.groupby('sentiment')['sentiment'].count().sort_values(ascending=False))
-    
-    #df['content'] = df['content'].apply(textMod.preProcess)
+    #print(df.groupby('sentiment')['sentiment'].count().sort_values(ascending=False))
 
+
+    df['content'] = df['content'].progress_apply(preProcess)
+    df['content'] = df['content'].progress_apply(removeURLs)
+    df['content'] = df['content'].progress_apply(removeRepetitions)
+    df['content'] = df['content'].progress_apply(spellCheck)
 
     #Encoding output labels
     lbl_enc = LabelEncoder()
     y = lbl_enc.fit_transform(df.sentiment.values)
-    X_train, X_val, y_train, y_val = train_test_split(df.content.values, 
-                                                        y, 
-                                                        random_state=42, 
-                                                        test_size=0.2, 
-                                                        shuffle=True)
-                                                    
-    # tfidf = TfidfVectorizer(max_features=1000, analyzer='word',ngram_range=(1,3))
+    X = df.content.values
+
+    X_train, X_val, y_train, y_val = train_test_split(
+            
+            X, y, random_state=42, test_size=0.2, shuffle=True)
+
+    # tfidf = TfidfVectorizer(max_features=1000,ngram_range=(1,3))
     # X_train_tfidf = tfidf.fit_transform(X_train)
     # X_val_tfidf = tfidf.fit_transform(X_val)
 
-    cv = CountVectorizer(analyzer='word')
+    cv = CountVectorizer()          #analyzer='word'
     cv.fit(df['content'])
     X_train_count =  cv.transform(X_train)
     X_val_count =  cv.transform(X_val)
 
+    #alpha = loss checker
     lsvm = SGDClassifier(alpha=0.001, random_state=5, max_iter=15, tol=None)
     lsvm.fit(X_train_count, y_train)
     y_pred = lsvm.predict(X_val_count)
     print('lsvm using count vectors accuracy %s' % accuracy_score(y_pred, y_val))
-
 
     # fear         8459
     # happiness    5209
@@ -84,6 +94,16 @@ def main():
     print('Fear Words')
     for best_positive in sorted(feature_to_coef.items(), key=lambda x: x[1]) [:20]: 
         print(best_positive)
+
+    model_filename = "../models/sgd_Model.pkl" 
+    saveFiles(lsvm, model_filename)      # save the model
+
+    cv_filename = "../models/sgd_CV_File.pkl"
+    saveFiles(cv, cv_filename)
+
+def saveFiles(data, filename):
+    with open(filename, 'wb') as file:
+        pickle.dump(data, file)
 
 def get_synonyms(word):
     #Get synonyms of a word
@@ -133,7 +153,6 @@ def random_insertion(words, n):
     return sentence
 
 def add_word(new_words):
-    
     synonyms = []
     counter = 0
     

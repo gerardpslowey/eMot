@@ -75,8 +75,6 @@ class Emot:
             if len(text) != 0:
                 writer.writerow(text)
 
-
-
 def main():
     print("Time filters include 'hour', 'day', 'week', 'month', or 'year' or '' (all time).")
     filtr = input('Filter the date: ').capitalize()

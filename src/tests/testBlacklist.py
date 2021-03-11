@@ -1,7 +1,6 @@
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.absolute())) 
-
 from urlProcessor.urlFilter import base, filterBlacklistedUrl
 
 def testBase():

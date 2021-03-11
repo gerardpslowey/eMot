@@ -1,5 +1,5 @@
 import pandas as pd
-import re, pickle, textMod, numpy as np
+import re, pickle, numpy as np
 import cProfile, io, pstats
 
 from sklearn.linear_model import LogisticRegression
@@ -8,7 +8,15 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split, GridSearchCV
 
 # TODO look into implementing a pipeline
-from sklearn.pipeline import Pipeline
+# from sklearn.pipeline import Pipeline
+
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent.absolute())) 
+from urlProcessor.textMod import preProcess, removeURLs, removeRepetitions, spellCheck, wordcloud_draw
+
+from tqdm import tqdm
+tqdm.pandas()
 
 def calculateCValue(x_train_fit, y_train):
     param_grid = {'C': [0.001, 0.01, 0.05, 0.25, 0.5, 1, 10]}
@@ -34,8 +42,8 @@ def negAndPos(cv, model):
             print(best_negative)
             bn.append(best_negative[0])
 
-    textMod.wordcloud_draw(bp)
-    #wp.wordcloud_draw(bn)
+    wordcloud_draw(bp)
+    #wordcloud_draw(bn)
 
 def saveFiles(data, filename):
     with open(filename, 'wb') as file:
@@ -50,8 +58,11 @@ def main():
 
     # remove neutrals for the moment
     trainSet = trainSet[trainSet.Sentiment != "other"]    
-    trainSet['CustomSentiment'] = trainSet.apply(lambda x: customSentiment(x['Sentiment']), axis=1)
-    trainSet['Tweet'] = trainSet['Tweet'].apply(textMod.preProcess)
+    trainSet['CustomSentiment'] = trainSet.progress_apply(lambda x: customSentiment(x['Sentiment']), axis=1)
+    trainSet['Tweet'] = trainSet['Tweet'].progress_apply(preProcess)
+    trainSet['Tweet'] = trainSet['Tweet'].progress_apply(removeURLs)
+    trainSet['Tweet'] = trainSet['Tweet'].progress_apply(removeRepetitions)
+    trainSet['Tweet'] = trainSet['Tweet'].progress_apply(spellCheck)
 
     X = trainSet.Tweet
     y = trainSet.CustomSentiment
@@ -73,10 +84,10 @@ def main():
 
     negAndPos(cv, model)                    # print the most negative and positive words
 
-    model_filename = "LR_Model.pkl" 
+    model_filename = "../models/LR_Model.pkl" 
     saveFiles(model, model_filename)      # save the model
 
-    cv_filename = "CV_File.pkl"
+    cv_filename = "../models/CV_File.pkl"
     saveFiles(cv, cv_filename)
 
 if __name__ == '__main__':

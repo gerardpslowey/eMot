@@ -3,8 +3,7 @@ from pathlib import Path
 import cProfile, io, pstats
 from bs4 import BeautifulSoup, Comment, Doctype
 
-sys.path.append(str(Path(__file__).parent.parent.absolute())) 
-from sentimentAnalysis.textMod import preProcess
+from urlProcessor.textMod import preProcess, removeURLs
 
 class Scraper:
     
@@ -17,12 +16,12 @@ class Scraper:
         return text
 
     def getSoup(self, url):
-        r = requests.get('http://localhost:8050/render.html', params={'url':url, 'wait':3, 'timeout':10})
+        r = requests.get('http://localhost:8050/render.html', params={'url':url, 'wait':3})
         soup = BeautifulSoup(r.text, 'html.parser') if r.status_code == 200 else ''
         return soup
 
     def getStatus(self, url):
-        r = requests.get('http://localhost:8050/render.html', params={'url':url, 'wait':3, 'timeout':10})
+        r = requests.get('http://localhost:8050/render.html', params={'url':url, 'wait':3})
         return r.status_code
 
     def getBlacklist(self, tag_list):
@@ -49,7 +48,8 @@ class Scraper:
                 and 'Personalised ads and content' not in sentence
                 and 'our privacy policy' not in sentence):
 
-                cleaned.append(preProcess(sentence))
+                sent = preProcess(sentence)
+                cleaned.append(removeURLs(sent))
         return cleaned
 
 def main():
@@ -58,15 +58,16 @@ def main():
     print(Scraper().scrape(url, tags_list))
 
 if __name__ == '__main__':
-    pr = cProfile.Profile()
-    pr.enable()
+    main()
+    # pr = cProfile.Profile()
+    # pr.enable()
 
-    my_result = main()
+    # my_result = main()
 
-    pr.disable()
-    s = io.StringIO()
-    ps = pstats.Stats(pr, stream=s).sort_stats('tottime')
-    ps.print_stats()
+    # pr.disable()
+    # s = io.StringIO()
+    # ps = pstats.Stats(pr, stream=s).sort_stats('tottime')
+    # ps.print_stats()
 
-    with open('scraper_cprofile.txt', 'w+') as f:
-        f.write(s.getvalue())
+    # with open('scraper_cprofile.txt', 'w+') as f:
+    #     f.write(s.getvalue())
