@@ -31,13 +31,13 @@ def negAndPos(cv, model):
         word: coef for word, coef in zip(cv.get_feature_names(), model.coef_[0])}
 
     print('Positive Words')
-    bp =[]
+    bp = []
     for best_positive in sorted(feature_to_coef.items(), key=lambda x: x[1]) [:25]: 
             print(best_positive)
             bp.append(best_positive[0])
 
     print('Negative Words')
-    bn=[]
+    bn = []
     for best_negative in sorted(feature_to_coef.items(), key=lambda x: x[1], reverse=True)[:10]:
             print(best_negative)
             bn.append(best_negative[0])

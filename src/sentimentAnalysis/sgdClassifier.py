@@ -61,8 +61,7 @@ def main():
     y = lbl_enc.fit_transform(df.sentiment.values)
     X = df.content.values
 
-    X_train, X_val, y_train, y_val = train_test_split(
-            
+    X_train, X_val, y_train, y_val = train_test_split(           
             X, y, random_state=42, test_size=0.2, shuffle=True)
 
     # tfidf = TfidfVectorizer(max_features=1000,ngram_range=(1,3))
@@ -75,7 +74,7 @@ def main():
     X_val_count =  cv.transform(X_val)
 
     #alpha = loss checker
-    lsvm = SGDClassifier(alpha=0.001, random_state=5, max_iter=15, tol=None)
+    lsvm = SGDClassifier(alpha=0.001, loss='modified_huber', penalty = 'l2', random_state=5, max_iter=15, tol=None)
     lsvm.fit(X_train_count, y_train)
     y_pred = lsvm.predict(X_val_count)
     print('lsvm using count vectors accuracy %s' % accuracy_score(y_pred, y_val))
