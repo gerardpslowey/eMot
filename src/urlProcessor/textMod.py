@@ -6,7 +6,7 @@ from spacy.tokenizer import _get_regex_pattern
 nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner'])
 nlp.add_pipe('sentencizer')
 
-from wordcloud import WordCloud
+# from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 
 # get default pattern for tokens that don't get split
@@ -41,11 +41,13 @@ def spellCheck(sentence):
     words = spell.split_words(sentence)
     return " ".join([spell.correction(word) for word in words])
 
-def wordcloud_draw(data, color = 'white'):
-    words = ' '.join(data)
-    wordcloud = WordCloud(  background_color=color,
-                            width=2500, height=2000).generate(words)
-    plt.figure(1,figsize=(10, 7))
-    plt.imshow(wordcloud)
-    plt.axis('off')
-    plt.show()
+# def wordcloud_draw(data, color = 'white'):
+#     words = ' '.join(data)
+#     wordcloud = WordCloud(
+#         background_color=color, 
+#         width=2500, height=2000).generate(words)
+
+#     plt.figure(1,figsize=(10, 7))
+#     plt.imshow(wordcloud)
+#     plt.axis('off')
+#     plt.show()

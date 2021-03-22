@@ -3,7 +3,7 @@ from pathlib import Path
 import cProfile, io, pstats
 from bs4 import BeautifulSoup, Comment, Doctype
 
-from urlProcessor.textMod import preProcess, removeURLs
+from .textMod import preProcess, removeURLs
 
 class Scraper:
     
@@ -11,9 +11,14 @@ class Scraper:
         print("scraping site: " + url + "\n")
         soup = self.getSoup(url)
         blacklist = self.getBlacklist(tag_list)
-        text = self.getText(soup, blacklist)
-        print(f'task {url} finished\n') 
-        return text
+
+        if(len(soup) != 0):
+            text = self.getText(soup, blacklist)
+            print(f'task {url} finished\n') 
+            return text
+
+        print(f'task {url} returned null, skipped\n') 
+        return None
 
     def getSoup(self, url):
         r = requests.get('http://localhost:8050/render.html', params={'url':url, 'wait':3})
@@ -33,6 +38,7 @@ class Scraper:
 
     def getText(self, soup, blacklist):
         # get rid of the unwanted text in Comments, Doctype and the above tags list.
+
         for junk in soup(blacklist):
             junk.decompose() 
 
@@ -50,6 +56,7 @@ class Scraper:
 
                 sent = preProcess(sentence)
                 cleaned.append(removeURLs(sent))
+
         return cleaned
 
 def main():

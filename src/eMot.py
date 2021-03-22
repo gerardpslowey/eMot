@@ -16,7 +16,7 @@ import multiprocessing
 
 cpu_cores = multiprocessing.cpu_count()
 MAX_WORKERS = cpu_cores * 2
-# print(MAX_WORKERS)
+print(MAX_WORKERS)
     
 class Emot:
     def __init__(self, filtr, browser):
@@ -57,13 +57,14 @@ class Emot:
             # Deal with the threads as they complete individually
             for future in futures.as_completed(f):
                 data = future.result()
-                # store scraped data
-                self.writeToCSV(data)
+
+                if(data != None):
+                    # store scraped data
+                    self.writeToCSV(data)
 
         print("Finished scraping!")
 
     def writeToCSV(self, data):
-        
         text =[]
         with open('sentimentAnalysis/scraped.csv', mode='a', encoding="utf-8",  newline='') as scraped_text:
             writer = csv.writer(scraped_text, delimiter=',')
