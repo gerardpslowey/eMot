@@ -10,3 +10,6 @@ job1:
 job2:
     stage: test
     script: "pytest"
+    
+    
+    
