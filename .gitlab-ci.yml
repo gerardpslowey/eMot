@@ -2,6 +2,7 @@ before_script:
     - python --version
     - cd src
     - pip install -r requirements.txt
+    - python -m spacy download en_core_web_sm
 
 job1:
     script: echo "testing pytests"
