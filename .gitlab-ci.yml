@@ -1,9 +1,10 @@
 before_script:
     - python --version
+    - cd src
     - pip install -r requirements.txt
 
 job1:
-    script: "echo Hello World"
+    script: echo "testing pytests"
         
 job2:
     stage: test
