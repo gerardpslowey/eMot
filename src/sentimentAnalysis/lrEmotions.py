@@ -1,5 +1,5 @@
 import pandas as pd
-import re, pickle, numpy as np
+import os, re, pickle, numpy as np
 import cProfile, io, pstats
 
 from sklearn.linear_model import LogisticRegression
@@ -13,7 +13,7 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.absolute())) 
-from urlProcessor.textMod import preProcess, removeURLs, removeRepetitions, spellCheck, wordcloud_draw
+from urlProcessor.textMod import saveFiles, preProcess, removeURLs, removeRepetitions, spellCheck, wordcloud_draw
 
 from tqdm import tqdm
 tqdm.pandas()
@@ -28,12 +28,22 @@ def calculateCValue(x_train_fit, y_train):
     print("Best parameters: {}".format(grid.best_params_))
     return grid.best_params_
 
-def saveFiles(data, filename):
-    with open(filename, 'wb') as file:
-        pickle.dump(data, file)
-
 def customSentiment(sentiment):
     return sentiment_dict[sentiment]
+
+def measurePerformance():
+    pr = cProfile.Profile()
+    pr.enable()
+
+    my_result = main()
+
+    pr.disable()
+    s = io.StringIO()
+    ps = pstats.Stats(pr, stream=s).sort_stats('tottime')
+    ps.print_stats()
+
+    with open('scikit_cprofile.txt', 'w+') as f:
+        f.write(s.getvalue())
 
 def main():
     # read the dataset into a data frame
@@ -60,31 +70,19 @@ def main():
 
     # c = calculateCValue(x_train_fit, y_train))
 
-    model = LogisticRegression(multi_class='multinomial', solver='lbfgs', penalty='l2', C=1)
+    model = LogisticRegression(multi_class='multinomial', solver='lbfgs', penalty='l2')
     model.fit(x_train_fit, y_train)         
 
     y_pred_class = model.predict(x_test_transform)
     aScore = accuracy_score(y_test, y_pred_class)
     print("Final Model Accuracy: {:.2f}".format(aScore))
 
-
-    model_filename = "../models/LRModelEmotion.pkl" 
+    model_filename = "LRModelEmotion.pkl" 
     saveFiles(model, model_filename)      
     
-    cv_filename = "../models/CVFileEmotions.pkl"
+    cv_filename = "CVFileEmotions.pkl"
     saveFiles(cv, cv_filename)
 
 if __name__ == '__main__':
     main()
-    # pr = cProfile.Profile()
-    # pr.enable()
-
-    # my_result = main()
-
-    # pr.disable()
-    # s = io.StringIO()
-    # ps = pstats.Stats(pr, stream=s).sort_stats('tottime')
-    # ps.print_stats()
-
-    # with open('scikit_cprofile.txt', 'w+') as f:
-    #     f.write(s.getvalue())
+    # measurePerformance()

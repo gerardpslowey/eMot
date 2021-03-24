@@ -9,12 +9,12 @@ from sklearn.preprocessing import LabelEncoder
 from nltk.corpus import wordnet
 from nltk.corpus import stopwords
 stop = stopwords.words('english')
-import random
+import random, os
 
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.absolute())) 
-from urlProcessor.textMod import preProcess, removeURLs, removeRepetitions, spellCheck
+from urlProcessor.textMod import saveFiles, preProcess, removeURLs, removeRepetitions, spellCheck
 
 from tqdm import tqdm
 tqdm.pandas()
@@ -33,20 +33,20 @@ def main():
     df = df.drop(df[df.sentiment == 'love'].index)
     df = df.drop(df[df.sentiment == 'neutral'].index)
 
-    df['sentiment'].replace(to_replace='hate', value='anger', inplace=True)
-    # replace 'worry' for 'fear'
-    df['sentiment'].replace(to_replace='worry', value='fear', inplace=True)
+    # df['sentiment'].replace(to_replace='hate', value='anger', inplace=True)
+    # # replace 'worry' for 'fear'
+    # df['sentiment'].replace(to_replace='worry', value='fear', inplace=True)
 
-    anger = df.loc[df['sentiment'] == 'anger']
-    new_anger_comments = []
-    for content in anger['content']:
-        new_anger_comments.append(synonym_replacement(content, 4))
-        new_anger_comments.append(random_insertion(content, 4))
-    new_anger = pd.DataFrame()
-    new_anger['content'] = new_anger_comments
-    new_anger['sentiment'] = 'anger'
-    anger = anger.append(new_anger)
-    df = df.append(new_anger)
+    # anger = df.loc[df['sentiment'] == 'anger']
+    # new_anger_comments = []
+    # for content in anger['content']:
+    #     new_anger_comments.append(synonym_replacement(content, 4))
+    #     new_anger_comments.append(random_insertion(content, 4))
+    # new_anger = pd.DataFrame()
+    # new_anger['content'] = new_anger_comments
+    # new_anger['sentiment'] = 'anger'
+    # anger = anger.append(new_anger)
+    # df = df.append(new_anger)
 
     #print(df.groupby('sentiment')['sentiment'].count().sort_values(ascending=False))
 
@@ -94,15 +94,11 @@ def main():
     for best_positive in sorted(feature_to_coef.items(), key=lambda x: x[1]) [:20]: 
         print(best_positive)
 
-    model_filename = "../models/sgd_Model.pkl" 
+    model_filename = "sgd_Model.pkl" 
     saveFiles(lsvm, model_filename)      # save the model
 
-    cv_filename = "../models/sgd_CV_File.pkl"
+    cv_filename = "sgd_CV_File.pkl"
     saveFiles(cv, cv_filename)
-
-def saveFiles(data, filename):
-    with open(filename, 'wb') as file:
-        pickle.dump(data, file)
 
 def get_synonyms(word):
     #Get synonyms of a word

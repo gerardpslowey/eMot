@@ -1,13 +1,14 @@
-from spellchecker import SpellChecker
-spell = SpellChecker(distance=1)
+import spacy, re, string, os, pickle, matplotlib.pyplot as plt
 
-import spacy, re, string
 from spacy.tokenizer import _get_regex_pattern
 nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner'])
 nlp.add_pipe('sentencizer')
 
-# from wordcloud import WordCloud
-import matplotlib.pyplot as plt
+from wordcloud import WordCloud
+from pathlib import Path
+
+from spellchecker import SpellChecker
+spell = SpellChecker(distance=1)
 
 # get default pattern for tokens that don't get split
 re_token_match = _get_regex_pattern(nlp.Defaults.token_match)
@@ -41,13 +42,23 @@ def spellCheck(sentence):
     words = spell.split_words(sentence)
     return " ".join([spell.correction(word) for word in words])
 
-# def wordcloud_draw(data, color = 'white'):
-#     words = ' '.join(data)
-#     wordcloud = WordCloud(
-#         background_color=color, 
-#         width=2500, height=2000).generate(words)
+def wordcloud_draw(data, color = 'white'):
+    words = ' '.join(data)
+    wordcloud = WordCloud(
+        background_color=color, 
+        width=2500, height=2000).generate(words)
 
-#     plt.figure(1,figsize=(10, 7))
-#     plt.imshow(wordcloud)
-#     plt.axis('off')
-#     plt.show()
+    plt.figure(1,figsize=(10, 7))
+    plt.imshow(wordcloud)
+    plt.axis('off')
+    plt.show()
+
+
+def saveFiles(data, filename):
+    directory = "../models"
+    if not os.path.exists(directory):
+        Path(directory).mkdir(parents=True, exist_ok=True)
+
+    model_location = os.path.join(directory, filename)
+    with open(model_location, 'wb') as file:
+        pickle.dump(data, file)

@@ -1,6 +1,5 @@
 import pandas as pd
-import re, pickle, numpy as np
-import cProfile, io, pstats
+import cProfile, io, pstats, os, sys, re, pickle, numpy as np 
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
@@ -10,10 +9,9 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 # TODO look into implementing a pipeline
 # from sklearn.pipeline import Pipeline
 
-import sys
 from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent.absolute())) 
-from urlProcessor.textMod import preProcess, removeURLs, removeRepetitions, spellCheck, wordcloud_draw
+sys.path.append(str(Path(__file__).parent.parent.absolute()))
+from urlProcessor.textMod import saveFiles, preProcess, removeURLs, removeRepetitions, spellCheck, wordcloud_draw
 
 from tqdm import tqdm
 tqdm.pandas()
@@ -45,12 +43,22 @@ def negAndPos(cv, model):
     wordcloud_draw(bp)
     #wordcloud_draw(bn)
 
-def saveFiles(data, filename):
-    with open(filename, 'wb') as file:
-        pickle.dump(data, file)
-
 def customSentiment(sentiment):
     return 0 if sentiment == "neg" else 1
+
+def measurePerformance():
+    pr = cProfile.Profile()
+    pr.enable()
+
+    my_result = main()
+
+    pr.disable()
+    s = io.StringIO()
+    ps = pstats.Stats(pr, stream=s).sort_stats('tottime')
+    ps.print_stats()
+
+    with open('scikit_cprofile.txt', 'w+') as f:
+        f.write(s.getvalue())
 
 def main():
     # read the dataset into a data frame
@@ -84,23 +92,12 @@ def main():
 
     negAndPos(cv, model)                    # print the most negative and positive words
 
-    model_filename = "../models/LR_Model.pkl" 
+    model_filename = "LR_Model.pkl" 
     saveFiles(model, model_filename)      # save the model
 
-    cv_filename = "../models/CV_File.pkl"
+    cv_filename = "CV_File.pkl"
     saveFiles(cv, cv_filename)
 
 if __name__ == '__main__':
     main()
-    # pr = cProfile.Profile()
-    # pr.enable()
-
-    # my_result = main()
-
-    # pr.disable()
-    # s = io.StringIO()
-    # ps = pstats.Stats(pr, stream=s).sort_stats('tottime')
-    # ps.print_stats()
-
-    # with open('scikit_cprofile.txt', 'w+') as f:
-    #     f.write(s.getvalue())
+    # measurePerformance()
