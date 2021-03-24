@@ -42,16 +42,8 @@ def negAndPos(cv, model):
             print(best_negative)
             bn.append(best_negative[0])
 
-    # wordcloud_draw(bp)
-    # wordcloud_draw(bn)
-
-def customSentiment(sentiment):
-    if sentiment == "neg":
-        return 0  
-    elif sentiment == "pos":
-        return 1
-    else:
-        return 2
+    wordcloud_draw(bp)
+    wordcloud_draw(bn)
 
 def measurePerformance():
     pr = cProfile.Profile()
@@ -72,14 +64,6 @@ def main():
     print("Reading Training Data")
     trainSet = pd.read_csv("../datasets/train.csv")
     print("Finished Reading")
-    print("\nCleaning Data Set")
-
-    trainSet['CustomSentiment'] = trainSet.progress_apply(lambda x: customSentiment(x['Sentiment']), axis=1)
-    trainSet['Tweet'] = trainSet['Tweet'].progress_apply(preProcess)
-    trainSet['Tweet'] = trainSet['Tweet'].progress_apply(removeURLs)
-    trainSet['Tweet'] = trainSet['Tweet'].progress_apply(removeRepetitions)
-    trainSet['Tweet'] = trainSet['Tweet'].progress_apply(spellCheck)
-    print("Finished Cleaning")
 
     X = trainSet.Tweet
     y = trainSet.CustomSentiment

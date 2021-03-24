@@ -33,28 +33,28 @@ def main():
     df = df.drop(df[df.sentiment == 'love'].index)
     df = df.drop(df[df.sentiment == 'neutral'].index)
 
-    # df['sentiment'].replace(to_replace='hate', value='anger', inplace=True)
-    # # replace 'worry' for 'fear'
-    # df['sentiment'].replace(to_replace='worry', value='fear', inplace=True)
+    df['sentiment'].replace(to_replace='hate', value='anger', inplace=True)
+    # replace 'worry' for 'fear'
+    df['sentiment'].replace(to_replace='worry', value='fear', inplace=True)
 
-    # anger = df.loc[df['sentiment'] == 'anger']
-    # new_anger_comments = []
-    # for content in anger['content']:
-    #     new_anger_comments.append(synonym_replacement(content, 4))
-    #     new_anger_comments.append(random_insertion(content, 4))
-    # new_anger = pd.DataFrame()
-    # new_anger['content'] = new_anger_comments
-    # new_anger['sentiment'] = 'anger'
-    # anger = anger.append(new_anger)
-    # df = df.append(new_anger)
+    anger = df.loc[df['sentiment'] == 'anger']
+    new_anger_comments = []
+    for content in anger['content']:
+        new_anger_comments.append(synonym_replacement(content, 4))
+        new_anger_comments.append(random_insertion(content, 4))
+    new_anger = pd.DataFrame()
+    new_anger['content'] = new_anger_comments
+    new_anger['sentiment'] = 'anger'
+    anger = anger.append(new_anger)
+    df = df.append(new_anger)
 
-    #print(df.groupby('sentiment')['sentiment'].count().sort_values(ascending=False))
+    # print(df.groupby('sentiment')['sentiment'].count().sort_values(ascending=False))
 
 
-    df['content'] = df['content'].progress_apply(preProcess)
-    df['content'] = df['content'].progress_apply(removeURLs)
-    df['content'] = df['content'].progress_apply(removeRepetitions)
-    df['content'] = df['content'].progress_apply(spellCheck)
+    # df['content'] = df['content'].progress_apply(preProcess)
+    # df['content'] = df['content'].progress_apply(removeURLs)
+    # df['content'] = df['content'].progress_apply(removeRepetitions)
+    # df['content'] = df['content'].progress_apply(spellCheck)
 
     #Encoding output labels
     lbl_enc = LabelEncoder()

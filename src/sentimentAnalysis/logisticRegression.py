@@ -13,9 +13,6 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.absolute()))
 from urlProcessor.textMod import saveFiles, preProcess, removeURLs, removeRepetitions, spellCheck, wordcloud_draw
 
-from tqdm import tqdm
-tqdm.pandas()
-
 def calculateCValue(x_train_fit, y_train):
     param_grid = {'C': [0.001, 0.01, 0.05, 0.25, 0.5, 1, 10]}
     grid = GridSearchCV(LogisticRegression(), param_grid, cv=5)
@@ -43,9 +40,6 @@ def negAndPos(cv, model):
     wordcloud_draw(bp)
     #wordcloud_draw(bn)
 
-def customSentiment(sentiment):
-    return 0 if sentiment == "neg" else 1
-
 def measurePerformance():
     pr = cProfile.Profile()
     pr.enable()
@@ -62,15 +56,11 @@ def measurePerformance():
 
 def main():
     # read the dataset into a data frame
-    trainSet = pd.read_csv("../datasets/train.csv")
+    # and convert the dtype object to unicode
+    trainSet = pd.read_csv("../datasets/train_cleaned.csv").astype('U')
 
     # remove neutrals for the moment
     trainSet = trainSet[trainSet.Sentiment != "other"]    
-    trainSet['CustomSentiment'] = trainSet.progress_apply(lambda x: customSentiment(x['Sentiment']), axis=1)
-    trainSet['Tweet'] = trainSet['Tweet'].progress_apply(preProcess)
-    trainSet['Tweet'] = trainSet['Tweet'].progress_apply(removeURLs)
-    trainSet['Tweet'] = trainSet['Tweet'].progress_apply(removeRepetitions)
-    trainSet['Tweet'] = trainSet['Tweet'].progress_apply(spellCheck)
 
     X = trainSet.Tweet
     y = trainSet.CustomSentiment

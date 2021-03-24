@@ -65,7 +65,7 @@ class Emot:
         print("Finished scraping!")
 
     def writeToCSV(self, data):
-        text =[]
+        text = []
         with open('sentimentAnalysis/scraped.csv', mode='a', encoding="utf-8",  newline='') as scraped_text:
             writer = csv.writer(scraped_text, delimiter=',')
 
