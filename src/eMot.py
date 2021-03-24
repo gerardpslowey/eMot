@@ -11,6 +11,7 @@ from browserHistory.getHistory import GetHistory
 # Scraper and url filter
 from urlProcessor.scraper import Scraper
 from urlProcessor.urlFilter import filterBlacklistedUrl
+from urlProcessor.blacklists import urlsDict
 
 import multiprocessing
 
@@ -22,16 +23,9 @@ class Emot:
     def __init__(self, filtr, browser):
         self.filtr = filtr
         self.browser = browser
-        blacklist = self.getBlacklist()
+        blacklist = list(urlsDict.values())
         urls = self.getUrls(filtr, browser, blacklist)
         self.startTasks(urls)
-
-    def getBlacklist(self):
-        blacklist = []
-        with open('blacklists/urls_blacklist.txt','r') as myfile:
-            for line in myfile:
-                blacklist.append(line.strip())
-        return blacklist
 
     def getUrls(self, filtr, browser, blacklist):
         urls = GetHistory().getHistory(filtr, browser)
