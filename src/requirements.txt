@@ -7,5 +7,5 @@ pyqt5-tools
 scikit-learn
 pandas
 nltk
-# wordcloud
 pyspellchecker
+pytest

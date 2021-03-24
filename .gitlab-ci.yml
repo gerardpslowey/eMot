@@ -2,14 +2,12 @@ before_script:
     - python --version
     - pip install -r requirements.txt
 
-demo_job_1:
-    tags:
-        - sql
+job1:
     script:
         - echo Hello World
         
-demo_job_2:
-    tags:
-        - scraper
+job2:
+    stage: 
+        - test
     script:
-        - echo Test Complete
+        - pytest
