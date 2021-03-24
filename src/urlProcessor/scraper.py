@@ -3,8 +3,8 @@ from pathlib import Path
 import cProfile, io, pstats
 from bs4 import BeautifulSoup, Comment, Doctype
 
-from textMod import preProcess, removeURLs
-from blacklists import tagsDict
+from .textMod import preProcess, removeURLs
+from .blacklists import tagsDict
 
 class Scraper:
     def scrape(self, url):

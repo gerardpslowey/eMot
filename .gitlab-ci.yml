@@ -1,12 +1,26 @@
+image: python:latest
+
+variables:
+    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+    paths:
+        - .cache/pip
+        - venv/
+
 before_script:
-    - python --version
+    - python -V  # Print out python version for debugging
+    - pip install virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
     - cd src
     - pip install -r requirements.txt
     - python -m spacy download en_core_web_sm
 
-job1:
-    script: echo "testing pytests"
-        
-job2:
-    stage: test
-    script: "pytest"
+print:
+    script:
+        - echo "Testing 1 2 3"
+
+pytest:
+    script:
+        - pytest

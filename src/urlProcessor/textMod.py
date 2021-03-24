@@ -12,7 +12,7 @@ spell = SpellChecker(distance=1)
 
 # get default pattern for tokens that don't get split
 re_token_match = _get_regex_pattern(nlp.Defaults.token_match)
-re_token_match = f"({re_token_match}|#\w+|\w+-\w+)"
+re_token_match = fr'({re_token_match}|#\w+|\w+-\w+)'
 
 # overwrite token_match function of the tokenizer
 nlp.tokenizer.token_match = re.compile(re_token_match).match

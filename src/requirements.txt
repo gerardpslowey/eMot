@@ -1,7 +1,8 @@
 bs4
 python-dateutil
 requests
-setuptools wheel
+setuptools 
+wheel
 spacy
 pyqt5==5.15.2
 pyqt5-tools

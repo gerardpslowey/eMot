@@ -6,13 +6,11 @@ from urlProcessor.scraper import Scraper
 def test_scraper():
     # test what sort of data is return 
     url = 'https://www.independent.ie/opinion/letters/new-opening-hours-very-little-use-when-the-pubs-are-closed-40125545.html'
-    tags_list = '../blacklists/tags_blacklist.txt'
-    assert Scraper().scrape(url,tags_list) != None
+    assert Scraper().scrape(url) != None
 
 def test_blank_site():
     url = "https://www.blank.org/"
-    tags_list = '../blacklists/tags_blacklist.txt'
-    assert Scraper().scrape(url,tags_list) == ['']
+    assert Scraper().scrape(url) == ['']
 
 def test_good_status_code():
     # check that a 404 or 503 code doesn't return
@@ -26,6 +24,3 @@ def test_bad_status_code():
 def test_bad_url():
     url = 'https:/testing.1.2.3'
     assert Scraper().getStatus(url) == 502
-
-if __name__ == '__main__':
-    test_blank_site()
