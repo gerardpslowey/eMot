@@ -1,8 +1,8 @@
 import pickle
 
 emotions_dict = {0:"neutral", 1:"worry", 2:"happiness", 3:"sadness", 4:"love", 5:"surprise", 6:"fun", 7:"relief", 8:"hate", 9:"empty", 10:"enthusiasm", 11:"boredom", 12:"anger"}
-model_filename = "../models/LRModelEmotion.pkl"
-cv_filename = "../models/CVFileEmotions.pkl"
+model_filename = "models/LRModelEmotion.pkl"
+cv_filename = "models/CVFileEmotions.pkl"
 
 def test_sentiment():    
     model = loadFiles(model_filename)
