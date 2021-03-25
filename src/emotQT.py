@@ -35,8 +35,6 @@ class Main(QtWidgets.QMainWindow, MainWindow):
         else:
             self.PrintWindow.show()
 
-
-
 class AboutWindow(QtWidgets.QMainWindow, Ui_Form):
     def __init__(self, *args, obj=None, **kwargs):
         super(AboutWindow, self).__init__(*args, **kwargs)

@@ -24,3 +24,11 @@ def test_bad_status_code():
 def test_bad_url():
     url = 'https:/testing.1.2.3'
     assert Scraper().getStatus(url) == 502
+
+
+if __name__ == '__main__':
+    # test_scraper()
+    # test_blank_site()
+    # test_good_status_code()
+    # test_bad_status_code()
+    # test_bad_url()
