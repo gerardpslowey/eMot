@@ -9,6 +9,7 @@ class Main(QtWidgets.QMainWindow, MainWindow):
     def __init__(self, *args, obj=None, **kwargs):
         super(Main, self).__init__(*args, **kwargs)
         self.setupUi(self)
+
         self.AboutWindow = AboutWindow()
         self.DialogWindow = DialogWindow()
         self.PrintWindow = PrintWindow()
@@ -30,7 +31,7 @@ class Main(QtWidgets.QMainWindow, MainWindow):
         filtr = str(self.dateComboBox.currentText())
 
         if browser == "Select Browser":
-            self.DialogWindow.show()
+            self.toggle_window(self.DialogWindow)
         else:
             self.PrintWindow.show()
 

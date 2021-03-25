@@ -25,12 +25,19 @@
   <property name="windowTitle">
    <string>BrowserDialog</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="resource.qrc">
+    <normaloff>:/newPrefix/resources/icon.png</normaloff>:/newPrefix/resources/icon.png</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(255, 255, 255);</string>
+  </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>60</x>
+     <x>100</x>
      <y>60</y>
-     <width>301</width>
+     <width>201</width>
      <height>51</height>
     </rect>
    </property>
@@ -45,9 +52,9 @@ The Drop Down Menu</string>
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>30</y>
-     <width>401</width>
+     <x>70</x>
+     <y>20</y>
+     <width>271</width>
      <height>20</height>
     </rect>
    </property>
@@ -65,7 +72,30 @@ The Drop Down Menu</string>
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
+  <widget class="QLabel" name="emptyBox_3">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>30</y>
+     <width>371</width>
+     <height>101</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 1px solid rgb(165, 165, 165);
+background-color: rgb(255, 255, 255);
+</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <zorder>emptyBox_3</zorder>
+  <zorder>label</zorder>
+  <zorder>label_2</zorder>
  </widget>
- <resources/>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
  <connections/>
 </ui>
