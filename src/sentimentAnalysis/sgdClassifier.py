@@ -39,15 +39,12 @@ def main():
     sgd.fit(X_train_count, y_train)
     ysvm_pred = sgd.predict(x_test_count)
     print("Accuracy: {:.2f}%".format(accuracy_score(y_test, ysvm_pred) * 100))
-    print("\nF1 Score: {:.2f}".format(f1_score(y_test, ysvm_pred, average='micro') * 100))
+    print("F1 Score: {:.2f}".format(f1_score(y_test, ysvm_pred, average='micro') * 100))
 
-    svm_model = Pipeline([
-        ('cv', cv),
-        ('clf', sgd),
-    ])
-
-    filename = 'cv_sgd.pkl'
-    saveFiles(svm_model, filename)
+    model_filename = 'sgd.pkl'
+    cv_filename = 'sgd_cv.pkl'
+    saveFiles(sgd, model_filename)
+    saveFiles(cv, cv_filename)
 
 if __name__ == '__main__':
     main()

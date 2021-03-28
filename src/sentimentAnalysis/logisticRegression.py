@@ -49,13 +49,10 @@ def main():
     print("Accuracy: {:.2f}%".format(accuracy_score(y_test, y_pred) * 100))
     print("F1 Score: {:.2f}".format(f1_score(y_test, y_pred, average='micro') * 100))
 
-    lr_model = Pipeline([
-        ('cv', vect),
-        ('clf', model),
-    ])
-
-    filename = 'cv_lr.pkl'
-    saveFiles(lr_model, filename)
+    model_filename = 'lr.pkl'
+    cv_filename = 'lr_cv.pkl'
+    saveFiles(model, model_filename)
+    saveFiles(vect, cv_filename)
 
 if __name__ == '__main__':
     main()

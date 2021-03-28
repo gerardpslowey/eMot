@@ -58,13 +58,10 @@ def main():
     # plot_confusion_matrix(y_test, ysvm_pred, classes=class_names, normalize=True, title='Normalized confusion matrix')
     # plt.show()
 
-    svm_model = Pipeline([
-        ('tfidf', vect),
-        ('clf', svc),
-    ])
-
-    filename = 'tfidf_svm.pkl'
-    saveFiles(svm_model, filename)
+    model_filename = 'svm.pkl'
+    tfidf_filename = 'svm_tfidf.pkl'
+    saveFiles(svc, model_filename)
+    saveFiles(vect, tfidf_filename)
 
 def plot_confusion_matrix(y_true, y_pred, classes, normalize=False, title=None, cmap=plt.cm.Blues):
     # This function prints and plots the confusion matrix.
