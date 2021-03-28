@@ -15,10 +15,6 @@ def test_remove_repetitions():
     sentence = "Gottttt the newsssss"
     assert removeRepetitions(sentence) == "Gott the newss"
 
-def test_spell_check():
-    sentence = "I'm sorri, at leest it's Friday?"
-    assert spellCheck(sentence) == "i'm sorry at least it's friday"
-
 def test_clean_text():
     text = ".... Python is great and challenging! #preprocessing @testing !?;:"
     text = preProcess(text)
