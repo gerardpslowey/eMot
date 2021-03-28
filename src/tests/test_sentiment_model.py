@@ -19,9 +19,9 @@ def test_sentiment():
 
     message = "This move is good and cool"
     sentiment_value = model.predict(cv.transform([message]))[0]
-    print(sentiment_value)
+    # print(sentiment_value)
 
-    assert model.predict([message]) == 'joy'
+    assert sentiment_value == 'joy'
 
 def test_sentiment2():    
     model = loadFiles(SGD_Model)
@@ -29,7 +29,7 @@ def test_sentiment2():
 
     message = "this is horrible"
     sentiment_value = model.predict(cv.transform([message]))[0]
-    print(sentiment_value)
+    # print(sentiment_value)
 
     assert sentiment_value != 'love'
 
@@ -39,7 +39,7 @@ def test_sentiment3():
 
     review = "pizza was hour late and my pizza is cold"
     sentiment_value = model.predict(tfidf.transform([review]))[0]    
-    print(sentiment_value)
+    # print(sentiment_value)
 
     assert sentiment_value == 'anger'
 
