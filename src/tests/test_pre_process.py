@@ -17,7 +17,7 @@ def test_remove_repetitions():
 
 def test_spell_check():
     sentence = "I'm sorri, at leest it's Friday?"
-    assert spellCheck(sentence) == "i'm sorry at least it's friday"
+    assert spellCheck(sentence).lower() == "i'm sorry at least it's friday"
 
 def test_clean_text():
     text = ".... Python is great and challenging! #preprocessing @testing !?;:"
