@@ -17,7 +17,6 @@ import multiprocessing
 
 cpu_cores = multiprocessing.cpu_count()
 MAX_WORKERS = cpu_cores * 2
-print(MAX_WORKERS)
     
 class Emot:
     def __init__(self, filtr, browser):
@@ -40,8 +39,10 @@ class Emot:
             queue.put(url)
         print("URLs added to queue")
 
-        # asynchronous execution of tasks using threads
-        # use a with statement to ensure threads are cleaned up promptly
+        """
+        asynchronous execution of tasks using threads
+        use a with statement to ensure threads are cleaned up promptly
+        """
         with futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
             f = []
             while not queue.empty():

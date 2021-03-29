@@ -21,7 +21,7 @@ class GetHistory():
                     urlDict[date] = url
             return urlDict
         except Exception as e:
-            print(f"{e} : Make sure your browser choice is valid and spelled correctly.")
+            raise SystemExit(f"{e} : Make sure your BROWSER choice is valid and spelled correctly.")
 
     def dateFilter(self, times):
 
@@ -45,8 +45,11 @@ class GetHistory():
         elif times == 'Year':
             return self.strFormat(datetime.now() + relativedelta(years=-1))
 
+        elif times == 'All':
+            return ''
+
         else:
-            raise ValueError("Make sure your filter choice is valid and spelled correctly.")
+            raise ValueError("Make sure your FILTER choice is valid and spelled correctly.")
 
     def strFormat(self, time):
         return time.strftime("%Y-%m-%d %H:%M:%S")   #makes the date a string

@@ -29,9 +29,10 @@ class Ui_MainWindow(object):
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
         self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 479, 409))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
-        self.label = QtWidgets.QLabel(self.scrollAreaWidgetContents)
-        self.label.setGeometry(QtCore.QRect(10, 10, 451, 16))
-        self.label.setObjectName("label")
+        self.textEdit = QtWidgets.QTextEdit(self.scrollAreaWidgetContents)
+        self.textEdit.setGeometry(QtCore.QRect(10, 10, 451, 41))
+        self.textEdit.setReadOnly(True)
+        self.textEdit.setObjectName("textEdit")
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -48,7 +49,6 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "PrintWindow"))
-        self.label.setText(_translate("MainWindow", "Starting..."))
 import pyqt.resource_rc
 
 

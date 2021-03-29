@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import pyqt.resource_rc
 
 class Ui_browserDialog(object):
     def setupUi(self, browserDialog):
@@ -54,7 +54,6 @@ class Ui_browserDialog(object):
         self.label.setText(_translate("browserDialog", "Choose A Browser From \n"
 "The Drop Down Menu"))
         self.label_2.setText(_translate("browserDialog", "You Must Choose A Browser"))
-import pyqt.resource_rc
 
 
 if __name__ == "__main__":
