@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>eMot</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resource.qrc">
@@ -278,7 +278,9 @@ background-color: rgb(255, 255, 255);
     </property>
     <property name="styleSheet">
      <string notr="true">color: rgb(255, 255, 255);
+selection-color: rgb(0, 0, 0);
 background-color: rgb(103, 171, 159);
+selection-background-color: rgb(68, 112, 104);
 border: 1px solid black;</string>
     </property>
     <property name="text">
@@ -303,7 +305,14 @@ border: 1px solid black;</string>
      <height>26</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
    <widget class="QMenu" name="menuFile">
+    <property name="styleSheet">
+     <string notr="true">selection-background-color: rgb(103, 171, 159);
+selection-color: rgb(255, 255, 255);</string>
+    </property>
     <property name="title">
      <string>File</string>
     </property>
@@ -316,6 +325,9 @@ border: 1px solid black;</string>
   <action name="actionpreferences">
    <property name="text">
     <string>preferences</string>
+   </property>
+   <property name="visible">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionabout">

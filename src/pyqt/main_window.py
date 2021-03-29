@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import pyqt.resource_rc
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -98,7 +98,9 @@ class Ui_MainWindow(object):
         self.button.setFont(font)
         self.button.setAutoFillBackground(False)
         self.button.setStyleSheet("color: rgb(255, 255, 255);\n"
+"selection-color: rgb(0, 0, 0);\n"
 "background-color: rgb(103, 171, 159);\n"
+"selection-background-color: rgb(68, 112, 104);\n"
 "border: 1px solid black;")
         self.button.setObjectName("button")
         self.emptyBox_2.raise_()
@@ -112,14 +114,18 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 880, 26))
+        self.menubar.setStyleSheet("")
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
+        self.menuFile.setStyleSheet("selection-background-color: rgb(103, 171, 159);\n"
+"selection-color: rgb(255, 255, 255);")
         self.menuFile.setObjectName("menuFile")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
         self.actionpreferences = QtWidgets.QAction(MainWindow)
+        self.actionpreferences.setVisible(True)
         self.actionpreferences.setObjectName("actionpreferences")
         self.actionabout = QtWidgets.QAction(MainWindow)
         self.actionabout.setObjectName("actionabout")
@@ -157,6 +163,8 @@ class Ui_MainWindow(object):
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.actionpreferences.setText(_translate("MainWindow", "preferences"))
         self.actionabout.setText(_translate("MainWindow", "about"))
+import pyqt.resource_rc
+
 
 if __name__ == "__main__":
     import sys

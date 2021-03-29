@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>BrowserDialog</string>
+   <string>Dialog</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resource.qrc">
@@ -42,8 +42,8 @@
     </rect>
    </property>
    <property name="text">
-    <string>Choose A Browser From 
-The Drop Down Menu</string>
+    <string>Choose a browser from 
+ the dropdown menu</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>

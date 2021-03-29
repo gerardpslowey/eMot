@@ -22,18 +22,20 @@ class Ui_MainWindow(object):
         MainWindow.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
-        self.scrollArea.setGeometry(QtCore.QRect(60, 30, 481, 411))
-        self.scrollArea.setWidgetResizable(True)
-        self.scrollArea.setObjectName("scrollArea")
-        self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 479, 409))
-        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
-        self.textEdit = QtWidgets.QTextEdit(self.scrollAreaWidgetContents)
-        self.textEdit.setGeometry(QtCore.QRect(10, 10, 451, 41))
+        self.analysis_button = QtWidgets.QPushButton(self.centralwidget)
+        self.analysis_button.setGeometry(QtCore.QRect(160, 390, 271, 71))
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        self.analysis_button.setFont(font)
+        self.analysis_button.setAutoFillBackground(False)
+        self.analysis_button.setStyleSheet("color: rgb(255, 255, 255);\n"
+"background-color: rgb(255, 125, 102);\n"
+"border: 1px solid black;")
+        self.analysis_button.setObjectName("analysis_button")
+        self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
+        self.textEdit.setGeometry(QtCore.QRect(80, 50, 431, 331))
         self.textEdit.setReadOnly(True)
         self.textEdit.setObjectName("textEdit")
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 581, 26))
@@ -49,6 +51,8 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "PrintWindow"))
+        self.analysis_button.setStatusTip(_translate("MainWindow", "Click to start the sentiment analysis"))
+        self.analysis_button.setText(_translate("MainWindow", "Start Analysis!"))
 import pyqt.resource_rc
 
 

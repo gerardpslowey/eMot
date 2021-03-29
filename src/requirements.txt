@@ -12,3 +12,4 @@ nltk
 wordcloud
 pyspellchecker
 pytest
+docker
