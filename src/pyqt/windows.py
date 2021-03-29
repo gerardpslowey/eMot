@@ -18,7 +18,7 @@ class PrintWindow(QtWidgets.QMainWindow, PWindow):
     def __init__(self, *args, obj=None, **kwargs):
         super(PrintWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
-        self.analysis_button.hide()
+        self.analysis_button.setEnabled(False)
         sys.stdout = Stream(newText=self.onUpdateText)
 
     def onUpdateText(self, text):

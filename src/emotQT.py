@@ -18,27 +18,28 @@ class Main(QtWidgets.QMainWindow, MainWindow):
         self.PrintWindow = PrintWindow()
         
         self.actionabout.triggered.connect(
-            lambda checked: self.toggle_window(self.AboutWindow))
+            lambda checked: self.toggle_item(self.AboutWindow))
 
         self.button.clicked.connect(self.go_button)
+        self.PrintWindow.analysis_button.clicked.connect(self.onAnalysisButton)
 
-    def toggle_window(self, window):
-        if window.isVisible():
-            window.hide()
+    def toggle_item(self, item):
+        if item.isVisible():
+            item.hide()
         else:
-            window.show()
+            item.show()
 
     def go_button(self):
         browser = str(self.browserComboBox.currentText()).capitalize()
         filtr = str(self.dateComboBox.currentText()).capitalize()
 
         if browser == "Select browser":
-            self.toggle_window(self.DialogWindow)
+            self.toggle_item(self.DialogWindow)
             self.DialogWindow.label.setText("Choose a browser from \n the dropdown menu")
             self.DialogWindow.label_2.setText("You Must Choose A Browser")
 
         elif not dockerRunner.is_running("splash"):
-            self.toggle_window(self.DialogWindow)
+            self.toggle_item(self.DialogWindow)
             self.DialogWindow.label.setText("The splash docker \nmust to be turned on")
             self.DialogWindow.label_2.setText("Docker Container")
 
@@ -46,7 +47,17 @@ class Main(QtWidgets.QMainWindow, MainWindow):
             self.PrintWindow.show()
             worker = Worker(Emot, filtr, browser)
             self.threadpool.start(worker)
-            self.PrintWindow.analysis_button.show()
+            worker.signals.finished.connect(self.toggleAnalysis)
+
+    def toggleAnalysis(self):
+        self.PrintWindow.analysis_button.setEnabled(True)
+
+    def onAnalysisButton(self):
+            self.PrintWindow.textEdit.clear()
+            print("Starting Analysis")
+            # TODO: import a sentiment Program and run.
+            #worker = Worker(emotSentiment) 
+            # self.threadpool.start(worker)
 
     def closeEvent(self, event):
         """Shuts down application on close."""
