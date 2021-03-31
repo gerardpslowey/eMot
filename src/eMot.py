@@ -11,7 +11,7 @@ from browserHistory.getHistory import GetHistory
 # Scraper and url filter
 from urlProcessor.scraper import Scraper
 from urlProcessor.urlFilter import filterBlacklistedUrl
-from urlProcessor.blacklists import urlsDict
+from urlProcessor.blacklists import Blacklists
 
 import multiprocessing
 
@@ -22,8 +22,8 @@ class Emot:
     def __init__(self, filtr, browser):
         self.filtr = filtr
         self.browser = browser
-        blacklist = list(urlsDict.values())
-        urls = self.getUrls(filtr, browser, blacklist)
+        urlsSet = Blacklists().getUrls()
+        urls = self.getUrls(filtr, browser, urlsSet)
         self.startTasks(urls)
 
     def getUrls(self, filtr, browser, blacklist):
@@ -59,17 +59,16 @@ class Emot:
 
         print("Finished scraping!")
 
-    def writeToCSV(self, data):
-        text = []
-        with open('sentimentAnalysis/scraped.csv', mode='a', encoding="utf-8",  newline='') as scraped_text:
+    def writeToCSV(self, document):
+        data = []
+        with open('sentimentAnalysis/scraped.csv', mode='w+', encoding="utf-8",  newline='') as scraped_text:
             writer = csv.writer(scraped_text, delimiter=',')
 
-            for item in data:
-                if(len(item)!=0):
-                    text.append(item)
-                    
-            if len(text) != 0:
-                writer.writerow(text)
+            for sentence in document:
+                if(len(sentence.split()) > 3):
+                    data.append(sentence)
+
+            writer.writerow(data)
 
 def main():
     print("Time filters include 'hour', 'day', 'week', 'month', or 'year' or '' (all time).")

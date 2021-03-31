@@ -50,9 +50,7 @@ class Ui_Form(object):
         self.gitlabLink_2.setObjectName("gitlabLink_2")
         self.emptyBox_3 = QtWidgets.QLabel(Form)
         self.emptyBox_3.setGeometry(QtCore.QRect(20, 80, 471, 341))
-        self.emptyBox_3.setStyleSheet("border: 1px solid rgb(165, 165, 165);\n"
-"background-color: rgb(255, 255, 255);\n"
-"")
+        self.emptyBox_3.setStyleSheet("border: 1px solid rgb(165, 165, 165);")
         self.emptyBox_3.setText("")
         self.emptyBox_3.setObjectName("emptyBox_3")
         self.emptyBox_3.raise_()
@@ -65,7 +63,7 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "AboutWindow"))
+        Form.setWindowTitle(_translate("Form", "About"))
         self.emotHeader_2.setText(_translate("Form", "About"))
         self.aboutText_2.setText(_translate("Form", "eMot is a sentiment analyis application that \n"
 "takes your browsing history and extracts the \n"

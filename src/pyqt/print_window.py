@@ -14,16 +14,23 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(581, 514)
-        MainWindow.setMinimumSize(QtCore.QSize(581, 514))
+        MainWindow.resize(880, 650)
+        MainWindow.setMinimumSize(QtCore.QSize(880, 650))
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/newPrefix/resources/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
         MainWindow.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.analysis_button = QtWidgets.QPushButton(self.centralwidget)
-        self.analysis_button.setGeometry(QtCore.QRect(160, 390, 271, 71))
+        self.splitter = QtWidgets.QSplitter(self.centralwidget)
+        self.splitter.setGeometry(QtCore.QRect(160, 20, 571, 541))
+        self.splitter.setOrientation(QtCore.Qt.Vertical)
+        self.splitter.setObjectName("splitter")
+        self.textEdit = QtWidgets.QTextEdit(self.splitter)
+        self.textEdit.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustIgnored)
+        self.textEdit.setReadOnly(True)
+        self.textEdit.setObjectName("textEdit")
+        self.analysis_button = QtWidgets.QPushButton(self.splitter)
         font = QtGui.QFont()
         font.setPointSize(20)
         self.analysis_button.setFont(font)
@@ -32,13 +39,9 @@ class Ui_MainWindow(object):
 "background-color: rgb(255, 125, 102);\n"
 "border: 1px solid black;")
         self.analysis_button.setObjectName("analysis_button")
-        self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
-        self.textEdit.setGeometry(QtCore.QRect(80, 50, 431, 331))
-        self.textEdit.setReadOnly(True)
-        self.textEdit.setObjectName("textEdit")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 581, 26))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 880, 26))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -47,14 +50,14 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        MainWindow.setTabOrder(self.textEdit, self.analysis_button)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "PrintWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Analysing"))
         self.analysis_button.setStatusTip(_translate("MainWindow", "Click to start the sentiment analysis"))
         self.analysis_button.setText(_translate("MainWindow", "Start Analysis!"))
 import pyqt.resource_rc
-
 
 if __name__ == "__main__":
     import sys

@@ -4,15 +4,15 @@ import cProfile, io, pstats
 from bs4 import BeautifulSoup, Comment, Doctype
 
 from .textMod import preProcess, removeURLs
-from .blacklists import tagsDict
+from .blacklists import Blacklists
 
 class Scraper:
     def scrape(self, url):
         print("scraping site: " + url + "\n")
         soup = self.getSoup(url)
-        tagsList = list(tagsDict.values())
+        tagsSet = Blacklists().getTags()
         if(len(soup) != 0):
-            text = self.getText(soup, tagsList)
+            text = self.getText(soup, tagsSet)
             print(f'task {url} finished\n') 
             return text
 

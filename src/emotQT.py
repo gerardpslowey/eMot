@@ -1,10 +1,11 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-import sys
+import sys, subprocess
 from qtWorker import Worker
 from pyqt.main_window import Ui_MainWindow as MainWindow
-from pyqt.windows import AboutWindow, DialogWindow, PrintWindow
+from pyqt.windows import AboutWindow, DialogWindow, PrintWindow, PreferenceWindow
 from eMot import Emot
 from tests import dockerRunner
+from urlProcessor.blacklists import Blacklists
 
 class Main(QtWidgets.QMainWindow, MainWindow):
     def __init__(self, *args, obj=None, **kwargs):
@@ -16,12 +17,43 @@ class Main(QtWidgets.QMainWindow, MainWindow):
         self.AboutWindow = AboutWindow()
         self.DialogWindow = DialogWindow()
         self.PrintWindow = PrintWindow()
+        self.PreferenceWindow = PreferenceWindow()
         
-        self.actionabout.triggered.connect(
+        self.actionAbout.triggered.connect(
             lambda checked: self.toggle_item(self.AboutWindow))
 
+        self.actionPreferences.triggered.connect(
+            lambda checked: self.toggle_item(self.PreferenceWindow))
+
+        self.actionNew.triggered.connect(self.restart_window)
         self.button.clicked.connect(self.go_button)
         self.PrintWindow.analysis_button.clicked.connect(self.onAnalysisButton)
+
+        self.blacklists = Blacklists()
+        self.PreferenceWindow.addTagButton.clicked.connect(self.addTag)
+        self.PreferenceWindow.deleteTagButton.clicked.connect(self.deleteTag)
+        self.PreferenceWindow.addUrlButton.clicked.connect(self.addUrl)
+        self.PreferenceWindow.deleteUrlButton.clicked.connect(self.deleteUrl)
+
+    def addTag(self):
+        tag = self.PreferenceWindow.tagEdit.toPlainText()
+        self.blacklists.addTag(tag)
+        self.PreferenceWindow.tagEdit.clear()
+
+    def deleteTag(self):
+        tag = self.PreferenceWindow.tagEdit.toPlainText()
+        self.blacklists.deleteTag(tag)
+        self.PreferenceWindow.tagEdit.clear()
+
+    def addUrl(self):
+        url = self.PreferenceWindow.urlEdit.toPlainText()
+        self.blacklists.addUrl(url)
+        self.PreferenceWindow.urlEdit.clear()
+
+    def deleteUrl(self):
+        url = self.PreferenceWindow.urlEdit.toPlainText()
+        self.blacklists.deleteUrl(url)
+        self.PreferenceWindow.urlEdit.clear()
 
     def toggle_item(self, item):
         if item.isVisible():
@@ -35,7 +67,7 @@ class Main(QtWidgets.QMainWindow, MainWindow):
 
         if browser == "Select browser":
             self.toggle_item(self.DialogWindow)
-            self.DialogWindow.label.setText("Choose a browser from \n the dropdown menu")
+            self.DialogWindow.label.setText("Choose a browser from \nthe dropdown menu")
             self.DialogWindow.label_2.setText("You Must Choose A Browser")
 
         elif not dockerRunner.is_running("splash"):
@@ -48,6 +80,10 @@ class Main(QtWidgets.QMainWindow, MainWindow):
             worker = Worker(Emot, filtr, browser)
             self.threadpool.start(worker)
             worker.signals.finished.connect(self.toggleAnalysis)
+
+    def restart_window(self):
+        self.close()
+        subprocess.Popen(['python', 'emotQT.py'])
 
     def toggleAnalysis(self):
         self.PrintWindow.analysis_button.setEnabled(True)

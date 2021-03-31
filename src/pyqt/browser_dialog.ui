@@ -83,7 +83,6 @@
    </property>
    <property name="styleSheet">
     <string notr="true">border: 1px solid rgb(165, 165, 165);
-background-color: rgb(255, 255, 255);
 </string>
    </property>
    <property name="text">

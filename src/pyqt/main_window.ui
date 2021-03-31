@@ -74,7 +74,7 @@
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);</string>
+     <string notr="true"/>
     </property>
     <property name="text">
      <string>Choose Your Browser</string>
@@ -94,7 +94,6 @@
     </property>
     <property name="styleSheet">
      <string notr="true">border: 1px solid rgb(165, 165, 165);
-background-color: rgb(255, 255, 255);
 </string>
     </property>
     <property name="text">
@@ -178,7 +177,7 @@ background-color: rgb(255, 255, 255);
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);</string>
+     <string notr="true"/>
     </property>
     <property name="text">
      <string>Choose A Date Filter</string>
@@ -198,7 +197,6 @@ background-color: rgb(255, 255, 255);
     </property>
     <property name="styleSheet">
      <string notr="true">border: 1px solid rgb(165, 165, 165);
-background-color: rgb(255, 255, 255);
 </string>
     </property>
     <property name="text">
@@ -262,7 +260,7 @@ background-color: rgb(255, 255, 255);
       <x>290</x>
       <y>410</y>
       <width>310</width>
-      <height>80</height>
+      <height>91</height>
      </rect>
     </property>
     <property name="font">
@@ -287,14 +285,14 @@ border: 1px solid black;</string>
      <string>Go!</string>
     </property>
    </widget>
+   <zorder>emptyBox</zorder>
    <zorder>emptyBox_2</zorder>
    <zorder>emotHeader</zorder>
-   <zorder>emptyBox</zorder>
    <zorder>browserTextLabel</zorder>
    <zorder>browserComboBox</zorder>
    <zorder>dateTextLabel</zorder>
-   <zorder>dateComboBox</zorder>
    <zorder>button</zorder>
+   <zorder>dateComboBox</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -316,15 +314,16 @@ selection-color: rgb(255, 255, 255);</string>
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionpreferences"/>
-    <addaction name="actionabout"/>
+    <addaction name="actionNew"/>
+    <addaction name="actionPreferences"/>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionpreferences">
    <property name="text">
-    <string>preferences</string>
+    <string>Preferences</string>
    </property>
    <property name="visible">
     <bool>true</bool>
@@ -333,6 +332,21 @@ selection-color: rgb(255, 255, 255);</string>
   <action name="actionabout">
    <property name="text">
     <string>about</string>
+   </property>
+  </action>
+  <action name="actionNew">
+   <property name="text">
+    <string>New</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="text">
+    <string>Preferences</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
    </property>
   </action>
  </widget>

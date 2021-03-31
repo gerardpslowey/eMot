@@ -31,4 +31,4 @@ if __name__ == '__main__':
     # test_blank_site()
     # test_good_status_code()
     # test_bad_status_code()
-    # test_bad_url()
+    test_bad_url()

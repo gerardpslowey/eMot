@@ -1,35 +1,41 @@
-urlsDict = {
-    0: "www.google.com",
-    1: "www.google.ie",
-    2: "www.facebook.com",
-    3: "docs.google.com",
-    4: "mail.google.com",
-    5: "accounts.google.com",
-    6: "www.twitter.com",
-    7: "discord.com",
-    8: "www.reddit.com",
-    9: "gitlab.computing.dcu.ie",
-    10: "github.com",
-    11: "www.messenger.com",
-    12: "www.youtube.com",
-    13: "stackoverflow.com",
-    14: "dcu-ie.zoom.us",
-    15: "www.bing.com",
-}
+class Blacklists:
 
-tagsDict = {
-    0: "[document]",
-    1: "script",
-    2: "noscript",
-    3: "title",
-    4: "style",
-    5: "figure",
-    6: "img",
-    7: "iframe",
-    8: "nav",
-    9: "meta",
-    10: "header",
-    11: "head",
-    12: "footer",
-    13: "cookie",
-}
+    def __init__(self):
+        self.urlsSet = {
+            "www.google.com", "www.google.ie",
+            "www.facebook.com", "docs.google.com",
+            "mail.google.com", "accounts.google.com",
+            "www.twitter.com", "discord.com",
+            "www.reddit.com", "gitlab.computing.dcu.ie",
+            "github.com", "www.messenger.com",
+            "www.youtube.com", "stackoverflow.com",
+            "dcu-ie.zoom.us", "www.bing.com",
+        }
+
+        self.tagsSet = {
+            "[document]", "script",
+            "noscript", "title",
+            "style", "figure",
+            "img", "iframe",
+            "nav", "meta",
+            "header", "head",
+            "footer", "cookie",
+        }
+
+    def getTags(self):
+        return self.tagsSet
+
+    def addTag(self, tag):
+        self.tagsSet.add(tag)
+
+    def deleteTag(self, tag):
+        self.tagsSet.remove(tag)
+
+    def getUrls(self):
+        return self.urlsSet
+
+    def addUrl(self, url):
+        self.urlsSet.add(url)
+
+    def deleteUrl(self, url):
+        self.urlsSet.remove(url)

@@ -2,7 +2,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 from pyqt.about_window import Ui_Form
 from pyqt.browser_dialog import Ui_browserDialog
-from pyqt.print_window import Ui_MainWindow as PWindow
+from pyqt.print_window import Ui_MainWindow as PrintWindow
+from pyqt.preferences_window import Ui_Form as PrefWindow
 
 class AboutWindow(QtWidgets.QMainWindow, Ui_Form):
     def __init__(self, *args, obj=None, **kwargs):
@@ -14,7 +15,12 @@ class DialogWindow(QtWidgets.QMainWindow, Ui_browserDialog):
         super(DialogWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
-class PrintWindow(QtWidgets.QMainWindow, PWindow):
+class PreferenceWindow(QtWidgets.QMainWindow, PrefWindow):
+    def __init__(self, *args, obj=None, **kwargs):
+        super(PreferenceWindow, self).__init__(*args, **kwargs)
+        self.setupUi(self)
+
+class PrintWindow(QtWidgets.QMainWindow, PrintWindow):
     def __init__(self, *args, obj=None, **kwargs):
         super(PrintWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
