@@ -25,8 +25,8 @@ class Blacklists:
             data[blacklist].append(item)
             with open(self.filename, "w") as json_file:
                 json.dump(data, json_file)
-        else:
-            print(f"{item} already in {blacklist}")
+        # else:
+        #     print(f"{item} already in {blacklist}")
 
     def removeItem(self, item, blacklist):
         data = self.getItems()

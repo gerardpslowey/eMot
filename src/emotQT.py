@@ -100,6 +100,9 @@ class Main(QtWidgets.QMainWindow, MainWindow):
 
     def toggleAnalysis(self):
         self.PrintWindow.analysis_button.setEnabled(True)
+        self.PrintWindow.analysis_button.setStyleSheet("color: rgb(255, 255, 255);\n"
+    "background-color: rgb(103, 171, 159);\n"
+    "border: 1px solid black;")
 
     def onAnalysisButton(self):
         self.PrintWindow.textEdit.clear()

@@ -39,11 +39,10 @@ class Scraper:
         cleaned = []
         for sentence in soup.find_all(text=True):
             sentence = sentence.strip().lower()
-            if (str(sentence)
-                and 'we and our partners use' not in sentence
-                and 'we and our partners do' not in sentence
-                and 'personalised ads and content' not in sentence
-                and 'our privacy policy' not in sentence):
+            if (str(sentence) and 
+            not re.search('(we and our partners use|we and our partners store|'
+            +'personalised ads and content|our privacy policy|'
+            +'click below to consent)', sentence.lower())):
 
                 sent = preProcess(sentence)
                 cleaned.append(removeURLs(sent))
@@ -51,7 +50,7 @@ class Scraper:
         return cleaned
 
 def main():
-    url = 'https://www.independent.ie/opinion/letters/new-opening-hours-very-little-use-when-the-pubs-are-closed-40125545.html'
+    url = 'https://webscraper.io/test-sites/e-commerce/allinone/computers'
     print(Scraper().scrape(url))
 
 
