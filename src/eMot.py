@@ -61,7 +61,7 @@ class Emot:
 
     def writeToCSV(self, document):
         data = []
-        with open('sentimentAnalysis/scraped.csv', mode='w+', encoding="utf-8",  newline='') as scraped_text:
+        with open('sentimentAnalysis/scraped.csv', mode='a+', encoding="utf-8",  newline='') as scraped_text:
             writer = csv.writer(scraped_text, delimiter=',')
 
             for sentence in document:

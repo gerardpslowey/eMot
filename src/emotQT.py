@@ -6,6 +6,7 @@ from pyqt.windows import AboutWindow, DialogWindow, PrintWindow, PreferenceWindo
 from eMot import Emot
 from tests import dockerRunner
 from urlProcessor.blacklists import Blacklists
+import emotClassify
 
 class Main(QtWidgets.QMainWindow, MainWindow):
     def __init__(self, *args, obj=None, **kwargs):
@@ -89,11 +90,10 @@ class Main(QtWidgets.QMainWindow, MainWindow):
         self.PrintWindow.analysis_button.setEnabled(True)
 
     def onAnalysisButton(self):
-            self.PrintWindow.textEdit.clear()
-            print("Starting Analysis")
-            # TODO: import a sentiment Program and run.
-            #worker = Worker(emotSentiment) 
-            # self.threadpool.start(worker)
+        self.PrintWindow.textEdit.clear()
+        print("Starting Classification")
+        worker = Worker(emotClassify.classify) 
+        self.threadpool.start(worker)
 
     def closeEvent(self, event):
         """Shuts down application on close."""
