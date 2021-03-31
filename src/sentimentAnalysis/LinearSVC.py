@@ -4,6 +4,7 @@ import pandas as pd
 # plots and metrics
 import matplotlib.pyplot as plt, numpy as np
 from sklearn.metrics import accuracy_score, f1_score, confusion_matrix
+from sklearn.calibration import CalibratedClassifierCV
 
 # feature extraction / vectorization
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -39,28 +40,42 @@ def main():
     # print(data.head())
 
     # TFIDF, unigrams and bigrams
-    vect = TfidfVectorizer(tokenizer=preprocess_and_tokenize, sublinear_tf=True, norm='l2', ngram_range=(1,2))
+    vect = TfidfVectorizer(
+        tokenizer=preprocess_and_tokenize, 
+        sublinear_tf=True, 
+        norm='l2', 
+        ngram_range=(1,2)
+    )
+
     # fit on our complete corpus
     vect.fit_transform(data.Text)
     # transform testing and training datasets to vectors
     X_train_vect = vect.transform(X_train)
     X_test_vect = vect.transform(X_test)
 
-    svc = LinearSVC(tol=1e-05)
-    svc.fit(X_train_vect, y_train)
+    lsvc = LinearSVC(
+        tol=1e-05, 
+        penalty='l2',
+        loss='hinge',
+        random_state=42,
+        class_weight='balanced'
+    )
 
-    ysvm_pred = svc.predict(X_test_vect)
+    clf = CalibratedClassifierCV(lsvc) 
+    clf.fit(X_train_vect, y_train)
+
+    ysvm_pred = clf.predict(X_test_vect)
     print("Accuracy: {:.2f}%".format(accuracy_score(y_test, ysvm_pred) * 100))
     print("F1 Score: {:.2f}".format(f1_score(y_test, ysvm_pred, average='micro') * 100))
-    # print("\nConfusion Matrix:\n", confusion_matrix(y_test, ysvm_pred))
+    print("\nConfusion Matrix:\n", confusion_matrix(y_test, ysvm_pred))
 
-    # class_names = ['joy', 'sadness', 'anger', 'neutral', 'fear']
-    # plot_confusion_matrix(y_test, ysvm_pred, classes=class_names, normalize=True, title='Normalized confusion matrix')
-    # plt.show()
+    class_names = ['joy', 'sadness', 'anger', 'neutral', 'fear']
+    plot_confusion_matrix(y_test, ysvm_pred, classes=class_names, normalize=True, title='Normalized confusion matrix')
+    plt.show()
 
-    model_filename = 'svm.pkl'
-    tfidf_filename = 'svm_tfidf.pkl'
-    saveFiles(svc, model_filename)
+    model_filename = 'svc.pkl'
+    tfidf_filename = 'svc_tfidf.pkl'
+    saveFiles(clf, model_filename)
     saveFiles(vect, tfidf_filename)
 
 def plot_confusion_matrix(y_true, y_pred, classes, normalize=False, title=None, cmap=plt.cm.Blues):

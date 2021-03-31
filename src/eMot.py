@@ -60,15 +60,19 @@ class Emot:
 
     def writeToCSV(self, data):
         text = []
-        with open('sentimentAnalysis/scraped.csv', mode='a', encoding="utf-8",  newline='') as scraped_text:
+        with open('sentimentAnalysis/scraped.csv', mode='w+', encoding="utf-8",  newline='') as scraped_text:
             writer = csv.writer(scraped_text, delimiter=',')
 
-            for item in data:
-                if(len(item)!=0):
-                    text.append(item)
+            print(data)
+
+            # for item in data:
+            #     print(item)
+            # #     if(len(item) != 0):
+            #         print(item)
+            #         text.append(item)
                     
-            if len(text) != 0:
-                writer.writerow(text)
+            # if len(text) != 0:
+            #     writer.writerow(text)
 
 def main():
     print("Time filters include 'hour', 'day', 'week', 'month', or 'year' or '' (all time).")

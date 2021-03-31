@@ -27,14 +27,10 @@ def main():
     y_train = df_train.Emotion
     y_test = df_test.Emotion
 
-    data = pd.concat([df_train, df_test])
-
     cv = CountVectorizer(tokenizer=preprocess_and_tokenize, ngram_range=(1,2))
-    cv.fit(data['Text'])
-    X_train_count = cv.transform(X_train)
+    X_train_count = cv.fit_transform(X_train)
     x_test_count = cv.transform(x_test)
 
-    #alpha = loss checker
     sgd = SGDClassifier(alpha=0.001, loss='modified_huber', penalty='l2', tol=None, n_jobs=-1)
     sgd.fit(X_train_count, y_train)
     ysvm_pred = sgd.predict(x_test_count)

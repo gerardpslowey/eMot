@@ -22,8 +22,6 @@ def calculateCValue(x_train_fit, y_train):
     return grid.best_params_
 
 def main():
-    # read the dataset into a data frame
-    print("Reading Training Data")
     df_train = pd.read_csv('../datasets/data_train.csv')
     df_test = pd.read_csv('../datasets/data_test.csv')
 
@@ -33,26 +31,21 @@ def main():
     y_train = df_train.Emotion
     y_test = df_test.Emotion
 
-    data = pd.concat([df_train, df_test])
-    print("Finished Reading")
+    cv = CountVectorizer(tokenizer=preprocess_and_tokenize, ngram_range=(1,2))
+    X_train_count = cv.fit_transform(X_train)
+    x_test_count = cv.transform(x_test)
 
-    # print(trainSet.Sentiment.value_counts())
-    
-    vect = CountVectorizer()
-    X_train_vect = vect.fit_transform(X_train)
-    X_test_vect = vect.transform(x_test)
+    model = LogisticRegression(multi_class='auto', solver='lbfgs', max_iter=200, penalty='l2')
+    model.fit(X_train_count, y_train)
 
-    model = LogisticRegression(C=0.1, multi_class='auto', solver='lbfgs', max_iter=200, penalty='l2')
-    model.fit(X_train_vect, y_train)
-
-    y_pred = model.predict(X_test_vect)
+    y_pred = model.predict(x_test_count)
     print("Accuracy: {:.2f}%".format(accuracy_score(y_test, y_pred) * 100))
     print("F1 Score: {:.2f}".format(f1_score(y_test, y_pred, average='micro') * 100))
 
     model_filename = 'lr.pkl'
     cv_filename = 'lr_cv.pkl'
     saveFiles(model, model_filename)
-    saveFiles(vect, cv_filename)
+    saveFiles(cv, cv_filename)
 
 if __name__ == '__main__':
     main()
