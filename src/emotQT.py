@@ -28,7 +28,7 @@ class Main(QtWidgets.QMainWindow, MainWindow):
 
         self.actionNew.triggered.connect(self.restart_window)
         self.button.clicked.connect(self.go_button)
-        self.PrintWindow.analysis_button.clicked.connect(self.onAnalysisButton)
+        self.PrintWindow.results_button.clicked.connect(self.showResults)
 
         self.blacklists = Blacklists()
         self.PreferenceWindow.addTagButton.clicked.connect(self.addTag)
@@ -99,16 +99,25 @@ class Main(QtWidgets.QMainWindow, MainWindow):
         subprocess.Popen(['python', 'emotQT.py'])
 
     def toggleAnalysis(self):
-        self.PrintWindow.analysis_button.setEnabled(True)
-        self.PrintWindow.analysis_button.setStyleSheet("color: rgb(255, 255, 255);\n"
+        self.PrintWindow.textEdit.clear()
+        print("Starting Classification..")
+        print("Getting emotions..")
+        worker = Worker(emotClassify.classify) 
+        self.threadpool.start(worker)
+        worker.signals.finished.connect(self.resultsReady)
+
+    def resultsReady(self):
+        self.PrintWindow.results_button.setEnabled(True)
+        self.PrintWindow.results_button.setStyleSheet("color: rgb(255, 255, 255);\n"
     "background-color: rgb(103, 171, 159);\n"
     "border: 1px solid black;")
 
-    def onAnalysisButton(self):
-        self.PrintWindow.textEdit.clear()
-        print("Starting Classification")
-        worker = Worker(emotClassify.classify) 
-        self.threadpool.start(worker)
+    def showResults(self):
+        self.PrintWindow.textEdit.hide()
+        self.PrintWindow.results_button.hide()
+
+        #create a vertical or scrolling layout.
+        #get the matplot lib stuff to show on the screen.
 
     def closeEvent(self, event):
         """Shuts down application on close."""

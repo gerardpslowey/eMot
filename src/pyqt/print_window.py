@@ -30,15 +30,15 @@ class Ui_MainWindow(object):
         self.textEdit.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustIgnored)
         self.textEdit.setReadOnly(True)
         self.textEdit.setObjectName("textEdit")
-        self.analysis_button = QtWidgets.QPushButton(self.splitter)
+        self.results_button = QtWidgets.QPushButton(self.splitter)
         font = QtGui.QFont()
         font.setPointSize(20)
-        self.analysis_button.setFont(font)
-        self.analysis_button.setAutoFillBackground(False)
-        self.analysis_button.setStyleSheet("color: rgb(255, 255, 255);\n"
+        self.results_button.setFont(font)
+        self.results_button.setAutoFillBackground(False)
+        self.results_button.setStyleSheet("color: rgb(255, 255, 255);\n"
 "background-color: rgb(255, 125, 102);\n"
 "border: 1px solid black;")
-        self.analysis_button.setObjectName("analysis_button")
+        self.results_button.setObjectName("results_button")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 880, 26))
@@ -50,14 +50,15 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-        MainWindow.setTabOrder(self.textEdit, self.analysis_button)
+        MainWindow.setTabOrder(self.textEdit, self.results_button)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Analysing"))
-        self.analysis_button.setStatusTip(_translate("MainWindow", "Click to start the sentiment analysis"))
-        self.analysis_button.setText(_translate("MainWindow", "Start Analysis!"))
+        self.results_button.setStatusTip(_translate("MainWindow", "Click to start the sentiment analysis"))
+        self.results_button.setText(_translate("MainWindow", "Show Results!"))
 import pyqt.resource_rc
+
 
 if __name__ == "__main__":
     import sys

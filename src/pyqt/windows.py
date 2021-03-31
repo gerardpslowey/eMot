@@ -24,7 +24,7 @@ class PrintWindow(QtWidgets.QMainWindow, PrintWindow):
     def __init__(self, *args, obj=None, **kwargs):
         super(PrintWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
-        self.analysis_button.setEnabled(False)
+        self.results_button.setEnabled(False)
         sys.stdout = Stream(newText=self.onUpdateText)
 
     def onUpdateText(self, text):
@@ -37,6 +37,7 @@ class PrintWindow(QtWidgets.QMainWindow, PrintWindow):
     
     def closeEvent(self, event):
         """Shuts down application on close."""
+        self.textEdit.clear()
         super().closeEvent(event)
 
 class Stream(QtCore.QObject):

@@ -2,6 +2,9 @@ import pandas as pd
 import pickle
 import csv
 
+import numpy as np
+import matplotlib.pyplot as plt
+
 def classify():
 
     emotion_count = {
@@ -35,6 +38,9 @@ def classify():
 
 
         print(emotion_count)
+
+        plt.pie([float(emotion_count[v]) for v in emotion_count], labels=[str(k) for k in emotion_count], autopct='%1.1f%%')
+        plt.show()
 
 def loadFiles(filename):
     with open(filename, 'rb') as file:

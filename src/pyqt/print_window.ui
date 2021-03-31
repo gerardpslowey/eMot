@@ -47,7 +47,7 @@
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QPushButton" name="analysis_button">
+    <widget class="QPushButton" name="results_button">
      <property name="font">
       <font>
        <pointsize>20</pointsize>
@@ -65,7 +65,7 @@ background-color: rgb(255, 125, 102);
 border: 1px solid black;</string>
      </property>
      <property name="text">
-      <string>Start Analysis!</string>
+      <string>Show Results!</string>
      </property>
     </widget>
    </widget>
@@ -84,7 +84,7 @@ border: 1px solid black;</string>
  </widget>
  <tabstops>
   <tabstop>textEdit</tabstop>
-  <tabstop>analysis_button</tabstop>
+  <tabstop>results_button</tabstop>
  </tabstops>
  <resources>
   <include location="resource.qrc"/>
