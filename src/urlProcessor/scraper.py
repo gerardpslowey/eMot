@@ -8,11 +8,11 @@ from .blacklists import Blacklists
 
 class Scraper:
     def scrape(self, url):
+        tagSet = Blacklists().getItems()['tagSet']
         print("scraping site: " + url + "\n")
         soup = self.getSoup(url)
-        tagsSet = Blacklists().getTags()
         if(len(soup) != 0):
-            text = self.getText(soup, tagsSet)
+            text = self.getText(soup, tagSet)
             print(f'task {url} finished\n') 
             return text
 

@@ -1,41 +1,38 @@
+import json
+
 class Blacklists:
 
     def __init__(self):
-        self.urlsSet = {
-            "www.google.com", "www.google.ie",
-            "www.facebook.com", "docs.google.com",
-            "mail.google.com", "accounts.google.com",
-            "www.twitter.com", "discord.com",
-            "www.reddit.com", "gitlab.computing.dcu.ie",
-            "github.com", "www.messenger.com",
-            "www.youtube.com", "stackoverflow.com",
-            "dcu-ie.zoom.us", "www.bing.com",
-        }
+        self.filename = "blacklists.json"
 
-        self.tagsSet = {
-            "[document]", "script",
-            "noscript", "title",
-            "style", "figure",
-            "img", "iframe",
-            "nav", "meta",
-            "header", "head",
-            "footer", "cookie",
-        }
+    def getItems(self, blacklist=None):
+        try:
+            with open(self.filename, "r") as json_file:
+                data = json.load(json_file)
+                if blacklist != None:
+                    return data[blacklist]
+                else:
+                    return data
+        except IOError:
+            print(f"Could not read file {self.filename}")
+            return None
 
-    def getTags(self):
-        return self.tagsSet
+    def addItem(self, item, blacklist):
+        data = self.getItems()
+        
+        #blacklist is either urlSet or tagSet
+        if item not in data[blacklist]:
+            data[blacklist].append(item)
+            with open(self.filename, "w") as json_file:
+                json.dump(data, json_file)
+        else:
+            print(f"{item} already in {blacklist}")
 
-    def addTag(self, tag):
-        self.tagsSet.add(tag)
-
-    def deleteTag(self, tag):
-        self.tagsSet.remove(tag)
-
-    def getUrls(self):
-        return self.urlsSet
-
-    def addUrl(self, url):
-        self.urlsSet.add(url)
-
-    def deleteUrl(self, url):
-        self.urlsSet.remove(url)
+    def removeItem(self, item, blacklist):
+        data = self.getItems()
+        try:
+            data[blacklist].remove(item)
+            with open(self.filename, "w") as json_file:
+                json.dump(data, json_file)
+        except ValueError:
+            print(f"{item} not in {blacklist}")
