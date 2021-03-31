@@ -22,8 +22,8 @@ class Emot:
     def __init__(self, filtr, browser):
         self.filtr = filtr
         self.browser = browser
-        urlsSet = Blacklists().getUrls()
-        urls = self.getUrls(filtr, browser, urlsSet)
+        urlSet = Blacklists().getItems()['urlSet']
+        urls = self.getUrls(filtr, browser, urlSet)
         self.startTasks(urls)
 
     def getUrls(self, filtr, browser, blacklist):

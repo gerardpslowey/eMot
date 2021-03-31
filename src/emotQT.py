@@ -32,29 +32,41 @@ class Main(QtWidgets.QMainWindow, MainWindow):
 
         self.blacklists = Blacklists()
         self.PreferenceWindow.addTagButton.clicked.connect(self.addTag)
-        self.PreferenceWindow.deleteTagButton.clicked.connect(self.deleteTag)
+        self.PreferenceWindow.deleteTagButton.clicked.connect(self.removeTag)
         self.PreferenceWindow.addUrlButton.clicked.connect(self.addUrl)
-        self.PreferenceWindow.deleteUrlButton.clicked.connect(self.deleteUrl)
+        self.PreferenceWindow.deleteUrlButton.clicked.connect(self.removeURL)
 
     def addTag(self):
         tag = self.PreferenceWindow.tagEdit.toPlainText()
-        self.blacklists.addTag(tag)
+        self.blacklists.addItem(tag, "tagSet")
+        self.showPopUp("Tag added!")
         self.PreferenceWindow.tagEdit.clear()
 
-    def deleteTag(self):
+    def removeTag(self):
         tag = self.PreferenceWindow.tagEdit.toPlainText()
-        self.blacklists.deleteTag(tag)
+        self.blacklists.removeItem(tag, "tagSet")
+        self.showPopUp("Tag removed!")
         self.PreferenceWindow.tagEdit.clear()
 
     def addUrl(self):
         url = self.PreferenceWindow.urlEdit.toPlainText()
-        self.blacklists.addUrl(url)
+        self.blacklists.addItem(url, "urlSet")
+        self.showPopUp("URL added!")
         self.PreferenceWindow.urlEdit.clear()
 
-    def deleteUrl(self):
+    def removeURL(self):
         url = self.PreferenceWindow.urlEdit.toPlainText()
-        self.blacklists.deleteUrl(url)
+        self.blacklists.removeItem(url, "urlSet")
+        self.showPopUp("URL removed!")
         self.PreferenceWindow.urlEdit.clear()
+
+    def showPopUp(self, message):
+        msg = QtWidgets.QMessageBox()
+        msg.setWindowTitle("Message")
+        msg.setText(message)
+        msg.setIcon(QtWidgets.QMessageBox.Information)
+        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        x = msg.exec_()
 
     def toggle_item(self, item):
         if item.isVisible():
