@@ -9,6 +9,7 @@ class GetHistory():
     def getHistory(self, filtr, browser):
         #if blank, then use all dates
         df = '' if not filtr else self.dateFilter(filtr)
+        browser = browser.capitalize()
 
         try:
             f = globals()[browser]()                    # browser
