@@ -38,6 +38,9 @@ class PrintWindow(QtWidgets.QMainWindow, PrintWindow):
     def closeEvent(self, event):
         """Shuts down application on close."""
         self.textEdit.clear()
+        self.results_button.setStyleSheet("color: rgb(255, 255, 255);\n"
+                                        "background-color: rgb(255, 125, 102);\n"
+                                        "border: 1px solid black;")
         super().closeEvent(event)
 
 class Stream(QtCore.QObject):

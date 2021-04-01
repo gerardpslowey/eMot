@@ -30,7 +30,7 @@ class Emot:
         urls = GetHistory().getHistory(filtr, browser)
         print("History Retrieved: " + str(len(urls)))
         filtered_urls = filterBlacklistedUrl(urls.values(), blacklist)
-        print("URLS remaining after filtering: " + str(len(filtered_urls)))
+        print("URLS remaining after filtering: " + str(len(set(filtered_urls))))
         return filtered_urls
 
     def startTasks(self, urls):

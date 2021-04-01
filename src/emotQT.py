@@ -1,19 +1,24 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-import sys, subprocess
+from PyQt5.QtCore import QThreadPool, Qt
+from PyQt5.QtGui import QPainter, QPen
+from PyQt5.QtWidgets import QMainWindow, QMessageBox, QApplication
+from PyQt5.QtChart import QChart, QChartView, QPieSeries, QPieSlice
+
 from qtWorker import Worker
 from pyqt.main_window import Ui_MainWindow as MainWindow
 from pyqt.windows import AboutWindow, DialogWindow, PrintWindow, PreferenceWindow
+
+import sys, subprocess, random
 from eMot import Emot
 from tests import dockerRunner
 from urlProcessor.blacklists import Blacklists
-import emotClassify
+from emotClassify import EmotClassify
 
-class Main(QtWidgets.QMainWindow, MainWindow):
+class Main(QMainWindow, MainWindow):
     def __init__(self, *args, obj=None, **kwargs):
         super(Main, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
-        self.threadpool = QtCore.QThreadPool()
+        self.threadpool = QThreadPool()
 
         self.AboutWindow = AboutWindow()
         self.DialogWindow = DialogWindow()
@@ -35,6 +40,8 @@ class Main(QtWidgets.QMainWindow, MainWindow):
         self.PreferenceWindow.deleteTagButton.clicked.connect(self.removeTag)
         self.PreferenceWindow.addUrlButton.clicked.connect(self.addUrl)
         self.PreferenceWindow.deleteUrlButton.clicked.connect(self.removeURL)
+
+        self.emotClassify = EmotClassify()
 
     def addTag(self):
         tag = self.PreferenceWindow.tagEdit.toPlainText()
@@ -61,11 +68,11 @@ class Main(QtWidgets.QMainWindow, MainWindow):
         self.PreferenceWindow.urlEdit.clear()
 
     def showPopUp(self, message):
-        msg = QtWidgets.QMessageBox()
+        msg = QMessageBox()
         msg.setWindowTitle("Message")
         msg.setText(message)
-        msg.setIcon(QtWidgets.QMessageBox.Information)
-        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        msg.setIcon(QMessageBox.Information)
+        msg.setStandardButtons(QMessageBox.Ok)
         x = msg.exec_()
 
     def toggle_item(self, item):
@@ -102,22 +109,47 @@ class Main(QtWidgets.QMainWindow, MainWindow):
         self.PrintWindow.textEdit.clear()
         print("Starting Classification..")
         print("Getting emotions..")
-        worker = Worker(emotClassify.classify) 
+        worker = Worker(self.emotClassify.classify) 
         self.threadpool.start(worker)
         worker.signals.finished.connect(self.resultsReady)
 
     def resultsReady(self):
         self.PrintWindow.results_button.setEnabled(True)
         self.PrintWindow.results_button.setStyleSheet("color: rgb(255, 255, 255);\n"
-    "background-color: rgb(103, 171, 159);\n"
-    "border: 1px solid black;")
+                                                    "background-color: rgb(103, 171, 159);\n"
+                                                    "border: 1px solid black;")
 
     def showResults(self):
-        self.PrintWindow.textEdit.hide()
-        self.PrintWindow.results_button.hide()
+        self.PrintWindow.showMinimized()
+        emotions = self.emotClassify.get_emotion_count()
+        emot = dict(sorted(emotions.items(), key=lambda item: item[1], reverse= True))
 
-        #create a vertical or scrolling layout.
-        #get the matplot lib stuff to show on the screen.
+        series = QPieSeries()
+        for e in emot:
+            series.append(e, emotions[e])
+
+        #adding slice
+        #slice = QPieSlice()
+        slice = series.slices()[0]
+        slice.setExploded(True)
+        slice.setLabelVisible(True)
+        slice.setPen(QPen(Qt.darkGreen, 2))
+        slice.setBrush(Qt.green)
+
+        chart = QChart()
+        chart.legend().hide()
+        chart.addSeries(series)
+        chart.createDefaultAxes()
+        chart.setAnimationOptions(QChart.SeriesAnimations)
+        chart.setTitle("Emotions")
+
+        chart.legend().setVisible(True)
+        chart.legend().setAlignment(Qt.AlignBottom)
+
+        chartview = QChartView(chart)
+        chartview.setRenderHint(QPainter.Antialiasing)
+
+        self.setCentralWidget(chartview)
 
     def closeEvent(self, event):
         """Shuts down application on close."""
@@ -126,7 +158,7 @@ class Main(QtWidgets.QMainWindow, MainWindow):
         super().closeEvent(event)
 
 if __name__ == '__main__':
-    app = QtWidgets.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     main = Main()
     main.show()
     app.exec_()
