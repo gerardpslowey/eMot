@@ -3,8 +3,8 @@ import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.absolute())) 
 
-LR_Model = "../models/lr.pkl"
-LR_CV_File = "../models/lr_cv.pkl"
+LR_Model = "models/lr.pkl"
+LR_CV_File = "models/lr_cv.pkl"
 
 SGD_Model = "../models/sgd.pkl"
 SGD_CV_File = "../models/sgd_cv.pkl"
@@ -18,34 +18,34 @@ def test_sentiment():
 
     message = "This move is good and cool"
     sentiment_value = model.predict(cv.transform([message]))[0]
-    print(sentiment_value)
+    # print(sentiment_value)
 
-    # assert sentiment_value == 'joy'
+    assert sentiment_value == 'love'
 
-def test_sentiment2():    
-    model = loadFiles(SGD_Model)
-    cv = loadFiles(SGD_CV_File)
+# def test_sentiment2():    
+#     model = loadFiles(SGD_Model)
+#     cv = loadFiles(SGD_CV_File)
 
-    message = "this is horrible"
-    sentiment_value = model.predict(cv.transform([message]))
-    print(sentiment_value)
+#     message = "this is horrible"
+#     sentiment_value = model.predict(cv.transform([message]))
+#     print(sentiment_value)
 
     # assert sentiment_value != 'love'
 
-def test_sentiment3(): 
-    model = loadFiles(SVC_Model)
-    tfidf = loadFiles(SVC_TFIDF_File)
+# def test_sentiment3(): 
+#     model = loadFiles(SVC_Model)
+#     tfidf = loadFiles(SVC_TFIDF_File)
 
-    reviews = ["my dog died", 
-        "the car drove very fast before crashing",
-        "pizza was hour late and my pizza is cold", 
-        "it was a lovely sunny day today", 
-        "vaccines are in the news",
-        "this film is very good",
-        "I had a brilliant birthday party",
-        "You fucker, I'll kill you",
-        "he's the nicest guy I know"
-    ]
+#     reviews = ["my dog died", 
+#         "the car drove very fast before crashing",
+#         "pizza was hour late and my pizza is cold", 
+#         "it was a lovely sunny day today", 
+#         "vaccines are in the news",
+#         "this film is very good",
+#         "I had a brilliant birthday party",
+#         "You fucker, I'll kill you",
+#         "he's the nicest guy I know"
+#     ]
     
     # for review in reviews:
     #     sentiment_score = model.predict_proba(tfidf.transform([review]))
@@ -64,5 +64,5 @@ def loadFiles(filename):
 
 if __name__ == "__main__":
     test_sentiment()
-    test_sentiment2()
+    # test_sentiment2()
     # test_sentiment3()
