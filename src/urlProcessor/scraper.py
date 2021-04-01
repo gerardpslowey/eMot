@@ -44,8 +44,7 @@ class Scraper:
             +'personalised ads and content|our privacy policy|'
             +'click below to consent)', sentence.lower())):
 
-                sent = preProcess(sentence)
-                cleaned.append(removeURLs(sent))
+                cleaned.append(preProcess(sentence))
 
         return cleaned
 

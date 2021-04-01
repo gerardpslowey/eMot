@@ -23,48 +23,77 @@ re_token_match = fr'({re_token_match}|#\w+|\w+-\w+)'
 # overwrite token_match function of the tokenizer
 nlp.tokenizer.token_match = re.compile(re_token_match).match
 
-def preProcess(sentence):
-    mytokens = nlp(sentence.lower())
+def preProcess(data):
+    # Spacy stuff
+    # mytokens = nlp(sentence.lower())
 
-    cleaned = []
-    for word in mytokens:
-        if (word.lemma_ != '-PRON-'
-            and '@' not in word.text and '#' not in word.text 
-            and not word.is_punct and not word.is_stop):            
+    # cleaned = []
+    # for word in mytokens:
+    #     if (word.lemma_ != '-PRON-'
+    #         and '@' not in word.text and '#' not in word.text 
+    #         and not word.is_punct and not word.is_stop):            
             
-            cleaned.append(word.lemma_.strip())
+    #         cleaned.append(word.lemma_.strip())
 
-    return " ".join(cleaned)
+    # return " ".join(cleaned)
 
+    # remove html markup
+
+    data = re.sub("(<.*?>)", "", data)
+
+    # remove urls
+    data = re.sub(r'https?://\S+|www\.\S+', '', data)
+    
+    # remove hashtags and @ symbols
+    data = re.sub(r"(#[\d\w\.]+)", '', data)
+    data = re.sub(r"(@[\d\w\.]+)", '', data)
+
+    # remove punctuation and non-ascii digits
+    data = re.sub("(\\W|\\d)", " ", data)
+    
+    # remove whitespace
+    data = data.strip()
+    
+    # tokenization with nltk
+    data = word_tokenize(data)
+    
+    # stemming with nltk
+    porter = PorterStemmer()
+    stem_data = [porter.stem(word).strip() for word in data]
+    return " ".join(stem_data)
+
+
+# Not going to be used anymore
 def removeURLs(sentence):
     url = re.compile(r'https?://\S+|www\.\S+')
     return url.sub(r'', sentence)
 
+# Trials with this seem to indicate it worsens performance
 def removeRepetitions(sentence):
     pattern = re.compile(r"(.)\1{2,}")          
     return pattern.sub(r"\1\1", sentence)
 
+# Keeping this works great
 def spellCheck(sentence):
     words = spell.split_words(sentence)
     return " ".join([spell.correction(word) for word in words])
 
-
+# COnsolidate evything into one
 def preprocess_and_tokenize(data):    
-
-    #remove html markup
+    # remove html markup
     data = re.sub("(<.*?>)", "", data)
 
-    #remove urls
-    data = re.sub(r'http\S+', '', data)
+    # remove urls
+    data = re.sub(r'https?://\S+|www\.\S+', '', data)
     
-    #remove hashtags and @names
+    # remove hashtags and @ symbols
     data = re.sub(r"(#[\d\w\.]+)", '', data)
     data = re.sub(r"(@[\d\w\.]+)", '', data)
 
-    #remove punctuation and non-ascii digits
+    # remove punctuation and non-ascii digits
     data = re.sub("(\\W|\\d)", " ", data)
     
-    #remove whitespace
+    # remove whitespace
     data = data.strip()
     
     # tokenization with nltk
@@ -96,4 +125,3 @@ def saveFiles(data, filename):
     model_location = os.path.join(directory, filename)
     with open(model_location, 'wb') as file:
         pickle.dump(data, file)
-    print("Model and Data Saved")

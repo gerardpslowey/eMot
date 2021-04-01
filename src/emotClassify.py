@@ -9,27 +9,27 @@ class EmotClassify:
 
     def __init__(self):
         self.emotion_count = {
-            "joy":0,
-            "sadness":0,
             "anger":0,
-            "neutral":0,
-            "fear":0
+            "fear":0,
+            "joy":0,
+            "surprise":0,
+            "happiness":0
         }
 
         self.emotion_intensity = {
-            "joy":0,
-            "sadness":0,
             "anger":0,
-            "neutral":0,
-            "fear":0
+            "fear":0,
+            "joy":0,
+            "surprise":0,
+            "happiness":0
         }
 
         self.sentence_intensity = {
-            "joy":0,
-            "sadness":0,
             "anger":0,
-            "neutral":0,
-            "fear":0
+            "fear":0,
+            "joy":0,
+            "surprise":0,
+            "happiness":0
         }
 
         self.svc_model = "models/svc.pkl"
@@ -38,42 +38,45 @@ class EmotClassify:
         self.largest_emotion = None
 
     def classify(self):
+    
+        df = pd.read_csv('sentimentAnalysis/scraped.csv')
+        print(df.shape)
 
         model = self.loadFiles(self.svc_model)
         tfidf = self.loadFiles(self.svc_tfidf_file)
 
-        with open('sentimentAnalysis/scraped.csv', encoding='utf-8') as scraped_file:
-            scraped_text_file = csv.reader(scraped_file, delimiter=',')
+        for _, row in df.iterrows():
+            row = row.str.split(pat=".", expand=True)
+
+            for _, values in row.iteritems():
+                value = values[0]
+                sentiment_score = model.predict_proba(tfidf.transform([value]))
+                sentiment_name = model.predict(tfidf.transform([value]))
+
+                emotion = sentiment_name[0]
+                intensity = sentiment_score.max()
+
+                if self.emotion_count.get(emotion) == 0:
+                    self.emotion_count[emotion] = 1  
+                else:
+                    self.emotion_count[emotion] += 1
             
-            for row in scraped_text_file:
-                for column in row:
-                    sentiment_score = model.predict_proba(tfidf.transform([column]))
-                    sentiment_name = model.predict(tfidf.transform([column]))
-
-                    emotion = sentiment_name[0]
-                    intensity = sentiment_score.max()
-
-                    if self.emotion_count.get(emotion) == 0:
-                        self.emotion_count[emotion] = 1  
-                    else:
-                        self.emotion_count[emotion] += 1
-                
-                    if intensity > self.emotion_intensity.get(emotion):
-                        self.emotion_intensity[emotion] = intensity
-                        self.sentence_intensity[emotion] = column
+                if intensity > self.emotion_intensity.get(emotion):
+                    self.emotion_intensity[emotion] = intensity
+                    self.sentence_intensity[emotion] = value
 
 
-            print("\n")
-            print(self.emotion_count)
-            self.largest_emotion = [key for key in self.emotion_count.keys() if self.emotion_count[key] == max(self.emotion_count.values())]
-            print(f"\nThe most prominent emotion that you read was {self.largest_emotion[0]}.")
-            print(self.contentMessage())
+        print("\n")
+        print(self.emotion_count)
+        self.largest_emotion = [key for key in self.emotion_count.keys() if self.emotion_count[key] == max(self.emotion_count.values())]
+        print(f"\nThe most prominent emotion that you read was {self.largest_emotion[0]}.")
+        print(self.contentMessage())
 
-            i = 1
-            print("\nExamples of each emotion:")
-            for emotion in self.emotion_intensity:
-                print(f" {i}. {emotion} = '{self.sentence_intensity[emotion]}' with a score of {self.emotion_intensity[emotion]}")
-                i+=1
+        i = 1
+        print("\nExamples of each emotion:")
+        for emotion in self.emotion_intensity:
+            print(f" {i}. {emotion} = '{self.sentence_intensity[emotion]}' with a score of {self.emotion_intensity[emotion]}")
+            i+=1
 
             # print(self.emotion_intensity)
             # print(self.sentence_intensity)

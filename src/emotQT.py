@@ -108,16 +108,17 @@ class Main(QMainWindow, MainWindow):
     def toggleAnalysis(self):
         self.PrintWindow.textEdit.clear()
         print("Starting Classification..")
-        print("Getting emotions..")
         worker = Worker(self.emotClassify.classify) 
         self.threadpool.start(worker)
         worker.signals.finished.connect(self.resultsReady)
 
     def resultsReady(self):
         self.PrintWindow.results_button.setEnabled(True)
-        self.PrintWindow.results_button.setStyleSheet("color: rgb(255, 255, 255);\n"
-                                                    "background-color: rgb(103, 171, 159);\n"
-                                                    "border: 1px solid black;")
+        self.PrintWindow.results_button.setStyleSheet(
+            "color: rgb(255, 255, 255);\n"                                        
+            "background-color: rgb(103, 171, 159);\n"
+            "border: 1px solid black;"
+        )
 
     def showResults(self):
         self.PrintWindow.showMinimized()

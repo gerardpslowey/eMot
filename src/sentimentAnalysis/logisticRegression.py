@@ -22,11 +22,11 @@ def calculateCValue(x_train_fit, y_train):
     return grid.best_params_
 
 def main():
-    df_anger = pd.read_csv('anger.csv')
-    df_fear = pd.read_csv('fear.csv')
-    df_joy = pd.read_csv('joy.csv')
-    df_surprise = pd.read_csv('surprise.csv')
-    df_love = pd.read_csv('love.csv')
+    df_anger = pd.read_csv('../datasets/anger.csv')
+    df_fear = pd.read_csv('../datasets/fear.csv')
+    df_joy = pd.read_csv('../datasets/joy.csv')
+    df_surprise = pd.read_csv('../datasets/surprise.csv')
+    df_love = pd.read_csv('../datasets/love.csv')
     data_set = [df_anger, df_fear, df_joy, df_surprise, df_love]
 
     data = pd.concat(data_set)
@@ -34,9 +34,17 @@ def main():
     X = data['Text']
     y = data['Emotion']
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, 
+        y, 
+        test_size=0.2, 
+        random_state=42
+    )
 
-    vect = CountVectorizer(tokenizer=preprocess_and_tokenize, ngram_range=(1,2))
+    vect = CountVectorizer(
+        tokenizer=preprocess_and_tokenize, 
+        ngram_range=(1,2)
+    )
 
     print("Training")
     # fit on our complete corpus
@@ -45,17 +53,25 @@ def main():
     X_train_vect = vect.transform(X_train)
     X_test_vect = vect.transform(X_test)
 
-    model = LogisticRegression(multi_class='auto', solver='lbfgs', max_iter=200, penalty='l2')
+    model = LogisticRegression(
+        multi_class='multinomial',
+        class_weight='balanced', 
+        solver='lbfgs', 
+        max_iter=10000, 
+        penalty='l2', 
+        n_jobs=-1
+    )
+
     model.fit(X_train_vect, y_train)
 
     y_pred = model.predict(X_test_vect)
     print("Accuracy: {:.2f}%".format(accuracy_score(y_test, y_pred) * 100))
     print("F1 Score: {:.2f}".format(f1_score(y_test, y_pred, average='micro') * 100))
 
-    # model_filename = 'lr.pkl'
-    # cv_filename = 'lr_cv.pkl'
-    # saveFiles(model, model_filename)
-    # saveFiles(vect, cv_filename)
+    model_filename = 'lr.pkl'
+    cv_filename = 'lr_cv.pkl'
+    saveFiles(model, model_filename)
+    saveFiles(vect, cv_filename)
 
 if __name__ == '__main__':
     main()
