@@ -4,19 +4,19 @@ import cProfile, io, pstats
 from bs4 import BeautifulSoup, Comment, Doctype
 
 from .textMod import preProcess, removeURLs
-from .blacklists import tagsDict
+from .blacklists import Blacklists
 
 class Scraper:
     def scrape(self, url):
-        print("scraping site: " + url + "\n")
+        tagSet = Blacklists().getItems()['tagSet']
+        print(f"scraping site: {url}", end="\n")
         soup = self.getSoup(url)
-        tagsList = list(tagsDict.values())
         if(len(soup) != 0):
-            text = self.getText(soup, tagsList)
-            print(f'task {url} finished\n') 
+            text = self.getText(soup, tagSet)
+            print(f"task {url} finished") 
             return text
 
-        print(f'task {url} returned null, skipped\n') 
+        print(f"task {url} returned null, skipped") 
         return None
 
     def getSoup(self, url):
@@ -36,26 +36,25 @@ class Scraper:
         for comment in soup.findAll(text=lambda text: isinstance(text, (Comment, Doctype))):
             comment.extract()
 
-        cleaned = []
+        normalAndClean = {}
         for sentence in soup.find_all(text=True):
             sentence = sentence.strip().lower()
-            if (str(sentence)
-                and 'we and our partners use' not in sentence
-                and 'we and our partners do' not in sentence
-                and 'personalised ads and content' not in sentence
-                and 'our privacy policy' not in sentence):
+            normal = sentence
+            if (str(sentence) and 
+            not re.search('(we and our partners use|we and our partners store|'
+            +'personalised ads and content|our privacy policy|'
+            +'click below to consent)', sentence.lower())):
 
-                sent = preProcess(sentence)
-                cleaned.append(removeURLs(sent))
+                normalAndClean[normal] = preProcess(sentence)
 
-        return cleaned
+        return normalAndClean
 
 def main():
-    url = 'https://www.independent.ie/opinion/letters/new-opening-hours-very-little-use-when-the-pubs-are-closed-40125545.html'
+    url = 'https://webscraper.io/test-sites/e-commerce/allinone/computers'
     print(Scraper().scrape(url))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
     # pr = cProfile.Profile()
     # pr.enable()

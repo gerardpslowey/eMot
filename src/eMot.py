@@ -11,37 +11,43 @@ from browserHistory.getHistory import GetHistory
 # Scraper and url filter
 from urlProcessor.scraper import Scraper
 from urlProcessor.urlFilter import filterBlacklistedUrl
-from urlProcessor.blacklists import urlsDict
+from urlProcessor.blacklists import Blacklists
 
 import multiprocessing
 
 cpu_cores = multiprocessing.cpu_count()
 MAX_WORKERS = cpu_cores * 2
-print(MAX_WORKERS)
     
 class Emot:
     def __init__(self, filtr, browser):
         self.filtr = filtr
         self.browser = browser
-        blacklist = list(urlsDict.values())
-        urls = self.getUrls(filtr, browser, blacklist)
+        self.scraped_csv = 'sentimentAnalysis/scraped.csv'
+        f = open(self.scraped_csv, "w+")
+        f.close()
+
+        urlSet = Blacklists().getItems()['urlSet']
+        urls = self.getUrls(filtr, browser, urlSet)
         self.startTasks(urls)
 
     def getUrls(self, filtr, browser, blacklist):
         urls = GetHistory().getHistory(filtr, browser)
-        print("History Retrieved: " + str(len(urls)))
-        filtered_urls = filterBlacklistedUrl(urls.values(), blacklist)
-        print("URLS remaining after filtering: " + str(len(filtered_urls)))
+        print(f"History Retrieved: {len(urls)}")
+        
+        filtered_urls = set(filterBlacklistedUrl(urls.values(), blacklist))
+        print(f"URLS remaining after filtering: {len(filtered_urls)}")
         return filtered_urls
 
     def startTasks(self, urls):
         queue = Queue()
-        for url in set(urls):
+        for url in urls:
             queue.put(url)
-        print("URLs added to queue")
+        print("URLs added to queue!")
 
-        # asynchronous execution of tasks using threads
-        # use a with statement to ensure threads are cleaned up promptly
+        """
+        asynchronous execution of tasks using threads
+        use a with statement to ensure threads are cleaned up promptly
+        """
         with futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
             f = []
             while not queue.empty():
@@ -56,19 +62,25 @@ class Emot:
                     # store scraped data
                     self.writeToCSV(data)
 
-        print("Finished scraping!")
+        
+        if len(urls) > 0:
+            print("Finished scraping!")
+        else:
+            print("Nothing to scrape!")
 
-    def writeToCSV(self, data):
-        text = []
-        with open('sentimentAnalysis/scraped.csv', mode='a', encoding="utf-8",  newline='') as scraped_text:
-            writer = csv.writer(scraped_text, delimiter=',')
+    def writeToCSV(self, document):
+        normal = []
+        cleaned = []
+        with open(self.scraped_csv, mode='a+', encoding="utf-8",  newline='') as csvfile:
+            fieldnames = ['normalSentence', 'cleanedSentence']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter=',')
 
-            for item in data:
-                if(len(item)!=0):
-                    text.append(item)
-                    
-            if len(text) != 0:
-                writer.writerow(text)
+            for normalSentence, cleanedSentence in document.items():
+                if(len(normalSentence.split()) > 3):
+                    normal.append(normalSentence)
+                    cleaned.append(cleanedSentence)
+
+            writer.writerow({'normalSentence':normal, 'cleanedSentence':cleaned})
 
 def main():
     print("Time filters include 'hour', 'day', 'week', 'month', or 'year' or '' (all time).")

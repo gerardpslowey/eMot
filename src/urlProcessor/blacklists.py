@@ -1,35 +1,38 @@
-urlsDict = {
-    0: "www.google.com",
-    1: "www.google.ie",
-    2: "www.facebook.com",
-    3: "docs.google.com",
-    4: "mail.google.com",
-    5: "accounts.google.com",
-    6: "www.twitter.com",
-    7: "discord.com",
-    8: "www.reddit.com",
-    9: "gitlab.computing.dcu.ie",
-    10: "github.com",
-    11: "www.messenger.com",
-    12: "www.youtube.com",
-    13: "stackoverflow.com",
-    14: "dcu-ie.zoom.us",
-    15: "www.bing.com",
-}
+import json
 
-tagsDict = {
-    0: "[document]",
-    1: "script",
-    2: "noscript",
-    3: "title",
-    4: "style",
-    5: "figure",
-    6: "img",
-    7: "iframe",
-    8: "nav",
-    9: "meta",
-    10: "header",
-    11: "head",
-    12: "footer",
-    13: "cookie",
-}
+class Blacklists:
+
+    def __init__(self):
+        self.filename = "blacklists.json"
+
+    def getItems(self, blacklist=None):
+        try:
+            with open(self.filename, "r") as json_file:
+                data = json.load(json_file)
+                if blacklist != None:
+                    return data[blacklist]
+                else:
+                    return data
+        except IOError:
+            print(f"Could not read file {self.filename}")
+            return None
+
+    def addItem(self, item, blacklist):
+        data = self.getItems()
+        
+        #blacklist is either urlSet or tagSet
+        if item not in data[blacklist]:
+            data[blacklist].append(item)
+            with open(self.filename, "w") as json_file:
+                json.dump(data, json_file)
+        # else:
+        #     print(f"{item} already in {blacklist}")
+
+    def removeItem(self, item, blacklist):
+        data = self.getItems()
+        try:
+            data[blacklist].remove(item)
+            with open(self.filename, "w") as json_file:
+                json.dump(data, json_file)
+        except ValueError:
+            print(f"{item} not in {blacklist}")

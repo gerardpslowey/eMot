@@ -5,3 +5,4 @@ COPY requirements.txt .
 # install dependencies
 RUN pip install -r requirements.txt
 RUN python -m spacy download en_core_web_sm
+RUN python -m nltk.downloader punkt

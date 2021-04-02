@@ -1,6 +1,13 @@
 image: gerardpslowey/emot:dependencies
 
+<<<<<<< HEAD
 pytest:
   script:
     - cd src
     - pytest
+=======
+pytest: 
+    script: 
+        - cd src
+        - pytest
+>>>>>>> 1ea355de3e156aca7e8da015bdedbf655bba66fa

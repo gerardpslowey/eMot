@@ -10,16 +10,21 @@ from . import utils
 
 HistoryVar = List[Tuple[datetime, str]]
 
-# A generic class to support all major browsers with minimal configuration.
-# Currently, only browsers which save the history in SQLite files are supported.
+"""
+A generic class to support all major browsers with minimal configuration.
+Currently, only browsers which save the history in SQLite files are supported.
+"""
+
 class Browser(ABC):
 
-    # Boolean indicating whether the browser supports multiple profiles.
+    #Boolean indicating whether the browser supports multiple profiles.
     profile_support = False
 
-    # List of possible prefixes for the profile directories.
-    # Keep empty to check all subdirectories in the browser path.
-    # profile_dir_prefixes: typing.Optional[typing.List[typing.Any]] = None
+    """
+    List of possible prefixes for the profile directories.
+    Keep empty to check all subdirectories in the browser path.
+    profile_dir_prefixes: typing.Optional[typing.List[typing.Any]] = None
+    """
 
     def __init__(self, plat = None):
         self.profile_dir_prefixes = []
@@ -48,13 +53,18 @@ class Browser(ABC):
         if self.profile_support and not self.profile_dir_prefixes:
             self.profile_dir_prefixes.append("*")
 
-    # Returns a list of profile directories. 
-    # If the browser is supported on the current platform but is not installed an empty list will be returned
+    """
+    Returns a list of profile directories. 
+    If the browser is supported on the current platform but 
+    is not installed an empty list will be returned
+    """
     def profiles(self, profile_file):
-        # profile_file: file to search for in the profile directories.
-        # This should be history_file.
-        # profile_file is a string
-        # return type list(str)
+        """
+        profile_file: file to search for in the profile directories.
+        This should be history_file.
+        profile_file is a string
+        return type list(str)
+        """
         if not os.path.exists(self.history_dir):
             utils.logger.info("%s browser is not installed", self.name)
             return []
@@ -78,11 +88,13 @@ class Browser(ABC):
                 profile_dirs.append(path)
         return profile_dirs
 
-    # Returns path of the history file for the given profile_dir
+    #Returns path of the history file for the given profile_dir
     def historyPathProfile(self, profile_dir):
-        # The profile_dir should be one of the outputs from profiles method
-        # profile_dir: Profile directory (should be a single name, relative to history_dir)
-        # returns path to history file of the profile
+        """
+        The profile_dir should be one of the outputs from profiles method
+        profile_dir: Profile directory (should be a single name, relative to history_dir)
+        returns path to history file of the profile
+        """
         if self.history_file is None:
             return None
 
