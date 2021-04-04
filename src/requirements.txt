@@ -5,6 +5,7 @@ setuptools
 wheel
 spacy
 pyqt5==5.15.2
+pyqtchart==5.15.2
 pyqt5-tools
 scikit-learn
 pandas
@@ -12,3 +13,4 @@ nltk
 wordcloud
 pyspellchecker
 pytest
+docker

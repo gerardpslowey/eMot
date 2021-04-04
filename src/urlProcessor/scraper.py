@@ -4,15 +4,15 @@ import cProfile, io, pstats
 from bs4 import BeautifulSoup, Comment, Doctype
 
 from .textMod import preProcess, removeURLs
-from .blacklists import tagsDict
+from .blacklists import Blacklists
 
 class Scraper:
     def scrape(self, url):
+        tagSet = Blacklists().getItems()['tagSet']
         print("scraping site: " + url + "\n")
         soup = self.getSoup(url)
-        tagsList = list(tagsDict.values())
         if(len(soup) != 0):
-            text = self.getText(soup, tagsList)
+            text = self.getText(soup, tagSet)
             print(f'task {url} finished\n') 
             return text
 
@@ -39,19 +39,17 @@ class Scraper:
         cleaned = []
         for sentence in soup.find_all(text=True):
             sentence = sentence.strip().lower()
-            if (str(sentence)
-                and 'we and our partners use' not in sentence
-                and 'we and our partners do' not in sentence
-                and 'personalised ads and content' not in sentence
-                and 'our privacy policy' not in sentence):
+            if (str(sentence) and 
+            not re.search('(we and our partners use|we and our partners store|'
+            +'personalised ads and content|our privacy policy|'
+            +'click below to consent)', sentence.lower())):
 
-                sent = preProcess(sentence)
-                cleaned.append(removeURLs(sent))
+                cleaned.append(preProcess(sentence))
 
         return cleaned
 
 def main():
-    url = 'https://www.independent.ie/opinion/letters/new-opening-hours-very-little-use-when-the-pubs-are-closed-40125545.html'
+    url = 'https://webscraper.io/test-sites/e-commerce/allinone/computers'
     print(Scraper().scrape(url))
 
 
