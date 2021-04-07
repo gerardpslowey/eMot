@@ -26,7 +26,7 @@
    <string>eMot</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resource.qrc">
+   <iconset>
     <normaloff>:/newPrefix/resources/icon.png</normaloff>:/newPrefix/resources/icon.png</iconset>
   </property>
   <property name="autoFillBackground">
@@ -46,7 +46,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="homePage">
      <widget class="QLabel" name="browserTextLabel">
@@ -361,7 +361,7 @@ border: 1px solid black;</string>
         <x>260</x>
         <y>130</y>
         <width>531</width>
-        <height>321</height>
+        <height>281</height>
        </rect>
       </property>
       <property name="sizeAdjustPolicy">
@@ -399,6 +399,65 @@ border: 1px solid black;</string>
       <property name="text">
        <string>Show Results!</string>
       </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="reportsPage">
+     <widget class="QLabel" name="emotHeader2_2">
+      <property name="geometry">
+       <rect>
+        <x>390</x>
+        <y>50</y>
+        <width>279</width>
+        <height>81</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>40</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>eMot</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QScrollArea" name="scrollArea">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>170</y>
+        <width>1041</width>
+        <height>471</height>
+       </rect>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>1039</width>
+         <height>469</height>
+        </rect>
+       </property>
+       <widget class="QWidget" name="verticalLayoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>-1</x>
+          <y>-1</y>
+          <width>1041</width>
+          <height>471</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="layout"/>
+       </widget>
+      </widget>
      </widget>
     </widget>
    </widget>
@@ -460,7 +519,7 @@ selection-color: rgb(255, 255, 255);</string>
   </action>
  </widget>
  <resources>
-  <include location="resource.qrc"/>
+  <include location="../resources/resource.qrc"/>
  </resources>
  <connections/>
 </ui>

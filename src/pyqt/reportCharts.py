@@ -2,9 +2,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtChart import QChart, QChartView, QPieSeries, QPieSlice
 import pyqtgraph as pg
 
-class PieChart:
-    def __init__(self, emotionsDict):
-        emotions = dict(sorted(emotions.items(), key=lambda item: item[1], reverse= True))
+class PieChart(QtWidgets.QWidget):
+    def __init__(self, emotionsDict, parent): 
+        super(PieChart, self).__init__(parent)
+        emotions = dict(sorted(emotionsDict.items(), key=lambda item: item[1], reverse= True))
 
         series = QPieSeries()
         for emotion in emotions:
@@ -30,5 +31,3 @@ class PieChart:
 
         chartview = QChartView(chart)
         chartview.setRenderHint(QtGui.QPainter.Antialiasing)
-
-        self.setCentralWidget(chartview)

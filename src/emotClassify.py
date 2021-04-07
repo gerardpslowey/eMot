@@ -4,7 +4,6 @@ import csv
 
 import numpy as np
 import matplotlib.pyplot as plt
-from tqdm import tqdm
 
 class EmotClassify:
 
@@ -41,12 +40,11 @@ class EmotClassify:
     def classify(self):
     
         df = pd.read_csv('sentimentAnalysis/scraped.csv')
-        print(df.shape)
 
         model = self.loadFiles(self.svc_model)
         tfidf = self.loadFiles(self.svc_tfidf_file)
 
-        for i, row in tqdm(df.iterrows(), total = df.shape[0]):
+        for i, row in df.iterrows():
             row = row.str.split(pat=".", expand=True)
 
             for _, values in row.iteritems():
@@ -66,7 +64,6 @@ class EmotClassify:
                     self.emotion_intensity[emotion] = intensity
                     self.sentence_intensity[emotion] = value
 
-
         print("\n")
         print(self.emotion_count)
         self.largest_emotion = [key for key in self.emotion_count.keys() if self.emotion_count[key] == max(self.emotion_count.values())]
@@ -76,7 +73,7 @@ class EmotClassify:
         i = 1
         print("\nExamples of each emotion:")
         for emotion in self.emotion_intensity:
-            print(f" {i}. {emotion} = '{self.sentence_intensity[emotion]}' with a score of {self.emotion_intensity[emotion]}")
+            print(f" {i}. {emotion} = '{self.sentence_intensity[emotion]}' with a score of {self.emotion_intensity[emotion]:.1%}")
             i+=1
 
             # print(self.emotion_intensity)

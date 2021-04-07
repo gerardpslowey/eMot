@@ -14,7 +14,7 @@
    <string>Preferences</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resource.qrc">
+   <iconset>
     <normaloff>:/newPrefix/resources/icon.png</normaloff>:/newPrefix/resources/icon.png</iconset>
   </property>
   <property name="styleSheet">
@@ -74,12 +74,13 @@
     <string notr="true"/>
    </property>
    <property name="text">
-    <string>The blacklists contain items that are excluded from searches. 
-Add a URL so that it is not gathered from your browsing history. 
-Or add a HTML tag so that it is not scraped!</string>
+    <string>Add a URL so that it is not scraped from your browsing history. Or add a HTML tag so that it is not scraped!</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QLabel" name="blacklistHeader">
@@ -131,7 +132,7 @@ Or add a HTML tag so that it is not scraped!</string>
    </property>
    <property name="font">
     <font>
-     <pointsize>12</pointsize>
+     <pointsize>14</pointsize>
     </font>
    </property>
   </widget>
@@ -180,7 +181,7 @@ color: rgb(255, 255, 255);</string>
    </property>
    <property name="font">
     <font>
-     <pointsize>12</pointsize>
+     <pointsize>14</pointsize>
     </font>
    </property>
   </widget>
@@ -231,7 +232,7 @@ color: rgb(255, 255, 255);</string>
   <zorder>deleteUrlButton</zorder>
  </widget>
  <resources>
-  <include location="resource.qrc"/>
+  <include location="../resources/resource.qrc"/>
  </resources>
  <connections/>
 </ui>

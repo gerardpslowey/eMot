@@ -1,1 +1,36 @@
-{"urlSet": ["www.google.com", "www.google.ie", "www.facebook.com", "docs.google.com", "mail.google.com", "accounts.google.com", "www.twitter.com", "discord.com", "www.reddit.com", "gitlab.computing.dcu.ie", "github.com", "www.messenger.com", "www.youtube.com", "stackoverflow.com", "dcu-ie.zoom.us", "www.bing.com"], "tagSet": ["[document]", "script", "noscript", "title", "style", "figure", "img", "iframe", "nav", "meta", "header", "head", "footer", "cookie"]}
+{
+    "tagSet": [
+        "[document]",
+        "script",
+        "noscript",
+        "title",
+        "style",
+        "figure",
+        "img",
+        "iframe",
+        "nav",
+        "meta",
+        "header",
+        "head",
+        "footer",
+        "cookie"
+    ],
+    "urlSet": [
+        "www.google.com",
+        "www.google.ie",
+        "www.facebook.com",
+        "docs.google.com",
+        "mail.google.com",
+        "accounts.google.com",
+        "www.twitter.com",
+        "discord.com",
+        "www.reddit.com",
+        "gitlab.computing.dcu.ie",
+        "github.com",
+        "www.messenger.com",
+        "www.youtube.com",
+        "stackoverflow.com",
+        "dcu-ie.zoom.us",
+        "www.bing.com"
+    ]
+}

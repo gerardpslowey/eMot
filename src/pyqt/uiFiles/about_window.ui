@@ -26,7 +26,7 @@
    <string>About</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resource.qrc">
+   <iconset>
     <normaloff>:/newPrefix/resources/icon.png</normaloff>:/newPrefix/resources/icon.png</iconset>
   </property>
   <property name="styleSheet">
@@ -75,9 +75,9 @@
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>150</y>
+     <y>120</y>
      <width>412</width>
-     <height>241</height>
+     <height>291</height>
     </rect>
    </property>
    <property name="orientation">
@@ -92,7 +92,7 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>9</pointsize>
      </font>
     </property>
     <property name="text">
@@ -117,11 +117,11 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>9</pointsize>
      </font>
     </property>
     <property name="text">
-     <string>All browsing history is never stored anywhere. We scrape the text from these websites and give you an indication of what sort of material you are reading. It is beneficial to know whether you are consuming media that has hateful emotions, sad emotions, or happy emotions. </string>
+     <string>Your browsing history is never stored anywhere. We scrape the text from these websites and give you an indication of what sort of material you are reading. It is beneficial to know whether you are consuming media that has hateful emotions, sad emotions, or happy emotions. </string>
     </property>
     <property name="wordWrap">
      <bool>true</bool>
@@ -136,7 +136,7 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>9</pointsize>
      </font>
     </property>
     <property name="text">
@@ -146,7 +146,7 @@
    <widget class="QLabel" name="gitlabLink_2">
     <property name="font">
      <font>
-      <pointsize>8</pointsize>
+      <pointsize>9</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -167,14 +167,11 @@
    </widget>
   </widget>
   <zorder>emptyBox_3</zorder>
+  <zorder>splitter</zorder>
   <zorder>emotHeader_2</zorder>
-  <zorder>aboutText_2</zorder>
-  <zorder>gitlabLink_2</zorder>
-  <zorder>label</zorder>
-  <zorder>label_2</zorder>
  </widget>
  <resources>
-  <include location="resource.qrc"/>
+  <include location="../resources/resource.qrc"/>
  </resources>
  <connections/>
 </ui>

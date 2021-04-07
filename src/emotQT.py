@@ -9,18 +9,21 @@ from emotClassify import EmotClassify
 from tests import dockerRunner
 
 class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
+
     def __init__(self, *args, obj=None, **kwargs):
         super(Main, self).__init__(*args, **kwargs)
         self.setupUi(self)
         self.stackedWidget.setCurrentWidget(self.homePage)
 
         self.threadpool = QtCore.QThreadPool()
+        self.emotClassify = EmotClassify()
 
         #Set all the UI windows
         self.AboutWindow = windows.About()
         self.DialogWindow = windows.Dialog()
         self.PreferenceWindow = windows.Preference()
         
+        #file menu
         self.actionAbout.triggered.connect(lambda checked: self.toggle_item(self.AboutWindow))
         self.actionPreferences.triggered.connect(lambda checked: self.toggle_item(self.PreferenceWindow))
         self.actionNew.triggered.connect(self.restart_window)
@@ -40,6 +43,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
             item.show()
 
     def go_button(self):
+
         browser = str(self.browserComboBox.currentText()).capitalize()
         filtr = str(self.dateComboBox.currentText()).capitalize()
 
@@ -90,9 +94,10 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
             "border: 1px solid black;")
 
     def showPieChart(self):
-        emotClassify = EmotClassify()
-        emotionsDict = emotClassify.get_emotion_count()
-        reportCharts.PieChart(emotionsDict)
+
+        self.stackedWidget.setCurrentWidget(self.reportsPage)
+        emotionsDict = self.emotClassify.get_emotion_count()
+        pieChart = reportCharts.PieChart(emotionsDict)
 
     def closeEvent(self, event):
         """Shuts down application on close."""
