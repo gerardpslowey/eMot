@@ -2,16 +2,9 @@ import spacy, re, string, os, pickle, matplotlib.pyplot as plt
 
 from spacy.tokenizer import _get_regex_pattern
 nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner'])
-nlp.add_pipe('sentencizer')
 
 from wordcloud import WordCloud
 from pathlib import Path
-
-# text preprocessing
-from nltk import word_tokenize
-from nltk.stem import PorterStemmer
-from nltk.corpus import stopwords
-import re
 
 from spellchecker import SpellChecker
 spell = SpellChecker(distance=1)
@@ -23,22 +16,8 @@ re_token_match = fr'({re_token_match}|#\w+|\w+-\w+)'
 # overwrite token_match function of the tokenizer
 nlp.tokenizer.token_match = re.compile(re_token_match).match
 
-def preProcess(data):
-    # Spacy stuff
-    # mytokens = nlp(sentence.lower())
-
-    # cleaned = []
-    # for word in mytokens:
-    #     if (word.lemma_ != '-PRON-'
-    #         and '@' not in word.text and '#' not in word.text 
-    #         and not word.is_punct and not word.is_stop):            
-            
-    #         cleaned.append(word.lemma_.strip())
-
-    # return " ".join(cleaned)
-
+def preProcess(data):    
     # remove html markup
-
     data = re.sub("(<.*?>)", "", data)
 
     # remove urls
@@ -53,57 +32,59 @@ def preProcess(data):
     
     # remove whitespace
     data = data.strip()
-    
-    # tokenization with nltk
-    data = word_tokenize(data)
-    
-    # stemming with nltk
-    porter = PorterStemmer()
-    stem_data = [porter.stem(word).strip() for word in data]
-    return " ".join(stem_data)
+
+    mytokens = nlp(data)
+
+    stem_data = [word.lemma_ for word in mytokens]
+
+    return stem_data
 
 
-# Not going to be used anymore
+def cleanScrapedText(document):
+    cleaned = []
+
+    for sentence in " ".join(document):
+        mytokens = nlp(sentence)
+        cleaned = [word.lemma_ for word in mytokens 
+            if (word.lemma_ != '-PRON-' and not word.is_punct and not word.is_stop)]            
+                
+    return " ".join(cleaned)
+
+
+# remove html markup
+def removehtmlMarkup(sentence):
+    return re.sub("(<.*?>)", "", sentence)
+
+
+# remove urls
 def removeURLs(sentence):
-    url = re.compile(r'https?://\S+|www\.\S+')
-    return url.sub(r'', sentence)
+    return re.sub(r'https?://\S+|www\.\S+', '', sentence)
 
-# Trials with this seem to indicate it worsens performance
+
+# remove hashtags and @ symbols
+def removeHashandSymbols(sentence):
+    # hash symbols
+    data = re.sub(r"(#[\d\w\.]+)", '', sentence)
+    # @ symbols
+    return re.sub(r"(@[\d\w\.]+)", '', data)
+
+
+# remove punctuation and non-ascii digits
+def removeAscii(sentence):
+    return re.sub("(\\W|\\d)", " ", sentence)
+
+
+# Trials with this seem to indicate it worsens accuracy
 def removeRepetitions(sentence):
     pattern = re.compile(r"(.)\1{2,}")          
     return pattern.sub(r"\1\1", sentence)
+
 
 # Keeping this works great
 def spellCheck(sentence):
     words = spell.split_words(sentence)
     return " ".join([spell.correction(word) for word in words])
 
-# COnsolidate evything into one
-def preprocess_and_tokenize(data):    
-    # remove html markup
-    data = re.sub("(<.*?>)", "", data)
-
-    # remove urls
-    data = re.sub(r'https?://\S+|www\.\S+', '', data)
-    
-    # remove hashtags and @ symbols
-    data = re.sub(r"(#[\d\w\.]+)", '', data)
-    data = re.sub(r"(@[\d\w\.]+)", '', data)
-
-    # remove punctuation and non-ascii digits
-    data = re.sub("(\\W|\\d)", " ", data)
-    
-    # remove whitespace
-    data = data.strip()
-    
-    # tokenization with nltk
-    data = word_tokenize(data)
-    
-    # stemming with nltk
-    porter = PorterStemmer()
-    stem_data = [porter.stem(word) for word in data]
-        
-    return stem_data
 
 def wordcloud_draw(data, color = 'white'):
     words = ' '.join(data)

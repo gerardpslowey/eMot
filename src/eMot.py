@@ -13,6 +13,8 @@ from urlProcessor.scraper import Scraper
 from urlProcessor.urlFilter import filterBlacklistedUrl
 from urlProcessor.blacklists import Blacklists
 
+from urlProcessor.textMod import cleanScrapedText
+
 import multiprocessing
 
 cpu_cores = multiprocessing.cpu_count()
@@ -34,6 +36,8 @@ class Emot:
         return filtered_urls
 
     def startTasks(self, urls):
+        self.overwriteCSV()
+
         queue = Queue()
         for url in set(urls):
             queue.put(url)
@@ -51,24 +55,41 @@ class Emot:
 
             # Deal with the threads as they complete individually
             for future in futures.as_completed(f):
+                # tuple
                 data = future.result()
 
                 if(data != None):
+                    url = data[0]
+                    text = data[1]
+                    # cleanedText = cleanScrapedText(text)
                     # store scraped data
-                    self.writeToCSV(data)
+                    self.writeToCSV([data, text])
 
         print("Finished scraping!")
 
-    def writeToCSV(self, document):
-        data = []
+
+    def overwriteCSV(self):
+        with open('sentimentAnalysis/scraped.csv', mode='w', encoding="utf-8", newline='') as scraped_text:
+            fields = ['url', 'cleaned_data', 'original_data']
+            writer = csv.DictWriter(scraped_text, fieldnames=fields, delimiter=',')
+            writer.writeheader()
+
+
+    def writeToCSV(self, data):
+        url = data[0]
+        originalText = data[1]
+        # cleanedText = data[2]
+        
+        cleaned = []
+        fields = ['url', 'cleaned_data', 'original_data']
         with open('sentimentAnalysis/scraped.csv', mode='a+', encoding="utf-8",  newline='') as scraped_text:
-            writer = csv.writer(scraped_text, delimiter='.')
+            writer = csv.DictWriter(scraped_text, fieldnames=fields, delimiter='.') 
 
-            for sentence in document:
+            for sentence in originalText:
                 if(len(sentence.split()) > 3):
-                    data.append(sentence)
+                    cleaned.append(sentence)
 
-            writer.writerow(data)
+            writer.writerow({'url' : url, 'cleaned_data': cleaned, 'original_data' : originalText})
 
 def main():
     print("Time filters include 'hour', 'day', 'week', 'month', or 'year' or '' (all time).")

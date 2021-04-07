@@ -14,7 +14,7 @@ class Scraper:
         if(len(soup) != 0):
             text = self.getText(soup, tagSet)
             print(f'task {url} finished\n') 
-            return text
+            return (url, text)
 
         print(f'task {url} returned null, skipped\n') 
         return None
@@ -39,12 +39,13 @@ class Scraper:
         cleaned = []
         for sentence in soup.find_all(text=True):
             sentence = sentence.strip().lower()
-            if (str(sentence) and 
-            not re.search('(we and our partners use|we and our partners store|'
-            +'personalised ads and content|our privacy policy|'
-            +'click below to consent)', sentence.lower())):
+            if (str(sentence) and not re.search(
+                '(we and our partners use|we and our partners store|'
+                +'personalised ads and content|our privacy policy|'
+                +'click below to consent)', 
+                sentence.lower())):
 
-                cleaned.append(preProcess(sentence))
+                cleaned.append(sentence)
 
         return cleaned
 
