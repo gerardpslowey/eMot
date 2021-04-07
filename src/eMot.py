@@ -23,24 +23,22 @@ class Emot:
         self.filtr = filtr
         self.browser = browser
         self.scraped_csv = 'sentimentAnalysis/scraped.csv'
-        f = open(self.scraped_csv, "w+")
-        f.close()
+        self.clearCSV()
 
-        urlSet = Blacklists().getItems()['urlSet']
-        urls = self.getUrls(filtr, browser, urlSet)
-        self.startTasks(urls)
+        self.blacklist = Blacklists().getItems()['urlSet']
+        self.urls = self.getUrls()
 
-    def getUrls(self, filtr, browser, blacklist):
-        urls = GetHistory().getHistory(filtr, browser)
+    def getUrls(self):
+        urls = GetHistory().getHistory(self.filtr, self.browser)
         print(f"History Retrieved: {len(urls)}")
         
-        filtered_urls = set(filterBlacklistedUrl(urls.values(), blacklist))
+        filtered_urls = set(filterBlacklistedUrl(urls.values(), self.blacklist))
         print(f"URLS remaining after filtering: {len(filtered_urls)}")
         return filtered_urls
 
-    def startTasks(self, urls):
+    def startTasks(self):
         queue = Queue()
-        for url in urls:
+        for url in self.urls:
             queue.put(url)
         print("URLs added to queue!")
 
@@ -63,24 +61,32 @@ class Emot:
                     self.writeToCSV(data)
 
         
-        if len(urls) > 0:
+        if len(self.urls) > 0:
             print("Finished scraping!")
         else:
             print("Nothing to scrape!")
 
+    def clearCSV(self):
+        f = open(self.scraped_csv, "w+")
+        f.close()
+
     def writeToCSV(self, document):
-        normal = []
-        cleaned = []
-        with open(self.scraped_csv, mode='a+', encoding="utf-8",  newline='') as csvfile:
-            fieldnames = ['normalSentence', 'cleanedSentence']
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter=',')
+        data = []
+        with open(self.scraped_csv, mode='a+', encoding="utf-8",  newline='') as scraped_text:
+            writer = csv.writer(scraped_text, delimiter='.')
 
-            for normalSentence, cleanedSentence in document.items():
-                if(len(normalSentence.split()) > 3):
-                    normal.append(normalSentence)
-                    cleaned.append(cleanedSentence)
+            for sentence in document:
+                if(len(sentence.split()) > 3):
+                    data.append(sentence)
 
-            writer.writerow({'normalSentence':normal, 'cleanedSentence':cleaned})
+            writer.writerow(data)
+
+    def getFilter(self):
+        return self.filtr
+
+    def getNumSites(self):
+        return self.urls
+
 
 def main():
     print("Time filters include 'hour', 'day', 'week', 'month', or 'year' or '' (all time).")
@@ -88,7 +94,8 @@ def main():
     print("Browser options include 'Chrome', 'Firefox', 'Safari', 'Edge', 'Opera', and 'Brave'.")
     browser = input('Enter the browser: ').capitalize()
 
-    Emot(filtr, browser)
+    emot = Emot(filtr, browser)
+    emot.startTasks()
 
 if __name__ == "__main__":
     main()

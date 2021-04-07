@@ -1,80 +1,37 @@
-from PyQt5.QtCore import QThreadPool, Qt
-from PyQt5.QtGui import QPainter, QPen
-from PyQt5.QtWidgets import QMainWindow, QMessageBox, QApplication
-from PyQt5.QtChart import QChart, QChartView, QPieSeries, QPieSlice
+import sys, subprocess
 
+from PyQt5 import QtCore, QtGui, QtWidgets
+from pyqt import main_window, windows, reportCharts
 from qtWorker import Worker
-from pyqt.main_window import Ui_MainWindow as MainWindow
-from pyqt.windows import AboutWindow, DialogWindow, PrintWindow, PreferenceWindow
 
-import sys, subprocess, random
 from eMot import Emot
-from tests import dockerRunner
-from urlProcessor.blacklists import Blacklists
 from emotClassify import EmotClassify
+from tests import dockerRunner
 
-class Main(QMainWindow, MainWindow):
+class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
     def __init__(self, *args, obj=None, **kwargs):
         super(Main, self).__init__(*args, **kwargs)
         self.setupUi(self)
+        self.stackedWidget.setCurrentWidget(self.homePage)
 
-        self.threadpool = QThreadPool()
+        self.threadpool = QtCore.QThreadPool()
 
-        self.AboutWindow = AboutWindow()
-        self.DialogWindow = DialogWindow()
-        self.PrintWindow = PrintWindow()
-        self.PreferenceWindow = PreferenceWindow()
+        #Set all the UI windows
+        self.AboutWindow = windows.About()
+        self.DialogWindow = windows.Dialog()
+        self.PreferenceWindow = windows.Preference()
         
-        self.actionAbout.triggered.connect(
-            lambda checked: self.toggle_item(self.AboutWindow))
-
-        self.actionPreferences.triggered.connect(
-            lambda checked: self.toggle_item(self.PreferenceWindow))
-
+        self.actionAbout.triggered.connect(lambda checked: self.toggle_item(self.AboutWindow))
+        self.actionPreferences.triggered.connect(lambda checked: self.toggle_item(self.PreferenceWindow))
         self.actionNew.triggered.connect(self.restart_window)
+        
         self.button.clicked.connect(self.go_button)
-        self.PrintWindow.results_button.clicked.connect(self.showResults)
+        self.results_button.setEnabled(False)
+        self.results_button.clicked.connect(self.showPieChart)
 
-        self.blacklists = Blacklists()
-        self.PreferenceWindow.addTagButton.clicked.connect(self.addTag)
-        self.PreferenceWindow.deleteTagButton.clicked.connect(self.removeTag)
-        self.PreferenceWindow.addUrlButton.clicked.connect(self.addUrl)
-        self.PreferenceWindow.deleteUrlButton.clicked.connect(self.removeURL)
-
-        self.emot = Emot()
-        self.emotClassify = EmotClassify()
-
-    def addTag(self):
-        tag = self.PreferenceWindow.tagEdit.toPlainText()
-        self.blacklists.addItem(tag, "tagSet")
-        self.showPopUp("Tag added!")
-        self.PreferenceWindow.tagEdit.clear()
-
-    def removeTag(self):
-        tag = self.PreferenceWindow.tagEdit.toPlainText()
-        self.blacklists.removeItem(tag, "tagSet")
-        self.showPopUp("Tag removed!")
-        self.PreferenceWindow.tagEdit.clear()
-
-    def addUrl(self):
-        url = self.PreferenceWindow.urlEdit.toPlainText()
-        self.blacklists.addItem(url, "urlSet")
-        self.showPopUp("URL added!")
-        self.PreferenceWindow.urlEdit.clear()
-
-    def removeURL(self):
-        url = self.PreferenceWindow.urlEdit.toPlainText()
-        self.blacklists.removeItem(url, "urlSet")
-        self.showPopUp("URL removed!")
-        self.PreferenceWindow.urlEdit.clear()
-
-    def showPopUp(self, message):
-        msg = QMessageBox()
-        msg.setWindowTitle("Message")
-        msg.setText(message)
-        msg.setIcon(QMessageBox.Information)
-        msg.setStandardButtons(QMessageBox.Ok)
-        msg.exec_()
+    def restart_window(self):
+        self.close()
+        subprocess.Popen(['python', 'emotQT.py'])
 
     def toggle_item(self, item):
         if item.isVisible():
@@ -97,61 +54,45 @@ class Main(QMainWindow, MainWindow):
             self.DialogWindow.label_2.setText("Docker Container")
 
         else:
-            self.PrintWindow.show()
-            worker = Worker(emot, filtr, browser)
-            self.threadpool.start(worker)
-            worker.signals.finished.connect(self.toggleAnalysis)
+            self.setupPrintPage(filtr, browser)
 
-    def restart_window(self):
-        self.close()
-        subprocess.Popen(['python', 'emotQT.py'])
+    def setupPrintPage(self, filtr, browser):
 
-    def toggleAnalysis(self):
-        self.PrintWindow.textEdit.clear()
+        self.stackedWidget.setCurrentWidget(self.printPage)
+        sys.stdout = windows.Stream(newText=self.onUpdateText)
+        
+        emot = Emot(filtr, browser)
+        worker = Worker(emot.startTasks)
+        self.threadpool.start(worker)
+        worker.signals.finished.connect(self.startClassify)
+
+    def onUpdateText(self, text):
+
+        #Write console output to textEdit widget.
+        cursor = self.textEdit.textCursor()
+        cursor.movePosition(QtGui.QTextCursor.End)
+        cursor.insertText(text)
+        self.textEdit.setTextCursor(cursor)
+        self.textEdit.ensureCursorVisible()
+
+    def startClassify(self):
+        self.textEdit.clear()
         print("Starting Classification..")
         worker = Worker(self.emotClassify.classify) 
         self.threadpool.start(worker)
-        worker.signals.finished.connect(self.resultsReady)
+        worker.signals.finished.connect(self.enableResultsButton)
 
-    def resultsReady(self):
-        self.PrintWindow.results_button.setEnabled(True)
-        self.PrintWindow.results_button.setStyleSheet(
+    def enableResultsButton(self):
+        self.results_button.setEnabled(True)
+        self.results_button.setStyleSheet(
             "color: rgb(255, 255, 255);\n"                                        
             "background-color: rgb(103, 171, 159);\n"
-            "border: 1px solid black;"
-        )
+            "border: 1px solid black;")
 
-    def showResults(self):
-        self.PrintWindow.showMinimized()
-        emotions = self.emotClassify.get_emotion_count()
-        emotDict = dict(sorted(emotions.items(), key=lambda item: item[1], reverse= True))
-
-        series = QPieSeries()
-        for e in emotDict:
-            series.append(e, emotions[e])
-
-        #adding slice
-        #slice = QPieSlice()
-        slice = series.slices()[0]
-        slice.setExploded(True)
-        slice.setLabelVisible(True)
-        slice.setPen(QPen(Qt.darkGreen, 2))
-        slice.setBrush(Qt.green)
-
-        chart = QChart()
-        chart.legend().hide()
-        chart.addSeries(series)
-        chart.createDefaultAxes()
-        chart.setAnimationOptions(QChart.SeriesAnimations)
-        chart.setTitle("Emotions")
-
-        chart.legend().setVisible(True)
-        chart.legend().setAlignment(Qt.AlignBottom)
-
-        chartview = QChartView(chart)
-        chartview.setRenderHint(QPainter.Antialiasing)
-
-        self.setCentralWidget(chartview)
+    def showPieChart(self):
+        emotClassify = EmotClassify()
+        emotionsDict = emotClassify.get_emotion_count()
+        reportCharts.PieChart(emotionsDict)
 
     def closeEvent(self, event):
         """Shuts down application on close."""
@@ -160,7 +101,7 @@ class Main(QMainWindow, MainWindow):
         super().closeEvent(event)
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     main = Main()
     main.show()
     app.exec_()

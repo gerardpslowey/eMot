@@ -1,10 +1,10 @@
 import pandas as pd
 import pickle
 import csv
-from tqdm import tqdm
 
 import numpy as np
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 class EmotClassify:
 
@@ -46,26 +46,26 @@ class EmotClassify:
         model = self.loadFiles(self.svc_model)
         tfidf = self.loadFiles(self.svc_tfidf_file)
 
+        for i, row in tqdm(df.iterrows(), total = df.shape[0]):
+            row = row.str.split(pat=".", expand=True)
 
-        # for i, row in tqdm(df.iterrows(), total = df.shape[0]):
-        #     row = row.str.split(pat=":", expand=True)
+            for _, values in row.iteritems():
+                value = values[0]
+                sentiment_score = model.predict_proba(tfidf.transform([value]))
+                sentiment_name = model.predict(tfidf.transform([value]))
 
-        #     for _, values in row.iteritems():
-        #         value = values[0]
-        #         sentiment_score = model.predict_proba(tfidf.transform([value]))
-        #         sentiment_name = model.predict(tfidf.transform([value]))
+                emotion = sentiment_name[0]
+                intensity = sentiment_score.max()
 
-        #         emotion = sentiment_name[0]
-        #         intensity = sentiment_score.max()
-
-        #         if self.emotion_count.get(emotion) == 0:
-        #             self.emotion_count[emotion] = 1  
-        #         else:
-        #             self.emotion_count[emotion] += 1
+                if self.emotion_count.get(emotion) == 0:
+                    self.emotion_count[emotion] = 1  
+                else:
+                    self.emotion_count[emotion] += 1
             
-        #         if intensity > self.emotion_intensity.get(emotion):
-        #             self.emotion_intensity[emotion] = intensity
-        #             self.sentence_intensity[emotion] = value
+                if intensity > self.emotion_intensity.get(emotion):
+                    self.emotion_intensity[emotion] = intensity
+                    self.sentence_intensity[emotion] = value
+
 
         print("\n")
         print(self.emotion_count)
