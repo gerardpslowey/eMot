@@ -1,4 +1,7 @@
 import pandas as pd
+from tqdm import tqdm
+tqdm.pandas()
+
 import re, pickle, numpy as np, sys
 import cProfile, io, pstats
 
@@ -11,7 +14,7 @@ from sklearn.pipeline import Pipeline
 
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.absolute())) 
-from urlProcessor.textMod import saveFiles, preprocess_and_tokenize
+from urlProcessor.textMod import saveFiles, preprocessAndTokenise, spellCheck
 
 def calculateCValue(x_train_fit, y_train):
     param_grid = {'C': [0.01, 0.05, 0.25, 0.5, 1, 10]}
@@ -22,15 +25,25 @@ def calculateCValue(x_train_fit, y_train):
     return grid.best_params_
 
 def main():
+    print("Loading Data Sets")
     df_anger = pd.read_csv('../datasets/anger.csv')
     df_fear = pd.read_csv('../datasets/fear.csv')
     df_joy = pd.read_csv('../datasets/joy.csv')
     df_surprise = pd.read_csv('../datasets/surprise.csv')
-    df_love = pd.read_csv('../datasets/love.csv')
-    data_set = [df_anger, df_fear, df_joy, df_surprise, df_love]
+
+    df_happiness = pd.read_csv('../datasets/happiness.csv')
+    df_happiness = df_happiness.sample(n=5000)
+
+    # df_sadness = pd.read_csv('../datasets/sadness.csv')
+    # df_sadness = df_sadness.sample(n=5000)
+
+    data_set = [df_anger, df_fear, df_joy, df_surprise, df_happiness]
 
     data = pd.concat(data_set)
 
+    print("\nChecking Spelling:")
+    data['Text'] = data['Text'].progress_apply(spellCheck)
+    
     X = data['Text']
     y = data['Emotion']
 
@@ -42,7 +55,7 @@ def main():
     )
 
     vect = CountVectorizer(
-        tokenizer=preprocess_and_tokenize, 
+        tokenizer=preprocessAndTokenise, 
         ngram_range=(1,2)
     )
 

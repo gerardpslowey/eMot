@@ -1,11 +1,11 @@
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.absolute())) 
-from urlProcessor.textMod import preProcess, removeURLs, removeRepetitions, spellCheck
+from urlProcessor.textMod import preprocessAndTokenise, removeURLs, removeRepetitions, spellCheck
 
 def test_pre_process():
     sentence = "Screw you @davidbrussee! I only have 3 weeks..."
-    assert preProcess(sentence) == 'screw you i only have week'
+    assert preprocessAndTokenise(sentence).lower() == 'screw week'
 
 def test_remove_url():
     sentence = "feels strong contractions but wants to go out.  http://plurk.com/p/wxidk"
@@ -21,15 +21,15 @@ def test_spell_check():
 
 def test_clean_text():
     text = ".... Python is great and challenging! #preprocessing @testing !?;:"
-    text = preProcess(text)
+    text = preprocessAndTokenise(text)
     text = removeURLs(text)
     text = removeRepetitions(text)
     text = spellCheck(text)
-    assert text == "python be great and challenging"
+    assert text.lower() == "python great challenge"
 
 def test_wrong():
     sentence = "very nice very cool, king of the castle, king of the castle, I have a chair"
-    text = preProcess(sentence)
+    text = preprocessAndTokenise(sentence)
     text = removeURLs(text)
     text = removeRepetitions(text)
     text = spellCheck(text)

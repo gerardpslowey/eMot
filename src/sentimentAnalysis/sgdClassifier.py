@@ -6,6 +6,7 @@ from sklearn.linear_model import SGDClassifier
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics import accuracy_score, f1_score
 from sklearn.pipeline import Pipeline
+from sklearn.model_selection import train_test_split
 
 # filter warning about using custom tokenizer
 import warnings
@@ -14,24 +15,54 @@ warnings.filterwarnings('ignore')
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.absolute())) 
-from urlProcessor.textMod import preprocess_and_tokenize, saveFiles
+from urlProcessor.textMod import preprocessAndTokenise, saveFiles, spellCheck
 
 def main():
-    # read the dataset into a data frame
-    df_train = pd.read_csv('../datasets/data_train.csv')
-    df_test = pd.read_csv('../datasets/data_test.csv')
+    print("Loading Data Sets")
+    df_anger = pd.read_csv('../datasets/anger.csv')
+    df_fear = pd.read_csv('../datasets/fear.csv')
+    df_joy = pd.read_csv('../datasets/joy.csv')
+    df_surprise = pd.read_csv('../datasets/surprise.csv')
 
-    X_train = df_train.Text
-    x_test = df_test.Text
+    df_happiness = pd.read_csv('../datasets/happiness.csv')
+    df_happiness = df_happiness.sample(n=5000)
 
-    y_train = df_train.Emotion
-    y_test = df_test.Emotion
+    df_sadness = pd.read_csv('../datasets/sadness.csv')
+    df_sadness = df_sadness.sample(n=5000)
 
-    cv = CountVectorizer(tokenizer=preprocess_and_tokenize, ngram_range=(1,2))
+    data_set = [df_anger, df_fear, df_joy, df_surprise, df_happiness, df_sadness]
+
+    data = pd.concat(data_set)
+
+    print("\nChecking Spelling:")
+    data['Text'] = data['Text'].progress_apply(spellCheck)
+  
+    X = data['Text']
+    y = data['Emotion']
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, 
+        y, 
+        test_size=0.2, 
+        random_state=42
+    )
+
+    cv = CountVectorizer(
+        tokenizer=preprocessAndTokenise, 
+        ngram_range=(1,2)
+    )
+
     X_train_count = cv.fit_transform(X_train)
-    x_test_count = cv.transform(x_test)
+    x_test_count = cv.transform(X_test)
 
-    sgd = SGDClassifier(alpha=0.001, loss='modified_huber', penalty='l2', tol=None, n_jobs=-1)
+    sgd = SGDClassifier(
+        alpha=0.001, 
+        loss='modified_huber', 
+        penalty='l2', 
+        tol=None, 
+        n_jobs=-1
+    )
+    
     sgd.fit(X_train_count, y_train)
     ysvm_pred = sgd.predict(x_test_count)
     print("Accuracy: {:.2f}%".format(accuracy_score(y_test, ysvm_pred) * 100))

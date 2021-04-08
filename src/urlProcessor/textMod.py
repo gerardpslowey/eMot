@@ -16,7 +16,7 @@ re_token_match = fr'({re_token_match}|#\w+|\w+-\w+)'
 # overwrite token_match function of the tokenizer
 nlp.tokenizer.token_match = re.compile(re_token_match).match
 
-def preProcess(data):    
+def preprocessAndTokenise(data):    
     # remove html markup
     data = re.sub("(<.*?>)", "", data)
 
@@ -35,18 +35,17 @@ def preProcess(data):
 
     mytokens = nlp(data)
 
-    stem_data = [word.lemma_ for word in mytokens]
+    stem_data = [word.lemma_.strip() for word in mytokens if word.lemma_ != '-PRON-' and not word.is_punct and not word.is_stop and not word.is_space]
 
-    return stem_data
+    return " ".join(stem_data)
 
 
 def cleanScrapedText(document):
     cleaned = []
 
-    for sentence in " ".join(document):
-        mytokens = nlp(sentence)
-        cleaned = [word.lemma_ for word in mytokens 
-            if (word.lemma_ != '-PRON-' and not word.is_punct and not word.is_stop)]            
+    mytokens = nlp(document)
+    cleaned = [word.lemma_ for word in mytokens 
+        if (word.lemma_ != '-PRON-' and not word.is_punct and not word.is_stop)]            
                 
     return " ".join(cleaned)
 

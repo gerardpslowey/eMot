@@ -12,7 +12,6 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 # classifiers
 from sklearn.svm import LinearSVC
-from sklearn.pipeline import Pipeline
 
 # save and load a file
 import pickle
@@ -20,9 +19,7 @@ import pickle
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.absolute())) 
-from urlProcessor.textMod import preProcess, saveFiles, spellCheck, removeRepetitions
-
-from urlProcessor.nltkStuff import preprocess_and_tokenize
+from urlProcessor.textMod import preprocessAndTokenise, saveFiles, spellCheck
 
 from tqdm import tqdm
 tqdm.pandas()
@@ -64,7 +61,7 @@ def main():
 
     # TFIDF, unigrams and bigrams
     vect = TfidfVectorizer(
-        tokenizer=preProcess, 
+        tokenizer=preprocessAndTokenise, 
         sublinear_tf=True, 
         norm='l2', 
         ngram_range=(1,2)
@@ -86,6 +83,7 @@ def main():
         class_weight='balanced',
     )
 
+    # used to get classification score
     clf = CalibratedClassifierCV(lsvc) 
     clf.fit(X_train_vect, y_train)
 
@@ -109,7 +107,6 @@ def main():
     saveFiles(clf, model_filename)
     saveFiles(vect, tfidf_filename)
     print("Model and Data Saved")
-
 
 
 if __name__ == '__main__':
