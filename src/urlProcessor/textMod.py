@@ -16,26 +16,43 @@ re_token_match = fr'({re_token_match}|#\w+|\w+-\w+)'
 # overwrite token_match function of the tokenizer
 nlp.tokenizer.token_match = re.compile(re_token_match).match
 
+# Used for datasets
 def preprocessAndTokenise(data):    
     # remove html markup
-    data = re.sub("(<.*?>)", "", data)
-
+    data = removehtmlMarkup(data)
     # remove urls
-    data = re.sub(r'https?://\S+|www\.\S+', '', data)
-    
+    data = removeURLs(data)    
     # remove hashtags and @ symbols
-    data = re.sub(r"(#[\d\w\.]+)", '', data)
-    data = re.sub(r"(@[\d\w\.]+)", '', data)
-
+    data = removeHashandSymbols(data)
     # remove punctuation and non-ascii digits
-    data = re.sub("(\\W|\\d)", " ", data)
-    
+    data = removeAscii(data)
     # remove whitespace
     data = data.strip()
 
     mytokens = nlp(data)
 
-    stem_data = [word.lemma_.strip() for word in mytokens if word.lemma_ != '-PRON-' and not word.is_punct and not word.is_stop and not word.is_space]
+    stem_data = [word.lemma_.strip() for word in mytokens 
+        if not word.is_punct and not word.is_stop and not word.is_space]
+
+    return stem_data
+
+
+def preProcess(data):
+    # remove html markup
+    data = removehtmlMarkup(data)
+    # remove urls
+    data = removeURLs(data)    
+    # remove hashtags and @ symbols
+    data = removeHashandSymbols(data)
+    # remove punctuation and non-ascii digits
+    data = removeAscii(data)
+    # remove whitespace
+    data = data.strip()
+
+    mytokens = nlp(data)
+
+    stem_data = [word.lemma_.strip() for word in mytokens 
+        if word.lemma_ != '-PRON-' and not word.is_punct and not word.is_stop and not word.is_space]
 
     return " ".join(stem_data)
 
@@ -98,7 +115,7 @@ def wordcloud_draw(data, color = 'white'):
 
 
 def saveFiles(data, filename):
-    directory = "../models"
+    directory = "models"
     if not os.path.exists(directory):
         Path(directory).mkdir(parents=True, exist_ok=True)
 

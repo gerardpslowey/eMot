@@ -8,12 +8,14 @@ import threading, concurrent.futures as futures
 import os, sys, csv
 from browserHistory.getHistory import GetHistory
 
+import pandas as pd
+
 # Scraper and url filter
 from urlProcessor.scraper import Scraper
 from urlProcessor.urlFilter import filterBlacklistedUrl
 from urlProcessor.blacklists import Blacklists
 
-from urlProcessor.textMod import cleanScrapedText
+from urlProcessor.textMod import cleanScrapedText, preProcess
 
 import multiprocessing
 
@@ -60,36 +62,50 @@ class Emot:
 
                 if(data != None):
                     url = data[0]
-                    text = data[1]
-                    # cleanedText = cleanScrapedText(text)
+                    originalText = data[1]
+                    # cleanedText = preProcess(originalText)
                     # store scraped data
-                    self.writeToCSV([data, text])
+                    self.writeToCSV(url, originalText)
 
         print("Finished scraping!")
 
 
     def overwriteCSV(self):
         with open('sentimentAnalysis/scraped.csv', mode='w', encoding="utf-8", newline='') as scraped_text:
-            fields = ['url', 'cleaned_data', 'original_data']
+            fields = ['url', 'original_data']
             writer = csv.DictWriter(scraped_text, fieldnames=fields, delimiter=',')
             writer.writeheader()
 
 
-    def writeToCSV(self, data):
-        url = data[0]
-        originalText = data[1]
+    def writeToCSV(self, url, originalText):
         # cleanedText = data[2]
-        
-        cleaned = []
-        fields = ['url', 'cleaned_data', 'original_data']
+
+        data = []
         with open('sentimentAnalysis/scraped.csv', mode='a+', encoding="utf-8",  newline='') as scraped_text:
-            writer = csv.DictWriter(scraped_text, fieldnames=fields, delimiter='.') 
+            writer = csv.writer(scraped_text, delimiter=',')
+
+            # print(originalText)
+            # print(sentence)
 
             for sentence in originalText:
+                # remove silly sentences
                 if(len(sentence.split()) > 3):
-                    cleaned.append(sentence)
+                    data.append(sentence)
 
-            writer.writerow({'url' : url, 'cleaned_data': cleaned, 'original_data' : originalText})
+            writer.writerow([url, ".".join(data)])
+
+
+
+
+
+        #     writer = csv.DictWriter(scraped_text, fieldnames=fields, delimiter='.') 
+
+        #     for sentence in originalText:
+        #         if(len(sentence.split()) > 3):
+        #             cleaned.append(sentence)
+
+        # row = {'url' : url, 'original_data' : originalText}
+
 
 def main():
     print("Time filters include 'hour', 'day', 'week', 'month', or 'year' or '' (all time).")

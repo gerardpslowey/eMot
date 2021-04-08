@@ -19,7 +19,7 @@ import pickle
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.absolute())) 
-from urlProcessor.textMod import preprocessAndTokenise, saveFiles, spellCheck
+from urlProcessor.textMod import preProcess, saveFiles, spellCheck, preprocessAndTokenise
 
 from tqdm import tqdm
 tqdm.pandas()
@@ -80,7 +80,7 @@ def main():
         penalty='l2',
         loss='hinge',
         random_state=42,
-        class_weight='balanced',
+        class_weight='balanced'
     )
 
     # used to get classification score

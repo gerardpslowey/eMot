@@ -3,14 +3,17 @@ from pathlib import Path
 import cProfile, io, pstats
 from bs4 import BeautifulSoup, Comment, Doctype
 
-from .textMod import preProcess, removeURLs
+from .textMod import preprocessAndTokenise, removeURLs, preProcess
 from .blacklists import Blacklists
 
 class Scraper:
     def scrape(self, url):
         tagSet = Blacklists().getItems()['tagSet']
+
         print("scraping site: " + url + "\n")
+
         soup = self.getSoup(url)
+
         if(len(soup) != 0):
             text = self.getText(soup, tagSet)
             print(f'task {url} finished\n') 
@@ -45,7 +48,7 @@ class Scraper:
                 +'click below to consent)', 
                 sentence.lower())):
 
-                cleaned.append(sentence)
+                cleaned.append(preProcess(sentence))
 
         return cleaned
 

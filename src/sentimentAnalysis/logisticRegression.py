@@ -14,7 +14,7 @@ from sklearn.pipeline import Pipeline
 
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.absolute())) 
-from urlProcessor.textMod import saveFiles, preprocessAndTokenise, spellCheck
+from urlProcessor.textMod import saveFiles, preProcess, spellCheck, preprocessAndTokenise
 
 def calculateCValue(x_train_fit, y_train):
     param_grid = {'C': [0.01, 0.05, 0.25, 0.5, 1, 10]}

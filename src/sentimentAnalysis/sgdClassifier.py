@@ -15,7 +15,7 @@ warnings.filterwarnings('ignore')
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.absolute())) 
-from urlProcessor.textMod import preprocessAndTokenise, saveFiles, spellCheck
+from urlProcessor.textMod import preProcess, saveFiles, spellCheck, preprocessAndTokenise
 
 def main():
     print("Loading Data Sets")
