@@ -2,7 +2,8 @@ import sys
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtChart
-from pyqt import main_window, windows, reportCharts
+from pyqt import main_window, windows, reportsInfo
+import pyqtgraph as pg
 
 from emotClassify import EmotClassify
 
@@ -16,67 +17,25 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.threadpool = QtCore.QThreadPool()
         self.emotClassify = EmotClassify()
         self.emotClassify.classify()
-        self.results_button.clicked.connect(self.showPieChart)
+        self.results_button.clicked.connect(self.setStatistics)
 
-    def showPieChart(self):
+        self.nextPageButton.clicked.connect(self.changePage)
+        self.previousPageButton.clicked.connect(self.changePage)
 
+        self.browser = "Opera"
+        self.filtr = "All"
+
+    def changePage(self):
+        if self.stackedWidget.currentWidget() == self.reportsPage:
+            self.stackedWidget.setCurrentWidget(self.reportsPage2)
+        else:
+            self.stackedWidget.setCurrentWidget(self.reportsPage)
+
+    def setStatistics(self):
         self.stackedWidget.setCurrentWidget(self.reportsPage)
-
-        emotionsDict = self.emotClassify.get_emotion_count()
-        emotions = dict(sorted(emotionsDict.items(), key=lambda item: item[1], reverse= True))
-        
-        series = QtChart.QPieSeries()
-        for emotion in emotions:
-            series.append(emotion, emotionsDict[emotion])
-
-        #adding slice
-        slice = series.slices()[0]
-        slice.setExploded(True)
-        slice.setLabelVisible(True)
-        slice.setPen(QtGui.QPen(QtCore.Qt.darkGreen, 2))
-        slice.setBrush(QtCore.Qt.green)
-
-        chart = QtChart.QChart()
-        chart.legend().hide()
-        chart.addSeries(series)
-        chart.createDefaultAxes()
-        chart.setAnimationOptions(QtChart.QChart.SeriesAnimations)
-        chart.setTitle("Pie Chart")
-
-        chart.legend().setVisible(True)
-        chart.legend().setAlignment(QtCore.Qt.AlignBottom)
-
-        chartview = QtChart.QChartView(chart)
-        self.layout.addWidget(chartview)
-
-        self.showLineChart()
-
-    def showLineChart(self):
-        series = QtChart.QLineSeries(self)
-
-        emotionsDict = self.emotClassify.get_emotion_intensity()
-        emotions = dict(sorted(emotionsDict.items(), key=lambda item: item[1], reverse= True))
-
-        i = 1
-        for emotion in emotions:
-            series.append(i, emotionsDict[emotion])
-            i+=1
-
-        series << QtCore.QPointF(11, 1) << QtCore.QPointF(13, 3) << QtCore.QPointF(17, 6) << QtCore.QPointF(18, 3) << QtCore.QPointF(20, 2)
-        chart = QtChart.QChart()
-
-        chart.addSeries(series)
-        chart.createDefaultAxes()
-        chart.setAnimationOptions(QtChart.QChart.SeriesAnimations)
-        chart.setTitle("Line Chart")
-
-        chart.legend().setVisible(True)
-        chart.legend().setAlignment(QtCore.Qt.AlignBottom)
-
-        chartview = QtChart.QChartView(chart)
-        chartview.setRenderHint(QtGui.QPainter.Antialiasing)
-        self.layout.addWidget(chartview)
-
+        reportsInfo.setStats(self)
+        axes = self.wordCloud.figure.add_subplot(1,1,1)
+        axes.plot([1,2,3],[4,5,6])
 
     def closeEvent(self, event):
         """Shuts down application on close."""

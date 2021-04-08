@@ -1,12 +1,15 @@
 import sys, subprocess
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from pyqt import main_window, windows, reportCharts
+from pyqt import main_window, windows, reportsInfo
 from qtWorker import Worker
 
 from eMot import Emot
 from emotClassify import EmotClassify
 from tests import dockerRunner
+
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT as NavigationToolbar
+from matplotlib.figure import Figure
 
 class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
@@ -30,7 +33,10 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         
         self.button.clicked.connect(self.go_button)
         self.results_button.setEnabled(False)
-        self.results_button.clicked.connect(self.showPieChart)
+        self.results_button.clicked.connect(self.showStatistics)
+
+        self.nextPageButton.clicked.connect(self.changePage)
+        self.previousPageButton.clicked.connect(self.changePage)
 
     def restart_window(self):
         self.close()
@@ -42,12 +48,19 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         else:
             item.show()
 
+    def changePage(self):
+
+        if self.stackedWidget.currentWidget() == self.reportsPage:
+            self.stackedWidget.setCurrentWidget(self.reportsPage2)
+        else:
+            self.stackedWidget.setCurrentWidget(self.reportsPage)
+
     def go_button(self):
 
-        browser = str(self.browserComboBox.currentText()).capitalize()
-        filtr = str(self.dateComboBox.currentText()).capitalize()
+        self.browser = str(self.browserComboBox.currentText()).capitalize()
+        self.filtr = str(self.dateComboBox.currentText()).capitalize()
 
-        if browser == "Select browser":
+        if self.browser == "Select browser":
             self.toggle_item(self.DialogWindow)
             self.DialogWindow.label.setText("Choose a browser from \nthe dropdown menu")
             self.DialogWindow.label_2.setText("You Must Choose A Browser")
@@ -58,14 +71,14 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
             self.DialogWindow.label_2.setText("Docker Container")
 
         else:
-            self.setupPrintPage(filtr, browser)
+            self.setupPrintPage()
 
-    def setupPrintPage(self, filtr, browser):
+    def setupPrintPage(self):
 
         self.stackedWidget.setCurrentWidget(self.printPage)
         sys.stdout = windows.Stream(newText=self.onUpdateText)
         
-        emot = Emot(filtr, browser)
+        emot = Emot(self.filtr, self.browser)
         worker = Worker(emot.startTasks)
         self.threadpool.start(worker)
         worker.signals.finished.connect(self.startClassify)
@@ -93,11 +106,12 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
             "background-color: rgb(103, 171, 159);\n"
             "border: 1px solid black;")
 
-    def showPieChart(self):
-
+    def showStatistics(self):
         self.stackedWidget.setCurrentWidget(self.reportsPage)
-        emotionsDict = self.emotClassify.get_emotion_count()
-        pieChart = reportCharts.PieChart(emotionsDict)
+        reportsInfo.setStats(self)
+
+        axes = self.wordCloud.figure.add_subplot(1,1,1)
+        axes.plot([1,2,3],[4,5,6])
 
     def closeEvent(self, event):
         """Shuts down application on close."""
