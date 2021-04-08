@@ -110,8 +110,10 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.stackedWidget.setCurrentWidget(self.reportsPage)
         reportsInfo.setStats(self)
 
-        axes = self.wordCloud.figure.add_subplot(1,1,1)
-        axes.plot([1,2,3],[4,5,6])
+        x=range(0, 10)
+        y=range(0, 20, 2)
+        self.wordCloud.canvas.ax.plot(x, y)
+        self.wordCloud.canvas.draw()
 
     def closeEvent(self, event):
         """Shuts down application on close."""

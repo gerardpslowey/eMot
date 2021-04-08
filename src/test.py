@@ -6,6 +6,7 @@ from pyqt import main_window, windows, reportsInfo
 import pyqtgraph as pg
 
 from emotClassify import EmotClassify
+from wordcloud import WordCloud
 
 class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
@@ -34,8 +35,21 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
     def setStatistics(self):
         self.stackedWidget.setCurrentWidget(self.reportsPage)
         reportsInfo.setStats(self)
-        axes = self.wordCloud.figure.add_subplot(1,1,1)
-        axes.plot([1,2,3],[4,5,6])
+        
+        x=range(0, 10)
+        y=range(0, 20, 2)
+        self.wordCloud.canvas.ax.plot(x, y)
+        self.wordCloud.canvas.draw()
+
+        # data = ["happy", "sad", "hungry", "hungry", "design", "right", "wrong", "end", "happy"]
+        # words = ' '.join(data)
+        # wordcloud = WordCloud(
+        #     background_color="white", 
+        #     width=2500, height=2000).generate(words)
+
+        # self.wordCloud.figure(1,figsize=(10, 7))
+        # self.wordCloud.imshow(wordcloud)
+        # self.wordCloud.cavanas.ax('off')
 
     def closeEvent(self, event):
         """Shuts down application on close."""
