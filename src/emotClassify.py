@@ -1,10 +1,11 @@
 import pandas as pd
 import pickle
 import csv
-from tqdm import tqdm
 
 import numpy as np
 import matplotlib.pyplot as plt
+
+from urlProcessor.urlFilter import base
 
 class EmotClassify:
 
@@ -14,7 +15,8 @@ class EmotClassify:
             "fear":0,
             "joy":0,
             "surprise":0,
-            "happiness":0
+            "happiness":0,
+            "sadness":0
         }
 
         self.emotion_intensity = {
@@ -22,7 +24,8 @@ class EmotClassify:
             "fear":0,
             "joy":0,
             "surprise":0,
-            "happiness":0
+            "happiness":0,
+            "sadness":0
         }
 
         self.sentence_intensity = {
@@ -30,8 +33,10 @@ class EmotClassify:
             "fear":0,
             "joy":0,
             "surprise":0,
-            "happiness":0
+            "happiness":0,
+            "sadness":0
         }
+        # 'anger', 'fear', 'joy', 'surprise', 'happiness', 'sadness'
 
         self.svc_model = "models/svc.pkl"
         self.svc_tfidf_file = "models/svc_tfidf.pkl"
@@ -41,31 +46,48 @@ class EmotClassify:
     def classify(self):
     
         df = pd.read_csv('sentimentAnalysis/scraped.csv')
-        print(df.shape)
+
+        # Sort out urls first
+        urls_df = pd.DataFrame(df['url'])
+        urls_df['base'] = urls_df['url'].apply(base)
+
+        urls_df.base.value_counts().plot(kind='barh')
+        plt.xlabel('No. of Products');
+
+
+        # for _, row in urls_df.iterrows():
+        #     for name, values in row.iteritems():
+        #         print('{name}: {value}'.format(name=name, value=values))
 
         model = self.loadFiles(self.svc_model)
         tfidf = self.loadFiles(self.svc_tfidf_file)
 
 
-        # for i, row in tqdm(df.iterrows(), total = df.shape[0]):
-        #     row = row.str.split(pat=":", expand=True)
+        # looking at 
+        # for _, row in df.iterrows():
+        #     for name, values in row.iteritems():
+        #         print('{name}: {value}'.format(name=name, value=values))
 
-        #     for _, values in row.iteritems():
-        #         value = values[0]
-        #         sentiment_score = model.predict_proba(tfidf.transform([value]))
-        #         sentiment_name = model.predict(tfidf.transform([value]))
+        #         row = row.str.split(pat=".", expand=True)
 
-        #         emotion = sentiment_name[0]
-        #         intensity = sentiment_score.max()
+                # for _, values in row.iteritems():
+                #     value = values[0]
+                #     print(value)
+                    # sentiment_score = model.predict_proba(tfidf.transform([value]))
+                    # sentiment_name = model.predict(tfidf.transform([value]))
 
-        #         if self.emotion_count.get(emotion) == 0:
-        #             self.emotion_count[emotion] = 1  
-        #         else:
-        #             self.emotion_count[emotion] += 1
-            
-        #         if intensity > self.emotion_intensity.get(emotion):
-        #             self.emotion_intensity[emotion] = intensity
-        #             self.sentence_intensity[emotion] = value
+                    # emotion = sentiment_name[0]
+                    # intensity = sentiment_score.max()
+
+                    # if self.emotion_count.get(emotion) == 0:
+                    #     self.emotion_count[emotion] = 1  
+                    # else:
+                    #     self.emotion_count[emotion] += 1
+                
+                    # if intensity > self.emotion_intensity.get(emotion):
+                    #     self.emotion_intensity[emotion] = intensity
+                    #     self.sentence_intensity[emotion] = value
+
 
         print("\n")
         print(self.emotion_count)

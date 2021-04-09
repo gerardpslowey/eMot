@@ -41,7 +41,6 @@ class Main(QMainWindow, MainWindow):
         self.PreferenceWindow.addUrlButton.clicked.connect(self.addUrl)
         self.PreferenceWindow.deleteUrlButton.clicked.connect(self.removeURL)
 
-        self.emot = Emot()
         self.emotClassify = EmotClassify()
 
     def addTag(self):
@@ -74,7 +73,7 @@ class Main(QMainWindow, MainWindow):
         msg.setText(message)
         msg.setIcon(QMessageBox.Information)
         msg.setStandardButtons(QMessageBox.Ok)
-        msg.exec_()
+        x = msg.exec_()
 
     def toggle_item(self, item):
         if item.isVisible():
@@ -98,7 +97,7 @@ class Main(QMainWindow, MainWindow):
 
         else:
             self.PrintWindow.show()
-            worker = Worker(emot, filtr, browser)
+            worker = Worker(Emot, filtr, browser)
             self.threadpool.start(worker)
             worker.signals.finished.connect(self.toggleAnalysis)
 
@@ -124,10 +123,10 @@ class Main(QMainWindow, MainWindow):
     def showResults(self):
         self.PrintWindow.showMinimized()
         emotions = self.emotClassify.get_emotion_count()
-        emotDict = dict(sorted(emotions.items(), key=lambda item: item[1], reverse= True))
+        emot = dict(sorted(emotions.items(), key=lambda item: item[1], reverse= True))
 
         series = QPieSeries()
-        for e in emotDict:
+        for e in emot:
             series.append(e, emotions[e])
 
         #adding slice
