@@ -9,9 +9,7 @@ from .blacklists import Blacklists
 class Scraper:
     def scrape(self, url):
         tagSet = Blacklists().getItems()['tagSet']
-
-        print("scraping site: " + url + "\n")
-
+        print(f"scraping site: {url}", end="\n")
         soup = self.getSoup(url)
 
         if(len(soup) != 0):
@@ -19,7 +17,7 @@ class Scraper:
             print(f'task {url} finished\n') 
             return (url, text)
 
-        print(f'task {url} returned null, skipped\n') 
+        print(f"task {url} returned null, skipped") 
         return None
 
     def getSoup(self, url):
@@ -52,12 +50,13 @@ class Scraper:
 
         return cleaned
 
+
 def main():
     url = 'https://webscraper.io/test-sites/e-commerce/allinone/computers'
     print(Scraper().scrape(url))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
     # pr = cProfile.Profile()
     # pr.enable()
