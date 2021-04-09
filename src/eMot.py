@@ -67,8 +67,8 @@ class Emot:
             print("Nothing to scrape!")
 
     def clearCSV(self):
-        f = open(self.scraped_csv, "w+")
-        f.close()
+            f = open(self.scraped_csv, "w+")
+            f.close()
 
     def writeToCSV(self, document):
         data = []

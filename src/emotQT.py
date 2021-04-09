@@ -7,9 +7,7 @@ from qtWorker import Worker
 from eMot import Emot
 from emotClassify import EmotClassify
 from tests import dockerRunner
-
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT as NavigationToolbar
-from matplotlib.figure import Figure
+from wordcloud import WordCloud
 
 class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
@@ -110,10 +108,19 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.stackedWidget.setCurrentWidget(self.reportsPage)
         reportsInfo.setStats(self)
 
-        x=range(0, 10)
-        y=range(0, 20, 2)
-        self.wordCloud.canvas.ax.plot(x, y)
-        self.wordCloud.canvas.draw()
+        worker = Worker(self.draw_WordCloud)
+        self.threadpool.start(worker)
+
+    def draw_WordCloud(self):
+        data = ["happy", "sad", "hungry", "hungry", "design", "right", "wrong", "end", "happy"]
+        words = ' '.join(data)
+        wordcloud = WordCloud(
+            background_color="white", 
+            width=2500, height=2000).generate(words)
+
+        wordcloud.to_file("pyqt/wordCloud.png")
+        self.wordCloud.setPixmap(QtGui.QPixmap("pyqt/wordCloud.png"))
+        self.wordCloud.setScaledContents(True)
 
     def closeEvent(self, event):
         """Shuts down application on close."""

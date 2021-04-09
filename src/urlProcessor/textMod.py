@@ -105,16 +105,18 @@ def preprocess_and_tokenize(data):
         
     return stem_data
 
-def wordcloud_draw(data, color = 'white'):
+def wordCloud(data, color = 'white'):
     words = ' '.join(data)
     wordcloud = WordCloud(
         background_color=color, 
         width=2500, height=2000).generate(words)
 
-    plt.figure(1,figsize=(10, 7))
-    plt.imshow(wordcloud)
-    plt.axis('off')
-    plt.show()
+    wordcloud.to_file("wordCloud.png")
+
+    # plt.figure(1,figsize=(10, 7))
+    # plt.imshow(wordcloud)
+    # plt.axis('off')
+    # plt.show()
 
 
 def saveFiles(data, filename):

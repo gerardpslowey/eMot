@@ -4,6 +4,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtChart
 from pyqt import main_window, windows, reportsInfo
 import pyqtgraph as pg
+import matplotlib.pyplot as plt
 
 from emotClassify import EmotClassify
 from wordcloud import WordCloud
@@ -36,20 +37,20 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.stackedWidget.setCurrentWidget(self.reportsPage)
         reportsInfo.setStats(self)
         
-        x=range(0, 10)
-        y=range(0, 20, 2)
-        self.wordCloud.canvas.ax.plot(x, y)
-        self.wordCloud.canvas.draw()
+        # x=range(0, 10)
+        # y=range(0, 20, 2)
+        # self.wordCloud.canvas.ax.plot(x, y)
+        # self.wordCloud.canvas.draw()
 
-        # data = ["happy", "sad", "hungry", "hungry", "design", "right", "wrong", "end", "happy"]
-        # words = ' '.join(data)
-        # wordcloud = WordCloud(
-        #     background_color="white", 
-        #     width=2500, height=2000).generate(words)
+        data = ["happy", "sad", "hungry", "hungry", "design", "right", "wrong", "end", "happy"]
+        words = ' '.join(data)
+        wordcloud = WordCloud(
+            background_color="white", 
+            width=2500, height=2000).generate(words)
 
-        # self.wordCloud.figure(1,figsize=(10, 7))
-        # self.wordCloud.imshow(wordcloud)
-        # self.wordCloud.cavanas.ax('off')
+        wordcloud.to_file("wordCloud.png")
+        self.wordCloud.setPixmap(QtGui.QPixmap("wordCloud.png"))
+        self.wordCloud.setScaledContents(True)
 
     def closeEvent(self, event):
         """Shuts down application on close."""

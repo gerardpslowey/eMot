@@ -53,7 +53,7 @@
      </font>
     </property>
     <property name="statusTip">
-     <string>Pie Chart</string>
+     <string/>
     </property>
     <property name="layoutDirection">
      <enum>Qt::LeftToRight</enum>
@@ -421,22 +421,6 @@ border: 1px solid black;</string>
      <property name="styleSheet">
       <string notr="true">background-color: rgb(236, 236, 236);</string>
      </property>
-     <widget class="PlotWidget" name="lineChart">
-      <property name="geometry">
-       <rect>
-        <x>30</x>
-        <y>160</y>
-        <width>501</width>
-        <height>351</height>
-       </rect>
-      </property>
-      <property name="statusTip">
-       <string>Line Chart</string>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 255, 255);</string>
-      </property>
-     </widget>
      <widget class="QFrame" name="frame">
       <property name="geometry">
        <rect>
@@ -709,34 +693,41 @@ color: rgb(255, 255, 255);</string>
        <string>Next Page</string>
       </property>
      </widget>
-     <widget class="MplCanvas" name="wordCloud" native="true">
+     <widget class="QWidget" name="verticalLayoutWidget">
       <property name="geometry">
        <rect>
-        <x>549</x>
+        <x>29</x>
         <y>159</y>
         <width>501</width>
         <height>351</height>
        </rect>
       </property>
-      <property name="minimumSize">
-       <size>
-        <width>501</width>
-        <height>351</height>
-       </size>
+      <layout class="QVBoxLayout" name="lineChartLayout"/>
+     </widget>
+     <widget class="QLabel" name="wordCloud">
+      <property name="geometry">
+       <rect>
+        <x>570</x>
+        <y>165</y>
+        <width>471</width>
+        <height>341</height>
+       </rect>
       </property>
-      <property name="statusTip">
-       <string>Word Cloud</string>
+      <property name="font">
+       <font>
+        <pointsize>16</pointsize>
+       </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 255, 255);</string>
+       <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(103, 171, 159,255));</string>
+      </property>
+      <property name="text">
+       <string>Loading WordCloud..</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <zorder>frame</zorder>
-     <zorder>lineChart</zorder>
-     <zorder>frame_2</zorder>
-     <zorder>frame_3</zorder>
-     <zorder>nextPageButton</zorder>
-     <zorder>wordCloud</zorder>
     </widget>
     <widget class="QWidget" name="reportsPage2">
      <property name="styleSheet">
@@ -763,38 +754,6 @@ color: rgb(255, 255, 255);</string>
       </property>
       <property name="text">
        <string>Previous Page</string>
-      </property>
-     </widget>
-     <widget class="PlotWidget" name="pieChart">
-      <property name="geometry">
-       <rect>
-        <x>30</x>
-        <y>160</y>
-        <width>501</width>
-        <height>351</height>
-       </rect>
-      </property>
-      <property name="statusTip">
-       <string>Pie Chart</string>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 255, 255);</string>
-      </property>
-     </widget>
-     <widget class="PlotWidget" name="barChart">
-      <property name="geometry">
-       <rect>
-        <x>550</x>
-        <y>160</y>
-        <width>501</width>
-        <height>351</height>
-       </rect>
-      </property>
-      <property name="statusTip">
-       <string>Bar Chart</string>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 255, 255);</string>
       </property>
      </widget>
      <widget class="QFrame" name="frame_4">
@@ -1107,6 +1066,28 @@ p, li { white-space: pre-wrap; }
        </property>
       </widget>
      </widget>
+     <widget class="QWidget" name="verticalLayoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>29</x>
+        <y>159</y>
+        <width>481</width>
+        <height>351</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="pieChartLayout"/>
+     </widget>
+     <widget class="QWidget" name="verticalLayoutWidget_4">
+      <property name="geometry">
+       <rect>
+        <x>550</x>
+        <y>160</y>
+        <width>501</width>
+        <height>351</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="barChartLayout"/>
+     </widget>
     </widget>
    </widget>
   </widget>
@@ -1166,19 +1147,6 @@ selection-color: rgb(255, 255, 255);</string>
    </property>
   </action>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>PlotWidget</class>
-   <extends>QGraphicsView</extends>
-   <header>pyqtgraph</header>
-  </customwidget>
-  <customwidget>
-   <class>MplCanvas</class>
-   <extends>QWidget</extends>
-   <header>canvas</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="../resources/resource.qrc"/>
  </resources>

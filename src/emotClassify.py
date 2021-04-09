@@ -26,11 +26,11 @@ class EmotClassify:
         }
 
         self.sentence_intensity = {
-            "anger":0,
-            "fear":0,
-            "joy":0,
-            "surprise":0,
-            "happiness":0
+            "anger":"None",
+            "fear":"None",
+            "joy":"None",
+            "surprise":"None",
+            "happiness":"None"
         }
 
         self.svc_model = "models/svc.pkl"
@@ -40,34 +40,36 @@ class EmotClassify:
         self.emotion_total = 0
 
     def classify(self):
-    
-        df = pd.read_csv('sentimentAnalysis/scraped.csv')
+        try:
+            df = pd.read_csv('sentimentAnalysis/scraped.csv')
 
-        model = self.loadFiles(self.svc_model)
-        tfidf = self.loadFiles(self.svc_tfidf_file)
+            model = self.loadFiles(self.svc_model)
+            tfidf = self.loadFiles(self.svc_tfidf_file)
 
-        for i, row in df.iterrows():
-            row = row.str.split(pat=".", expand=True)
+            for i, row in df.iterrows():
+                row = row.str.split(pat=".", expand=True)
 
-            for _, values in row.iteritems():
-                value = values[0]
-                sentiment_score = model.predict_proba(tfidf.transform([value]))
-                sentiment_name = model.predict(tfidf.transform([value]))
+                for _, values in row.iteritems():
+                    value = values[0]
+                    sentiment_score = model.predict_proba(tfidf.transform([value]))
+                    sentiment_name = model.predict(tfidf.transform([value]))
 
-                emotion = sentiment_name[0]
-                intensity = sentiment_score.max()
+                    emotion = sentiment_name[0]
+                    intensity = sentiment_score.max()
 
-                if self.emotion_count.get(emotion) == 0:
-                    self.emotion_count[emotion] = 1  
-                else:
-                    self.emotion_count[emotion] += 1
-                self.emotion_total += 1
-            
-                if intensity > self.emotion_intensity.get(emotion):
-                    self.emotion_intensity[emotion] = intensity
-                    self.sentence_intensity[emotion] = value
+                    if self.emotion_count.get(emotion) == 0:
+                        self.emotion_count[emotion] = 1  
+                    else:
+                        self.emotion_count[emotion] += 1
+                    self.emotion_total += 1
+                
+                    if intensity > self.emotion_intensity.get(emotion):
+                        self.emotion_intensity[emotion] = intensity
+                        self.sentence_intensity[emotion] = value
 
-        reportsInfo.printTextInfo(self)
+            reportsInfo.printTextInfo(self)
+        except pd.errors.EmptyDataError:
+            print("Panda file is empty")
 
     def loadFiles(self,filename):
         with open(filename, 'rb') as file:
@@ -89,7 +91,10 @@ class EmotClassify:
         return self.largest_emotion[0]
 
     def get_anger_total(self):
-        return f"{self.emotion_count['anger'] / self.emotion_total:.1%}"
+        if self.emotion_total != 0:
+            return f"{self.emotion_count['anger'] / self.emotion_total:.1%}"
+        else:
+            return 0
 
 
 if __name__ == '__main__':
