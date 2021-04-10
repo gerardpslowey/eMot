@@ -53,14 +53,12 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
             item.show()
 
     def changePage(self):
-
         if self.stackedWidget.currentWidget() == self.reportsPage:
             self.stackedWidget.setCurrentWidget(self.reportsPage2)
         else:
             self.stackedWidget.setCurrentWidget(self.reportsPage)
 
     def go_button(self):
-
         self.browser = str(self.browserComboBox.currentText()).capitalize()
         self.filtr = str(self.dateComboBox.currentText()).capitalize()
 
@@ -78,7 +76,6 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
             self.setupPrintPage()
 
     def setupPrintPage(self):
-
         self.stackedWidget.setCurrentWidget(self.printPage)
         sys.stdout = windows.Stream(newText=self.onUpdateText)
         
@@ -88,8 +85,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         worker.signals.finished.connect(self.startClassify)
 
     def onUpdateText(self, text):
-
-        #Write console output to textEdit widget.
+        # Write console output to textEdit widget.
         cursor = self.textEdit.textCursor()
         cursor.movePosition(QtGui.QTextCursor.End)
         cursor.insertText(text)

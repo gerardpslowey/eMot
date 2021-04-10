@@ -1,65 +1,69 @@
 import sys
+from PyQt5.QtCore import *
+from PyQt5.QtWebEngineWidgets import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
 
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5 import QtChart
-from pyqt import main_window, windows, reportsInfo
-import pyqtgraph as pg
-import matplotlib.pyplot as plt
+import threading
 
-from emotClassify import EmotClassify
-from wordcloud import WordCloud
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
 
-class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
+class CustomMainWindow(QMainWindow):  # MainWindow is a subclass of QMainWindow
+    def __init__(self, *args, **kwargs):
+        super(CustomMainWindow, self).__init__(*args, **kwargs)
 
-    def __init__(self, *args, obj=None, **kwargs):
-        super(Main, self).__init__(*args, **kwargs)
-        self.setupUi(self)
-        self.stackedWidget.setCurrentWidget(self.printPage)
+        self.setWindowTitle("Window Title")
 
-        self.threadpool = QtCore.QThreadPool()
-        self.emotClassify = EmotClassify()
-        self.emotClassify.classify()
-        self.results_button.clicked.connect(self.setStatistics)
-
-        self.nextPageButton.clicked.connect(self.changePage)
-        self.previousPageButton.clicked.connect(self.changePage)
-
-        self.browser = "Opera"
-        self.filtr = "All"
-
-    def changePage(self):
-        if self.stackedWidget.currentWidget() == self.reportsPage:
-            self.stackedWidget.setCurrentWidget(self.reportsPage2)
-        else:
-            self.stackedWidget.setCurrentWidget(self.reportsPage)
-
-    def setStatistics(self):
-        self.stackedWidget.setCurrentWidget(self.reportsPage)
-        reportsInfo.setStats(self)
+        label = QLabel("Label")
+        label.setAlignment(Qt.AlignCenter)
+#        
+        layout = QVBoxLayout()
         
-        # x=range(0, 10)
-        # y=range(0, 20, 2)
-        # self.wordCloud.canvas.ax.plot(x, y)
-        # self.wordCloud.canvas.draw()
+        web = QWebEngineView()
+        web.load(QUrl("http://127.0.0.1:8050"))
 
-        data = ["happy", "sad", "hungry", "hungry", "design", "right", "wrong", "end", "happy"]
-        words = ' '.join(data)
-        wordcloud = WordCloud(
-            background_color="white", 
-            width=2500, height=2000).generate(words)
+        layout.addWidget(web)
 
-        wordcloud.to_file("wordCloud.png")
-        self.wordCloud.setPixmap(QtGui.QPixmap("wordCloud.png"))
-        self.wordCloud.setScaledContents(True)
+        widget = QWidget()
+        widget.setLayout(layout)
+        self.setCentralWidget(widget)        
 
-    def closeEvent(self, event):
-        """Shuts down application on close."""
-        # Return stdout to defaults.
-        sys.stdout = sys.__stdout__
-        super().closeEvent(event)
+
+def run_dash(data, layout):
+    app = dash.Dash()
+
+    app.layout = html.Div(children=[
+        html.H1(children='Hello Dash'),
+
+        html.Div(children='''
+            Dash: A web application framework for Python.
+        '''),
+
+        dcc.Graph(
+            id='example-graph',
+            figure={
+                'data': data,
+                'layout': layout
+            })
+        ])
+    app.run_server(debug=False)
 
 if __name__ == '__main__':
-    app = QtWidgets.QApplication(sys.argv)
-    main = Main()
-    main.show()
+    data = [
+        {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
+        {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': u'Montréal'},
+    ]
+
+    layout = {
+        'title': 'Dash Data Visualization'
+    }
+
+    threading.Thread(target=run_dash, args=(data, layout), daemon=True).start()
+
+    app = QApplication(sys.argv)
+
+    CMWindow = CustomMainWindow()  # Instead of using QMainWindow, we now use our custom window subclassed from QMainWindow
+    CMWindow.show()
     app.exec_()

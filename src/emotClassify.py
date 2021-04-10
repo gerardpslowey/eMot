@@ -2,6 +2,15 @@ import pandas as pd
 import pickle
 from pyqt import reportsInfo
 
+from urlProcessor.urlFilter import base
+
+import sys
+
+import threading
+
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
 
 class EmotClassify:
 
@@ -11,7 +20,8 @@ class EmotClassify:
             "fear": 0,
             "joy": 0,
             "surprise": 0,
-            "happiness": 0
+            "happiness": 0,
+            "sadness": 0
         }
 
         self.emotion_intensity = {
@@ -19,16 +29,11 @@ class EmotClassify:
             "fear": 0,
             "joy": 0,
             "surprise": 0,
-            "happiness": 0
+            "happiness": 0,
+            "sadness": 0
         }
 
-        self.sentence_intensity = {
-            "anger": "None",
-            "fear": "None",
-            "joy": "None",
-            "surprise": "None",
-            "happiness": "None"
-        }
+        # 'anger', 'fear', 'joy', 'surprise', 'happiness', 'sadness'
 
         self.svc_model = "models/svc.pkl"
         self.svc_tfidf_file = "models/svc_tfidf.pkl"
@@ -37,19 +42,49 @@ class EmotClassify:
         self.emotion_total = 0
 
     def classify(self):
-        try:
-            df = pd.read_csv('sentimentAnalysis/scraped.csv')
+    
+        df = pd.read_csv('sentimentAnalysis/scraped.csv')
 
-            model = self.loadFiles(self.svc_model)
-            tfidf = self.loadFiles(self.svc_tfidf_file)
+        # Sort out urls first
+        urls_df = pd.DataFrame(df['url'])
+        urls_df['base'] = urls_df['url'].apply(base)
 
-            for i, row in df.iterrows():
-                row = row.str.split(pat=".", expand=True)
+        print(urls_df.base.value_counts())
 
-                for _, values in row.iteritems():
-                    value = values[0]
-                    sentiment_score = model.predict_proba(tfidf.transform([value]))
-                    sentiment_name = model.predict(tfidf.transform([value]))
+
+        # for _, row in urls_df.iterrows():
+        #     for name, values in row.iteritems():
+        #         print('{name}: {value}'.format(name=name, value=values))
+
+        model = self.loadFiles(self.svc_model)
+        tfidf = self.loadFiles(self.svc_tfidf_file)
+
+
+        # looking at 
+        # for _, row in df.iterrows():
+        #     for name, values in row.iteritems():
+        #         print('{name}: {value}'.format(name=name, value=values))
+
+        #         row = row.str.split(pat=".", expand=True)
+
+                # for _, values in row.iteritems():
+                #     value = values[0]
+                #     print(value)
+                    # sentiment_score = model.predict_proba(tfidf.transform([value]))
+                    # sentiment_name = model.predict(tfidf.transform([value]))
+
+                    # emotion = sentiment_name[0]
+                    # intensity = sentiment_score.max()
+
+                    # if self.emotion_count.get(emotion) == 0:
+                    #     self.emotion_count[emotion] = 1  
+                    # else:
+                    #     self.emotion_count[emotion] += 1
+                
+                    # if intensity > self.emotion_intensity.get(emotion):
+                    #     self.emotion_intensity[emotion] = intensity
+                    #     self.sentence_intensity[emotion] = value
+
 
                     emotion = sentiment_name[0]
                     intensity = sentiment_score.max()
@@ -87,12 +122,24 @@ class EmotClassify:
     def get_largest_emotion(self):
         return self.largest_emotion[0]
 
-    def get_anger_total(self):
-        if self.emotion_total != 0:
-            return f"{self.emotion_count['anger'] / self.emotion_total:.1%}"
-        else:
-            return 0
+    def run_dash(self, data, layout):
+        app = dash.Dash()
 
+        app.layout = html.Div(children=[
+            html.H1(children='Hello Dash'),
+
+            html.Div(children='''
+                Dash: A web application framework for Python.
+            '''),
+
+            dcc.Graph(
+                id='example-graph',
+                figure={
+                    'data': data,
+                    'layout': layout
+                })
+            ])
+        app.run_server(debug=False)
 
 if __name__ == '__main__':
     test = EmotClassify()
