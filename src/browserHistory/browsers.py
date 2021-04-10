@@ -1,6 +1,8 @@
 # Functions to define all supported browsers and their functionality.
-import datetime, os, sys
+
+import datetime, os, sys  # noqa
 from .generic import Browser, ChromiumBasedBrowser
+
 
 # Google Chrome on Windows, Linux and Mac
 class Chrome(ChromiumBasedBrowser):
@@ -11,6 +13,7 @@ class Chrome(ChromiumBasedBrowser):
     linux_path = ".config/google-chrome"
 
     profile_support = True
+
 
 # Firefox on Windows, Linux and Mac
 class Firefox(Browser):
@@ -25,18 +28,19 @@ class Firefox(Browser):
     history_file = "places.sqlite"
 
     history_SQL = """
-        SELECT 
-            datetime(visit_date/1000000, 'unixepoch', 'localtime') AS 'visit_time', 
+        SELECT
+            datetime(visit_date/1000000, 'unixepoch', 'localtime') AS 'visit_time',
             url
-        FROM 
+        FROM
             moz_historyvisits
-        INNER JOIN 
+        INNER JOIN
             moz_places
-        ON 
+        ON
             moz_historyvisits.place_id = moz_places.id
-        WHERE 
+        WHERE
             visit_date IS NOT NULL AND url LIKE 'http%' AND title IS NOT NULL
     """
+
 
 # Safari on MAC
 class Safari(Browser):
@@ -47,18 +51,19 @@ class Safari(Browser):
     profile_support = False
 
     history_SQL = """
-        SELECT 
-            datetime(visit_time + 978307200, 'unixepoch', 'localtime') as visit_time, 
+        SELECT
+            datetime(visit_time + 978307200, 'unixepoch', 'localtime') as visit_time,
             url
-        FROM 
+        FROM
             history_visits
-        INNER JOIN 
+        INNER JOIN
             history_items
-        ON 
+        ON
             history_items.id = history_visits.history_item
-        ORDER BY 
+        ORDER BY
             visit_time DESC
     """
+
 
 # Edge on Windows and Mac
 class Edge(ChromiumBasedBrowser):
@@ -69,6 +74,7 @@ class Edge(ChromiumBasedBrowser):
 
     profile_support = True
 
+
 # Opera on Linux, Windows and Mac
 class Opera(ChromiumBasedBrowser):
     name = "Opera"
@@ -78,6 +84,7 @@ class Opera(ChromiumBasedBrowser):
     mac_path = "Library/Application Support/com.operasoftware.Opera"
 
     profile_support = False
+
 
 # Brave on Linux, Windows and Mac
 class Brave(ChromiumBasedBrowser):

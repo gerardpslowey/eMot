@@ -1,10 +1,10 @@
-import spacy, requests, re, os, sys
-from pathlib import Path
-import cProfile, io, pstats
+import requests, re
+# import cProfile, io, pstats
 from bs4 import BeautifulSoup, Comment, Doctype
 
-from .textMod import preprocessAndTokenise, removeURLs, preProcess
+from .textMod import preProcess  # , preprocessAndTokenise, removeURLs
 from .blacklists import Blacklists
+
 
 class Scraper:
     def scrape(self, url):
@@ -14,10 +14,10 @@ class Scraper:
 
         if(len(soup) != 0):
             text = self.getText(soup, tagSet)
-            print(f'task {url} finished') 
+            print(f'task {url} finished')
             return (url, text)
 
-        print(f"task {url} returned null, skipped") 
+        print(f"task {url} returned null, skipped")
         return None
 
     def getSoup(self, url):
@@ -26,13 +26,13 @@ class Scraper:
         return soup
 
     def getStatus(self, url):
-        r = requests.get('http://localhost:8050/render.html', params={'url':url, 'wait':3})
+        r = requests.get('http://localhost:8050/render.html', params={'url': url, 'wait': 3})
         return r.status_code
 
     def getText(self, soup, blacklist):
         # get rid of the unwanted text in Comments, Doctype and the above tags list.
         for junk in soup(blacklist):
-            junk.decompose() 
+            junk.decompose()
 
         for comment in soup.findAll(text=lambda text: isinstance(text, (Comment, Doctype))):
             comment.extract()
@@ -42,9 +42,9 @@ class Scraper:
             sentence = sentence.strip().lower()
             if (str(sentence) and not re.search(
                 '(we and our partners use|we and our partners store|'
-                +'personalised ads and content|our privacy policy|'
-                +'click below to consent)', 
-                sentence.lower())):
+                + 'personalised ads and content|our privacy policy|'
+                + 'click below to consent)',
+                    sentence.lower())):
 
                 cleaned.append(preProcess(sentence))
 

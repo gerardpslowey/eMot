@@ -1,22 +1,23 @@
 # Imports
 from PyQt5 import QtWidgets
 from matplotlib.figure import Figure
-import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as Canvas
 import matplotlib
 
 # Ensure using PyQt5 backend
 matplotlib.use('QT5Agg')
 
+
 # Matplotlib canvas class to create figure
 class MatplotCanvas(Canvas):
     def __init__(self):
         self.fig = Figure()
-        #self.fig = plt.figure(1,figsize=(10, 7))
+        # self.fig = plt.figure(1,figsize=(10, 7))
         self.ax = self.fig.add_subplot(111)
         Canvas.__init__(self, self.fig)
         Canvas.setSizePolicy(self, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         Canvas.updateGeometry(self)
+
 
 # Matplotlib widget
 class MplCanvas(QtWidgets.QWidget):

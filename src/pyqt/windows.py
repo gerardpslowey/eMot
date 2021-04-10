@@ -1,9 +1,9 @@
-from PyQt5 import QtCore, QtWidgets, QtWebEngineWidgets
+from PyQt5 import QtCore, QtWidgets, QtWebEngineWidgets, QtGui
 from pyqt.about_window import Ui_Form
 from pyqt.browser_dialog import Ui_browserDialog
 from pyqt.preferences_window import Ui_Form as PrefWindow
 from pyqt.metrics import Ui_MetricsDashboard
-from urlProcessor.blacklists import Blacklists
+from utils.blacklists import Blacklists
 
 
 class About(QtWidgets.QMainWindow, Ui_Form):
@@ -70,9 +70,10 @@ class Preference(QtWidgets.QMainWindow, PrefWindow):
 class Stream(QtCore.QObject):
     """Redirects console output to text widget."""
     newText = QtCore.pyqtSignal(str)
-    
+
     def write(self, text):
         self.newText.emit(str(text))
+
 
 class DashWindow(QtWidgets.QMainWindow):
     def __init__(self, *args, **kwargs):
@@ -82,9 +83,8 @@ class DashWindow(QtWidgets.QMainWindow):
 
         label = QtGui.QLabel("Label")
         label.setAlignment(QtCore.Qt.AlignCenter)
-#        
         layout = QtGui.QVBoxLayout()
-        
+
         web = QtWebEngineWidgets.QWebEngineView()
         web.load(QtCore.QUrl("http://127.0.0.1:8050"))
 
@@ -92,4 +92,4 @@ class DashWindow(QtWidgets.QMainWindow):
 
         widget = QtGui.QWidget()
         widget.setLayout(layout)
-        self.setCentralWidget(widget)  
+        self.setCentralWidget(widget)

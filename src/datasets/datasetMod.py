@@ -1,7 +1,8 @@
 import pandas as pd
-import sys, csv
+import sys
 from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent.absolute())) 
+sys.path.append(str(Path(__file__).parent.parent.absolute()))
+
 
 def modifyDailydialog():
     df = pd.read_csv('dailydialog/dailydialog_all.csv')
@@ -24,6 +25,7 @@ def modifyDailydialog():
     happiness.to_csv('dailydialog/dailydialog_happiness.csv', index=False, encoding='utf-8')
     surprise.to_csv('dailydialog/dailydialog_surprise.csv', index=False, encoding='utf-8')
 
+
 def modEmoint():
     df = pd.read_csv('emoint/emoint_all.csv', delimiter="\t", header=None)
     # drop unused columns
@@ -33,7 +35,7 @@ def modEmoint():
     df = df[[2, 1]]
 
     print(df[2].value_counts())
-    df.columns=["Emotion", "Text"]
+    df.columns = ["Emotion", "Text"]
     grouped = df.groupby(df['Emotion'])
 
     fear = grouped.get_group("fear")
@@ -46,6 +48,7 @@ def modEmoint():
     joy.to_csv('emoint/emoint_joy.csv', index=False, encoding='utf-8')
     sadness.to_csv('emoint/emoint_sadness.csv', index=False, encoding='utf-8')
 
+
 def modTextEmotion():
     df = pd.read_csv('text_emotion/emotion_all.csv', delimiter=",")
     # drop unused columns
@@ -55,7 +58,7 @@ def modTextEmotion():
     # print(df.head())
     # print(df['sentiment'].value_counts())
 
-    df.columns=['Emotion', 'Text']
+    df.columns = ['Emotion', 'Text']
     grouped = df.groupby(df['Emotion'])
 
     neutral = grouped.get_group("neutral")
@@ -86,6 +89,7 @@ def modTextEmotion():
     boredom.to_csv('text_emotion/emotion_boredom.csv', index=False, encoding='utf-8')
     anger.to_csv('text_emotion/emotion_anger.csv', index=False, encoding='utf-8')
 
+
 def modIsear():
     df = pd.read_csv('isear/isear_all.csv', delimiter=",")
 
@@ -98,12 +102,13 @@ def modIsear():
     anger = grouped.get_group("anger")
     neutral = grouped.get_group("neutral")
     fear = grouped.get_group("fear")
-   
+
     joy.to_csv('isear/isear_joy.csv', index=False, encoding='utf-8')
     sadness.to_csv('isear/isear_sadness.csv', index=False, encoding='utf-8')
     anger.to_csv('isear/isear_anger.csv', index=False, encoding='utf-8')
     neutral.to_csv('isear/isear_neutral.csv', index=False, encoding='utf-8')
     fear.to_csv('isear/isear_fear.csv', index=False, encoding='utf-8')
+
 
 def concatEmotions():
     # ANGER
@@ -120,7 +125,6 @@ def concatEmotions():
     # 5092 Anger
     df_anger.to_csv('anger.csv', index=False, encoding='utf-8')
 
-    
     # FEAR
     df_fear_1 = pd.read_csv('dailydialog/dailydialog_fear.csv', delimiter=",")
     df_fear_2 = pd.read_csv('emoint/emoint_fear.csv', delimiter=",")
@@ -134,7 +138,6 @@ def concatEmotions():
     # 4597 Fear
     df_fear.to_csv('fear.csv', index=False, encoding='utf-8')
 
-
     # JOY
     df_joy_1 = pd.read_csv('emoint/emoint_joy.csv', delimiter=",")
     df_joy_2 = pd.read_csv('isear/isear_joy.csv', delimiter=",")
@@ -146,7 +149,6 @@ def concatEmotions():
     # print(df_joy.shape)
     # 3942 Joy
     df_joy.to_csv('joy.csv', index=False, encoding='utf-8')
-
 
     # SADNESS
     df_sadness_1 = pd.read_csv('emoint/emoint_sadness.csv', delimiter=",")
@@ -161,7 +163,6 @@ def concatEmotions():
     # 9015 Sadness
     df_sadness.to_csv('sadness.csv', index=False, encoding='utf-8')
 
-
     # NEUTRAL
     df_neutral_1 = pd.read_csv('dailydialog/dailydialog_neutral.csv', delimiter=",")
     df_neutral_3 = pd.read_csv('isear/isear_neutral.csv', delimiter=",")
@@ -175,7 +176,6 @@ def concatEmotions():
     # 96464 Neutral
     df_neutral.to_csv('neutral.csv', index=False, encoding='utf-8')
 
-
     # HAPPINESS
     df_happiness_1 = pd.read_csv('dailydialog/dailydialog_happiness.csv', delimiter=",")
     df_happiness_4 = pd.read_csv('text_emotion/emotion_happiness.csv', delimiter=",")
@@ -187,7 +187,6 @@ def concatEmotions():
     # print(df_happiness.shape)
     # 18094 Happiness
     df_happiness.to_csv('happiness.csv', index=False, encoding='utf-8')
-
 
     # SURPRISE
     df_surprise_1 = pd.read_csv('dailydialog/dailydialog_surprise.csv', delimiter=",")
@@ -201,7 +200,6 @@ def concatEmotions():
     # 4010 Surprise
     df_surprise.to_csv('surprise.csv', index=False, encoding='utf-8')
 
-
     # WORRY
     df_worry = pd.read_csv('text_emotion/emotion_worry.csv', delimiter=",")
     # Drop any duplicates
@@ -209,7 +207,6 @@ def concatEmotions():
     # print(df_worry.shape)
     # 8459 worry
     df_worry.to_csv('worry.csv', index=False, encoding='utf-8')
-
 
     # LOVE
     df_love = pd.read_csv('text_emotion/emotion_love.csv', delimiter=",")
@@ -219,6 +216,7 @@ def concatEmotions():
     # print(df_love.shape)
     # 4010 love
     df_love.to_csv('love.csv', index=False, encoding='utf-8')
+
 
 def customSentiment(sentiment):
     if sentiment == 0:
@@ -235,6 +233,7 @@ def customSentiment(sentiment):
         return "sadness"
     elif sentiment == 6:
         return "surprise"
+
 
 if __name__ == "__main__":
     # modifyDailydialog()

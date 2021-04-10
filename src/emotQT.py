@@ -1,13 +1,14 @@
-import sys, subprocess
+import sys
+import subprocess
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from pyqt import main_window, windows, reportsInfo
+from pyqt import main_window, windows  # , reportsInfo
 from qtWorker import Worker
 
 from eMot import Emot
 from emotClassify import EmotClassify
 from tests import dockerRunner
-from wordcloud import WordCloud
+# from wordcloud import WordCloud
 
 
 class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
@@ -25,15 +26,15 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.DialogWindow = windows.Dialog()
         self.PreferenceWindow = windows.Preference()
         self.MetricsDashboard = windows.MetricsDashboard()
-        
+
         # file menu
         self.actionAbout.triggered.connect(
-                lambda checked: self.toggle_item(self.AboutWindow))
+            lambda checked: self.toggle_item(self.AboutWindow))
 
         self.actionPreferences.triggered.connect(
             lambda checked: self.toggle_item(self.PreferenceWindow))
         self.actionNew.triggered.connect(self.restart_window)
-        
+
         self.button.clicked.connect(self.go_button)
         self.results_button.setEnabled(False)
         self.results_button.clicked.connect(
@@ -78,7 +79,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
     def setupPrintPage(self):
         self.stackedWidget.setCurrentWidget(self.printPage)
         sys.stdout = windows.Stream(newText=self.onUpdateText)
-        
+
         emot = Emot(self.filtr, self.browser)
         worker = Worker(emot.startTasks)
         self.threadpool.start(worker)
@@ -117,7 +118,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
     #     data = ["happy", "sad", "hungry", "hungry", "design", "right", "wrong", "end", "happy"]
     #     words = ' '.join(data)
     #     wordcloud = WordCloud(
-    #         background_color="white", 
+    #         background_color="white",
     #         width=2500, height=2000).generate(words)
 
     #     wordcloud.to_file("pyqt/wordCloud.png")
@@ -129,6 +130,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         # Return stdout to defaults.
         sys.stdout = sys.__stdout__
         super().closeEvent(event)
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)

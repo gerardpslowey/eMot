@@ -2,19 +2,20 @@ import pandas as pd
 from tqdm import tqdm
 tqdm.pandas()
 
-import re, pickle, numpy as np, sys
-import cProfile, io, pstats
+import sys
+# import re, pickle, numpy as np
+# import cProfile, io, pstats
 
 from sklearn.linear_model import LogisticRegression
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.feature_extraction.text import CountVectorizer  # , TfidfVectorizer
 from sklearn.metrics import accuracy_score, f1_score
 from sklearn.model_selection import train_test_split, GridSearchCV
 
-from sklearn.pipeline import Pipeline
-
 from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent.absolute())) 
-from urlProcessor.textMod import saveFiles, preProcess, spellCheck, preprocessAndTokenise
+sys.path.append(str(Path(__file__).parent.parent.absolute()))
+from utils.textMod import saveFiles, spellCheck, preprocessAndTokenise
+# from utils.textMod import preProcess
+
 
 def calculateCValue(x_train_fit, y_train):
     param_grid = {'C': [0.01, 0.05, 0.25, 0.5, 1, 10]}
@@ -23,6 +24,7 @@ def calculateCValue(x_train_fit, y_train):
     # print("Best cross-validation score: {:.2f}".format(grid.best_score_))
     print("Best parameters: {}".format(grid.best_params_))
     return grid.best_params_
+
 
 def main():
     print("Loading Data Sets")
@@ -43,20 +45,20 @@ def main():
 
     print("\nChecking Spelling:")
     data['Text'] = data['Text'].progress_apply(spellCheck)
-    
+
     X = data['Text']
     y = data['Emotion']
 
     X_train, X_test, y_train, y_test = train_test_split(
-        X, 
-        y, 
-        test_size=0.2, 
+        X,
+        y,
+        test_size=0.2,
         random_state=42
     )
 
     vect = CountVectorizer(
-        tokenizer=preprocessAndTokenise, 
-        ngram_range=(1,2)
+        tokenizer=preprocessAndTokenise,
+        ngram_range=(1, 2)
     )
 
     print("Training")
@@ -68,10 +70,10 @@ def main():
 
     model = LogisticRegression(
         multi_class='multinomial',
-        class_weight='balanced', 
-        solver='lbfgs', 
-        max_iter=10000, 
-        penalty='l2', 
+        class_weight='balanced',
+        solver='lbfgs',
+        max_iter=10000,
+        penalty='l2',
         n_jobs=-1
     )
 
@@ -85,6 +87,7 @@ def main():
     cv_filename = 'lr_cv.pkl'
     saveFiles(model, model_filename)
     saveFiles(vect, cv_filename)
+
 
 if __name__ == '__main__':
     main()

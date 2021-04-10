@@ -112,7 +112,7 @@ class Ui_Form(object):
         self.addUrlButton.setText(_translate("Form", "Add"))
         self.deleteUrlButton.setText(_translate("Form", "Delete"))
 import pyqt.resource_rc
-
+# flake8: noqa
 
 if __name__ == "__main__":
     import sys

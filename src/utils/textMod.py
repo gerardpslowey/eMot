@@ -1,4 +1,4 @@
-import spacy, re, string, os, pickle, matplotlib.pyplot as plt
+import spacy, re, os, pickle
 
 from spacy.tokenizer import _get_regex_pattern
 nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner'])
@@ -16,12 +16,13 @@ re_token_match = fr'({re_token_match}|#\w+|\w+-\w+)'
 # overwrite token_match function of the tokenizer
 nlp.tokenizer.token_match = re.compile(re_token_match).match
 
+
 # Used for datasets
-def preprocessAndTokenise(data):    
+def preprocessAndTokenise(data):
     # remove html markup
     data = removehtmlMarkup(data)
     # remove urls
-    data = removeURLs(data)    
+    data = removeURLs(data)
     # remove hashtags and @ symbols
     data = removeHashandSymbols(data)
     # remove punctuation and non-ascii digits
@@ -31,8 +32,8 @@ def preprocessAndTokenise(data):
 
     mytokens = nlp(data)
 
-    stem_data = [word.lemma_.strip() for word in mytokens 
-        if not word.is_punct and not word.is_stop and not word.is_space]
+    stem_data = [word.lemma_.strip() for word in mytokens
+                 if not word.is_punct and not word.is_stop and not word.is_space]
 
     return stem_data
 
@@ -41,7 +42,7 @@ def preProcess(data):
     # remove html markup
     data = removehtmlMarkup(data)
     # remove urls
-    data = removeURLs(data)    
+    data = removeURLs(data)
     # remove hashtags and @ symbols
     data = removeHashandSymbols(data)
     # remove punctuation and non-ascii digits
@@ -51,8 +52,8 @@ def preProcess(data):
 
     mytokens = nlp(data)
 
-    stem_data = [word.lemma_.strip() for word in mytokens 
-        if word.lemma_ != '-PRON-' and not word.is_punct and not word.is_stop and not word.is_space]
+    stem_data = [word.lemma_.strip() for word in mytokens
+                 if word.lemma_ != '-PRON-' and not word.is_punct and not word.is_stop and not word.is_space]
 
     return " ".join(stem_data)
 
@@ -61,9 +62,9 @@ def cleanScrapedText(document):
     cleaned = []
 
     mytokens = nlp(document)
-    cleaned = [word.lemma_ for word in mytokens 
-        if (word.lemma_ != '-PRON-' and not word.is_punct and not word.is_stop)]            
-                
+    cleaned = [word.lemma_ for word in mytokens
+               if (word.lemma_ != '-PRON-' and not word.is_punct and not word.is_stop)]
+
     return " ".join(cleaned)
 
 
@@ -92,7 +93,7 @@ def removeAscii(sentence):
 
 # Trials with this seem to indicate it worsens accuracy
 def removeRepetitions(sentence):
-    pattern = re.compile(r"(.)\1{2,}")          
+    pattern = re.compile(r"(.)\1{2,}")
     return pattern.sub(r"\1\1", sentence)
 
 
@@ -102,10 +103,10 @@ def spellCheck(sentence):
     return " ".join([spell.correction(word) for word in words])
 
 
-def wordCloud(data, color = 'white'):
+def wordCloud(data, color='white'):
     words = ' '.join(data)
     wordcloud = WordCloud(
-        background_color=color, 
+        background_color=color,
         width=2500, height=2000).generate(words)
 
     wordcloud.to_file("wordCloud.png")

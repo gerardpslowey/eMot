@@ -9,7 +9,6 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import pyqt.resource_rc
 
 
 class Ui_MetricsDashboard(object):
@@ -36,7 +35,8 @@ class Ui_MetricsDashboard(object):
     def retranslateUi(self, MetricsDashboard):
         _translate = QtCore.QCoreApplication.translate
         MetricsDashboard.setWindowTitle(_translate("MetricsDashboard", "Metrics Dashboard"))
-
+import pyqt.resource_rc
+# flake8: noqa
 
 if __name__ == "__main__":
     import sys

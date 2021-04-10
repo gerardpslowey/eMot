@@ -1,16 +1,17 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtChart
+import pyqtgraph as pg
+# flake8: noqa
 
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-
 
 def setStats(self):
     self.emotClassify.get_largest_emotion()
     self.emotClassify.get_sentence_intensity("joy")
     self.emotClassify.get_anger_total()
     self.emotClassify.get_sentence_intensity("fear")
-
     self.getFilter()
     self.getNumSites()
 
@@ -21,13 +22,11 @@ def setStats(self):
     # for emotion in emotions:
     #     series.append(emotion, emotionsDict[emotion])
 
-
 def printTextInfo(self):
     print(self.emotion_count)
     self.largest_emotion = [key for key in self.emotion_count.keys() if self.emotion_count[key] == max(self.emotion_count.values())]
     print(f"\nThe most prominent emotion that you read was {self.largest_emotion[0]}.")
     print(contentMessage(self))
-
 
 def contentMessage(self):
     if self.largest_emotion[0] == 'joy':
@@ -40,7 +39,6 @@ def contentMessage(self):
         return "You are reading fear based content. Oh no! You should try to avoid this sort of content."
     else:
         return "This is good. You aren't viewing content that is very emotional."
-
 
 def run_dash(self, data, layout):
     app = dash.Dash()

@@ -516,7 +516,7 @@ class Ui_MainWindow(object):
         self.actionPreferences.setText(_translate("MainWindow", "Preferences"))
         self.actionAbout.setText(_translate("MainWindow", "About"))
 import pyqt.resource_rc
-
+# flake8: noqa
 
 if __name__ == "__main__":
     import sys

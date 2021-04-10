@@ -1,12 +1,14 @@
 # This module defines the generic base class and the functionality.
-from abc import ABC, abstractmethod
+from abc import ABC
+# from abc import abstractmethod
 from datetime import datetime
 import os, shutil, sqlite3, tempfile, typing
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Tuple
+from typing import Any, Dict, List, Tuple
+# from typing import Callable
 from urllib.parse import urlparse
-from . import utils
+from . import platform
 
 HistoryVar = List[Tuple[datetime, str]]
 
@@ -15,9 +17,10 @@ A generic class to support all major browsers with minimal configuration.
 Currently, only browsers which save the history in SQLite files are supported.
 """
 
+
 class Browser(ABC):
 
-    #Boolean indicating whether the browser supports multiple profiles.
+    # Boolean indicating whether the browser supports multiple profiles.
     profile_support = False
 
     """
@@ -26,27 +29,27 @@ class Browser(ABC):
     profile_dir_prefixes: typing.Optional[typing.List[typing.Any]] = None
     """
 
-    def __init__(self, plat = None):
+    def __init__(self, plat=None):
         self.profile_dir_prefixes = []
-        
+
         if plat is None:
-            plat = utils.getPlatform()
+            plat = platform.getPlatform()
         homedir = Path.home()
 
         error_string = self.name + " browser is not supported on {}"
-        
-        if plat == utils.Platform.WINDOWS:
+
+        if plat == platform.Platform.WINDOWS:
             assert self.windows_path is not None, error_string.format("windows")
             self.history_dir = homedir / self.windows_path
-        
-        elif plat == utils.Platform.MAC:
+
+        elif plat == platform.Platform.MAC:
             assert self.mac_path is not None, error_string.format("Mac OS")
             self.history_dir = homedir / self.mac_path
-        
-        elif plat == utils.Platform.LINUX:
+
+        elif plat == platform.Platform.LINUX:
             assert self.linux_path is not None, error_string.format("Linux")
             self.history_dir = homedir / self.linux_path
-        
+
         else:
             raise NotImplementedError()
 
@@ -54,8 +57,8 @@ class Browser(ABC):
             self.profile_dir_prefixes.append("*")
 
     """
-    Returns a list of profile directories. 
-    If the browser is supported on the current platform but 
+    Returns a list of profile directories.
+    If the browser is supported on the current platform but
     is not installed an empty list will be returned
     """
     def profiles(self, profile_file):
@@ -66,29 +69,30 @@ class Browser(ABC):
         return type list(str)
         """
         if not os.path.exists(self.history_dir):
-            utils.logger.info("%s browser is not installed", self.name)
+            platform.logger.info("%s browser is not installed", self.name)
             return []
-        
+
         if not self.profile_support:
             return ["."]
-        
+
         profile_dirs = []
         for files in os.walk(str(self.history_dir)):
 
-            #Generator expression to reduce cognitive complexity.
-            paths = (str(files[0]).split(str(self.history_dir), maxsplit=1)[-1] for item in files[2] if os.path.split(os.path.join(files[0], item))[-1] == profile_file)
+            # Generator expression to reduce cognitive complexity.
+            paths = (str(files[0]).split(str(self.history_dir), maxsplit=1)[-1] for item in files[2]
+                     if os.path.split(os.path.join(files[0], item))[-1] == profile_file)
 
             for path in paths:
                 if path.startswith(os.sep):             # os.sep checks if '/' or '\' used
                     path = path[1:]
-                        
+
                 if path.endswith(os.sep):               # Endwith '/' or '\' ?
                     path = path[:-1]
-                    
+
                 profile_dirs.append(path)
         return profile_dirs
 
-    #Returns path of the history file for the given profile_dir
+    # Returns path of the history file for the given profile_dir
     def historyPathProfile(self, profile_dir):
         """
         The profile_dir should be one of the outputs from profiles method
@@ -113,25 +117,25 @@ class Browser(ABC):
     def fetchHistory(self, history_paths=None, sort=True, desc=False):
         """
         The history files are first copied to a temporary location and then queried
-        This might lead to some additional overhead and results returned might not be the latest if the browser is in use
+        This might lead to some extra overhead and results returned might not be the latest if the browser is in use
         This is done because the SQlite files are locked by the browser when in use.
 
         history_paths: optional list of history files.
 
-        sort: optional boolean flag to specify if the output should be sorted. 
+        sort: optional boolean flag to specify if the output should be sorted.
         -> Default value set to True.
-        
+
         desc: optional boolean flag to specify asc/desc
-        Applicable if sort is True 
+        Applicable if sort is True
         -> Default value set to False.
         """
         # Path to history database
         if history_paths is None:
             history_paths = self.paths(self.history_file)
-        
+
         # Fetch history
         output_object = Outputs("history")
-        
+
         # Make temporary directory
         with tempfile.TemporaryDirectory() as tmpdirname:
             for history_path in history_paths:
@@ -145,13 +149,14 @@ class Browser(ABC):
                 # Format datetime to custom
                 date_histories = [(d, url) for d, url in cursor.fetchall()]
                 output_object.histories.extend(date_histories)
-                
+
                 # Sorting
                 if sort:
                     output_object.histories.sort(reverse=desc)
                 conn.close()
 
         return output_object
+
 
 # A generic class to encapsulate history outputs
 class Outputs:
@@ -186,13 +191,13 @@ class ChromiumBasedBrowser(Browser, ABC):
     bookmarks_file = "Bookmarks"
 
     history_SQL = """
-        SELECT 
-            datetime(visits.visit_time/1000000-11644473600, 'unixepoch', 'localtime') as 'visit_time', 
+        SELECT
+            datetime(visits.visit_time/1000000-11644473600, 'unixepoch', 'localtime') as 'visit_time',
             urls.url
-        FROM 
+        FROM
             visits INNER JOIN urls ON visits.url = urls.id
-        WHERE 
+        WHERE
             visits.visit_duration > 0
-        ORDER BY 
+        ORDER BY
             visit_time DESC
         """
