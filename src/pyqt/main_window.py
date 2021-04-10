@@ -156,6 +156,9 @@ class Ui_MainWindow(object):
         self.emotHeader2.setObjectName("emotHeader2")
         self.textEdit = QtWidgets.QTextEdit(self.printPage)
         self.textEdit.setGeometry(QtCore.QRect(260, 130, 531, 281))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.textEdit.setFont(font)
         self.textEdit.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustIgnored)
         self.textEdit.setReadOnly(True)
         self.textEdit.setObjectName("textEdit")
@@ -266,7 +269,7 @@ class Ui_MainWindow(object):
         self.lineChartLayout.setContentsMargins(0, 0, 0, 0)
         self.lineChartLayout.setObjectName("lineChartLayout")
         self.wordCloud = QtWidgets.QLabel(self.reportsPage)
-        self.wordCloud.setGeometry(QtCore.QRect(570, 165, 471, 341))
+        self.wordCloud.setGeometry(QtCore.QRect(550, 160, 501, 351))
         font = QtGui.QFont()
         font.setPointSize(16)
         self.wordCloud.setFont(font)
@@ -381,7 +384,7 @@ class Ui_MainWindow(object):
         self.dateFiltrTextEdit.setReadOnly(True)
         self.dateFiltrTextEdit.setObjectName("dateFiltrTextEdit")
         self.verticalLayoutWidget_2 = QtWidgets.QWidget(self.reportsPage2)
-        self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(29, 159, 481, 351))
+        self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(29, 159, 501, 351))
         self.verticalLayoutWidget_2.setObjectName("verticalLayoutWidget_2")
         self.pieChartLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_2)
         self.pieChartLayout.setContentsMargins(0, 0, 0, 0)
@@ -423,7 +426,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuFile.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(2)
+        self.stackedWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

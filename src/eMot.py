@@ -1,4 +1,4 @@
-# Queue of urls 
+# Queue of urls
 from queue import Queue
 
 # Implement threading
@@ -14,33 +14,33 @@ import pandas as pd
 from urlProcessor.scraper import Scraper
 from urlProcessor.urlFilter import filterBlacklistedUrl
 from urlProcessor.blacklists import Blacklists
-
 from urlProcessor.textMod import cleanScrapedText, preProcess
 
 import multiprocessing
 
 cpu_cores = multiprocessing.cpu_count()
 MAX_WORKERS = cpu_cores * 2
-    
+
+
 class Emot:
     def __init__(self, filtr, browser):
         self.filtr = filtr
         self.browser = browser
         self.scraped_csv = 'sentimentAnalysis/scraped.csv'
-        self.clearCSV()
 
         self.blacklist = Blacklists().getItems()['urlSet']
         self.urls = self.getUrls()
 
     def getUrls(self):
         urls = GetHistory().getHistory(self.filtr, self.browser)
+        print("Starting URL scraping..")
         print(f"History Retrieved: {len(urls)}")
         
         filtered_urls = set(filterBlacklistedUrl(urls.values(), self.blacklist))
         print(f"URLS remaining after filtering: {len(filtered_urls)}")
         return filtered_urls
 
-    def startTasks(self, urls):
+    def startTasks(self):
         self.overwriteCSV()
 
         queue = Queue()
@@ -63,36 +63,29 @@ class Emot:
                 # tuple
                 data = future.result()
 
-                if(data != None):
+                if(data is not None):
                     url = data[0]
                     originalText = data[1]
                     # cleanedText = preProcess(originalText)
                     # store scraped data
                     self.writeToCSV(url, originalText)
 
-        
         if len(self.urls) > 0:
             print("Finished scraping!")
         else:
             print("Nothing to scrape!")
 
-    def clearCSV(self):
-            f = open(self.scraped_csv, "w+")
-            f.close()
-
-
     def overwriteCSV(self):
-        with open('sentimentAnalysis/scraped.csv', mode='w', encoding="utf-8", newline='') as scraped_text:
+        with open(self.scraped_csv, mode='w', encoding="utf-8", newline='') as scraped_text:
             fields = ['url', 'original_data']
             writer = csv.DictWriter(scraped_text, fieldnames=fields, delimiter=',')
             writer.writeheader()
-
 
     def writeToCSV(self, url, originalText):
         # cleanedText = data[2]
 
         data = []
-        with open('sentimentAnalysis/scraped.csv', mode='a+', encoding="utf-8",  newline='') as scraped_text:
+        with open(self.scraped_csv, mode='a+', encoding="utf-8",  newline='') as scraped_text:
             writer = csv.writer(scraped_text, delimiter=',')
 
             # print(originalText)
@@ -117,9 +110,11 @@ class Emot:
 
         # row = {'url' : url, 'original_data' : originalText}
 
-
     def getFilter(self):
         return self.filtr
+
+    def getBrowser(self):
+        return self.browser
 
     def getNumSites(self):
         return self.urls
@@ -133,6 +128,7 @@ def main():
 
     emot = Emot(filtr, browser)
     emot.startTasks()
+
 
 if __name__ == "__main__":
     main()

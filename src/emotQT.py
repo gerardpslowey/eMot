@@ -9,6 +9,7 @@ from emotClassify import EmotClassify
 from tests import dockerRunner
 from wordcloud import WordCloud
 
+
 class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
     def __init__(self, *args, obj=None, **kwargs):
@@ -19,19 +20,24 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.threadpool = QtCore.QThreadPool()
         self.emotClassify = EmotClassify()
 
-        #Set all the UI windows
+        # Set all the UI windows
         self.AboutWindow = windows.About()
         self.DialogWindow = windows.Dialog()
         self.PreferenceWindow = windows.Preference()
+        self.MetricsDashboard = windows.MetricsDashboard()
         
-        #file menu
-        self.actionAbout.triggered.connect(lambda checked: self.toggle_item(self.AboutWindow))
-        self.actionPreferences.triggered.connect(lambda checked: self.toggle_item(self.PreferenceWindow))
+        # file menu
+        self.actionAbout.triggered.connect(
+                lambda checked: self.toggle_item(self.AboutWindow))
+
+        self.actionPreferences.triggered.connect(
+            lambda checked: self.toggle_item(self.PreferenceWindow))
         self.actionNew.triggered.connect(self.restart_window)
         
         self.button.clicked.connect(self.go_button)
         self.results_button.setEnabled(False)
-        self.results_button.clicked.connect(self.showStatistics)
+        self.results_button.clicked.connect(
+            lambda checked: self.toggle_item(self.MetricsDashboard))
 
         self.nextPageButton.clicked.connect(self.changePage)
         self.previousPageButton.clicked.connect(self.changePage)
@@ -91,7 +97,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.textEdit.ensureCursorVisible()
 
     def startClassify(self):
-        self.textEdit.clear()
+        #self.textEdit.clear()
         print("Starting Classification..")
         worker = Worker(self.emotClassify.classify) 
         self.threadpool.start(worker)
@@ -104,23 +110,23 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
             "background-color: rgb(103, 171, 159);\n"
             "border: 1px solid black;")
 
-    def showStatistics(self):
-        self.stackedWidget.setCurrentWidget(self.reportsPage)
-        reportsInfo.setStats(self)
+    # def showStatistics(self):
+    #     self.stackedWidget.setCurrentWidget(self.reportsPage)
+    #     reportsInfo.setStats(self)
 
-        worker = Worker(self.draw_WordCloud)
-        self.threadpool.start(worker)
+    #     worker = Worker(self.draw_WordCloud)
+    #     self.threadpool.start(worker)
 
-    def draw_WordCloud(self):
-        data = ["happy", "sad", "hungry", "hungry", "design", "right", "wrong", "end", "happy"]
-        words = ' '.join(data)
-        wordcloud = WordCloud(
-            background_color="white", 
-            width=2500, height=2000).generate(words)
+    # def draw_WordCloud(self):
+    #     data = ["happy", "sad", "hungry", "hungry", "design", "right", "wrong", "end", "happy"]
+    #     words = ' '.join(data)
+    #     wordcloud = WordCloud(
+    #         background_color="white", 
+    #         width=2500, height=2000).generate(words)
 
-        wordcloud.to_file("pyqt/wordCloud.png")
-        self.wordCloud.setPixmap(QtGui.QPixmap("pyqt/wordCloud.png"))
-        self.wordCloud.setScaledContents(True)
+    #     wordcloud.to_file("pyqt/wordCloud.png")
+    #     self.wordCloud.setPixmap(QtGui.QPixmap("pyqt/wordCloud.png"))
+    #     self.wordCloud.setScaledContents(True)
 
     def closeEvent(self, event):
         """Shuts down application on close."""

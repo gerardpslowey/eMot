@@ -10,8 +10,8 @@ def setStats(self):
     self.fearTextEdit.setText(self.emotClassify.get_sentence_intensity("fear"))
     #TODO: self.websiteTextEdit.setText(SOME WEBSITE)
 
-    self.browserUsedTextEdit.setText(self.browser)
-    self.dateFiltrTextEdit.setText(self.filtr)
+    self.browserUsedTextEdit.setText(self.getFilter())
+    self.dateFiltrTextEdit.setText(self.getNumSites())
 
 def showPieChart(self):
 

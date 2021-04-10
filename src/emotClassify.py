@@ -1,36 +1,33 @@
 import pandas as pd
 import pickle
-import csv
-
-import numpy as np
-import matplotlib.pyplot as plt
 from pyqt import reportsInfo
+
 
 class EmotClassify:
 
     def __init__(self):
         self.emotion_count = {
-            "anger":0,
-            "fear":0,
-            "joy":0,
-            "surprise":0,
-            "happiness":0
+            "anger": 0,
+            "fear": 0,
+            "joy": 0,
+            "surprise": 0,
+            "happiness": 0
         }
 
         self.emotion_intensity = {
-            "anger":0,
-            "fear":0,
-            "joy":0,
-            "surprise":0,
-            "happiness":0
+            "anger": 0,
+            "fear": 0,
+            "joy": 0,
+            "surprise": 0,
+            "happiness": 0
         }
 
         self.sentence_intensity = {
-            "anger":"None",
-            "fear":"None",
-            "joy":"None",
-            "surprise":"None",
-            "happiness":"None"
+            "anger": "None",
+            "fear": "None",
+            "joy": "None",
+            "surprise": "None",
+            "happiness": "None"
         }
 
         self.svc_model = "models/svc.pkl"
@@ -58,7 +55,7 @@ class EmotClassify:
                     intensity = sentiment_score.max()
 
                     if self.emotion_count.get(emotion) == 0:
-                        self.emotion_count[emotion] = 1  
+                        self.emotion_count[emotion] = 1
                     else:
                         self.emotion_count[emotion] += 1
                     self.emotion_total += 1
@@ -71,7 +68,7 @@ class EmotClassify:
         except pd.errors.EmptyDataError:
             print("Panda file is empty")
 
-    def loadFiles(self,filename):
+    def loadFiles(self, filename):
         with open(filename, 'rb') as file:
             return pickle.load(file)
 
@@ -82,7 +79,7 @@ class EmotClassify:
         return self.emotion_intensity
 
     def get_sentence_intensity(self, emotion=None):
-        if emotion==None:
+        if emotion is None:
             return self.sentence_intensity
         else:
             return self.sentence_intensity[emotion]

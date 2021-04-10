@@ -1,19 +1,28 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-import sys
+from PyQt5 import QtCore, QtWidgets
 from pyqt.about_window import Ui_Form
 from pyqt.browser_dialog import Ui_browserDialog
 from pyqt.preferences_window import Ui_Form as PrefWindow
+from pyqt.metrics import Ui_MetricsDashboard
 from urlProcessor.blacklists import Blacklists
+
 
 class About(QtWidgets.QMainWindow, Ui_Form):
     def __init__(self, *args, obj=None, **kwargs):
         super(About, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
+
 class Dialog(QtWidgets.QMainWindow, Ui_browserDialog):
     def __init__(self, *args, obj=None, **kwargs):
         super(Dialog, self).__init__(*args, **kwargs)
         self.setupUi(self)
+
+
+class MetricsDashboard(QtWidgets.QMainWindow, Ui_MetricsDashboard):
+    def __init__(self, *args, obj=None, **kwargs):
+        super(MetricsDashboard, self).__init__(*args, **kwargs)
+        self.setupUi(self)
+
 
 class Preference(QtWidgets.QMainWindow, PrefWindow):
     def __init__(self, *args, obj=None, **kwargs):
@@ -56,6 +65,7 @@ class Preference(QtWidgets.QMainWindow, PrefWindow):
         msg.setIcon(QtWidgets.QMessageBox.Information)
         msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
         msg.exec_()
+
 
 class Stream(QtCore.QObject):
     """Redirects console output to text widget."""

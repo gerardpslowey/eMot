@@ -14,7 +14,7 @@ class Scraper:
 
         if(len(soup) != 0):
             text = self.getText(soup, tagSet)
-            print(f'task {url} finished\n') 
+            print(f'task {url} finished') 
             return (url, text)
 
         print(f"task {url} returned null, skipped") 
