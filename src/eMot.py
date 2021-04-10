@@ -27,18 +27,16 @@ class Emot:
         self.filtr = filtr
         self.browser = browser
         self.scraped_csv = 'sentimentAnalysis/scraped.csv'
-        f = open(self.scraped_csv, "w+")
-        f.close()
+        self.overwriteCSV()
 
-        urlSet = Blacklists().getItems()['urlSet']
-        urls = self.getUrls(filtr, browser, urlSet)
-        self.startTasks(urls)
+        self.blacklist = Blacklists().getItems()['urlSet']
+        self.urls = self.getUrls()
 
-    def getUrls(self, filtr, browser, blacklist):
-        urls = GetHistory().getHistory(filtr, browser)
+    def getUrls(self):
+        urls = GetHistory().getHistory(self.filtr, self.browser)
         print(f"History Retrieved: {len(urls)}")
         
-        filtered_urls = set(filterBlacklistedUrl(urls.values(), blacklist))
+        filtered_urls = set(filterBlacklistedUrl(urls.values(), self.blacklist))
         print(f"URLS remaining after filtering: {len(filtered_urls)}")
         return filtered_urls
 
@@ -46,7 +44,7 @@ class Emot:
         self.overwriteCSV()
 
         queue = Queue()
-        for url in urls:
+        for url in self.urls:
             queue.put(url)
         print("URLs added to queue!")
 
@@ -73,11 +71,10 @@ class Emot:
                     self.writeToCSV(url, originalText)
 
         
-        if len(urls) > 0:
+        if len(self.urls) > 0:
             print("Finished scraping!")
         else:
             print("Nothing to scrape!")
-
 
     def overwriteCSV(self):
         with open('sentimentAnalysis/scraped.csv', mode='w', encoding="utf-8", newline='') as scraped_text:
@@ -116,13 +113,21 @@ class Emot:
         # row = {'url' : url, 'original_data' : originalText}
 
 
+    def getFilter(self):
+        return self.filtr
+
+    def getNumSites(self):
+        return self.urls
+
+
 def main():
     print("Time filters include 'hour', 'day', 'week', 'month', or 'year' or '' (all time).")
     filtr = input('Filter the date: ').capitalize()
     print("Browser options include 'Chrome', 'Firefox', 'Safari', 'Edge', 'Opera', and 'Brave'.")
     browser = input('Enter the browser: ').capitalize()
 
-    Emot(filtr, browser)
+    emot = Emot(filtr, browser)
+    emot.startTasks()
 
 if __name__ == "__main__":
     main()

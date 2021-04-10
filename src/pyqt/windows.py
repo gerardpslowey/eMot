@@ -2,46 +2,60 @@ from PyQt5 import QtCore, QtGui, QtWidgets, QtWebEngineWidgets
 import sys
 from pyqt.about_window import Ui_Form
 from pyqt.browser_dialog import Ui_browserDialog
-from pyqt.print_window import Ui_MainWindow as PrintWindow
 from pyqt.preferences_window import Ui_Form as PrefWindow
+from urlProcessor.blacklists import Blacklists
 
-class AboutWindow(QtWidgets.QMainWindow, Ui_Form):
+class About(QtWidgets.QMainWindow, Ui_Form):
     def __init__(self, *args, obj=None, **kwargs):
-        super(AboutWindow, self).__init__(*args, **kwargs)
+        super(About, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
-class DialogWindow(QtWidgets.QMainWindow, Ui_browserDialog):
+class Dialog(QtWidgets.QMainWindow, Ui_browserDialog):
     def __init__(self, *args, obj=None, **kwargs):
-        super(DialogWindow, self).__init__(*args, **kwargs)
+        super(Dialog, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
-class PreferenceWindow(QtWidgets.QMainWindow, PrefWindow):
+class Preference(QtWidgets.QMainWindow, PrefWindow):
     def __init__(self, *args, obj=None, **kwargs):
-        super(PreferenceWindow, self).__init__(*args, **kwargs)
+        super(Preference, self).__init__(*args, **kwargs)
         self.setupUi(self)
+        self.blacklists = Blacklists()
+        self.addTagButton.clicked.connect(self.addTag)
+        self.deleteTagButton.clicked.connect(self.removeTag)
+        self.addUrlButton.clicked.connect(self.addUrl)
+        self.deleteUrlButton.clicked.connect(self.removeURL)
 
-class PrintWindow(QtWidgets.QMainWindow, PrintWindow):
-    def __init__(self, *args, obj=None, **kwargs):
-        super(PrintWindow, self).__init__(*args, **kwargs)
-        self.setupUi(self)
-        self.results_button.setEnabled(False)
-        sys.stdout = Stream(newText=self.onUpdateText)
+    def addTag(self):
+        tag = self.tagEdit.toPlainText()
+        self.blacklists.addItem(tag, "tagSet")
+        self.showPopUp("Tag added!")
+        self.tagEdit.clear()
 
-    def onUpdateText(self, text):
-        """Write console output to text widget."""
-        cursor = self.textEdit.textCursor()
-        cursor.movePosition(QtGui.QTextCursor.End)
-        cursor.insertText(text)
-        self.textEdit.setTextCursor(cursor)
-        self.textEdit.ensureCursorVisible()
-    
-    def closeEvent(self, event):
-        """Shuts down application on close."""
-        self.textEdit.clear()
-        self.results_button.setStyleSheet("color: rgb(255, 255, 255);\n"
-                                        "background-color: rgb(255, 125, 102);\n"
-                                        "border: 1px solid black;")
-        super().closeEvent(event)
+    def removeTag(self):
+        tag = self.tagEdit.toPlainText()
+        self.blacklists.removeItem(tag, "tagSet")
+        self.showPopUp("Tag removed!")
+        self.tagEdit.clear()
+
+    def addUrl(self):
+        url = self.urlEdit.toPlainText()
+        self.blacklists.addItem(url, "urlSet")
+        self.showPopUp("URL added!")
+        self.urlEdit.clear()
+
+    def removeURL(self):
+        url = self.PreferenceWindow.urlEdit.toPlainText()
+        self.blacklists.removeItem(url, "urlSet")
+        self.showPopUp("URL removed!")
+        self.PreferenceWindow.urlEdit.clear()
+
+    def showPopUp(self, message):
+        msg = QtWidgets.QMessageBox()
+        msg.setWindowTitle("Message")
+        msg.setText(message)
+        msg.setIcon(QtWidgets.QMessageBox.Information)
+        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        msg.exec_()
 
 class Stream(QtCore.QObject):
     """Redirects console output to text widget."""
