@@ -7,6 +7,14 @@ import matplotlib.pyplot as plt
 
 from urlProcessor.urlFilter import base
 
+import sys
+
+import threading
+
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
+
 class EmotClassify:
 
     def __init__(self):
@@ -51,8 +59,7 @@ class EmotClassify:
         urls_df = pd.DataFrame(df['url'])
         urls_df['base'] = urls_df['url'].apply(base)
 
-        urls_df.base.value_counts().plot(kind='barh')
-        plt.xlabel('No. of Products');
+        print(urls_df.base.value_counts())
 
 
         # for _, row in urls_df.iterrows():
@@ -134,6 +141,25 @@ class EmotClassify:
 
     def get_biggest_emotion(self):
         return self.largest_emotion[0]
+
+    def run_dash(self, data, layout):
+        app = dash.Dash()
+
+        app.layout = html.Div(children=[
+            html.H1(children='Hello Dash'),
+
+            html.Div(children='''
+                Dash: A web application framework for Python.
+            '''),
+
+            dcc.Graph(
+                id='example-graph',
+                figure={
+                    'data': data,
+                    'layout': layout
+                })
+            ])
+        app.run_server(debug=False)
 
 if __name__ == '__main__':
     test = EmotClassify()

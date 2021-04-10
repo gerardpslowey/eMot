@@ -14,3 +14,5 @@ wordcloud
 pyspellchecker
 pytest
 docker
+PyQtWebEngine
+dash

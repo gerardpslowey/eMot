@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets, QtWebEngineWidgets
 import sys
 from pyqt.about_window import Ui_Form
 from pyqt.browser_dialog import Ui_browserDialog
@@ -49,3 +49,23 @@ class Stream(QtCore.QObject):
     
     def write(self, text):
         self.newText.emit(str(text))
+
+class DashWindow(QtWidgets.QMainWindow):
+    def __init__(self, *args, **kwargs):
+        super(DashWindow, self).__init__(*args, **kwargs)
+
+        self.setWindowTitle("Window Title")
+
+        label = QtGui.QLabel("Label")
+        label.setAlignment(QtCore.Qt.AlignCenter)
+#        
+        layout = QtGui.QVBoxLayout()
+        
+        web = QtWebEngineWidgets.QWebEngineView()
+        web.load(QtCore.QUrl("http://127.0.0.1:8050"))
+
+        layout.addWidget(web)
+
+        widget = QtGui.QWidget()
+        widget.setLayout(layout)
+        self.setCentralWidget(widget)  
