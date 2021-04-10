@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtChart
 import pyqtgraph as pg
+# flake8: noqa
 
 def setStats(self):
 
@@ -13,16 +14,17 @@ def setStats(self):
     self.browserUsedTextEdit.setText(self.getFilter())
     self.dateFiltrTextEdit.setText(self.getNumSites())
 
+
 def showPieChart(self):
 
     emotionsDict = self.emotClassify.get_emotion_count()
     emotions = dict(sorted(emotionsDict.items(), key=lambda item: item[1], reverse= True))
-    
+
     series = QtChart.QPieSeries()
     for emotion in emotions:
         series.append(emotion, emotionsDict[emotion])
 
-    #adding slice
+    # adding slice
     slice = series.slices()[0]
     slice.setExploded(True)
     slice.setLabelVisible(True)
@@ -42,6 +44,7 @@ def showPieChart(self):
     chartview = QtChart.QChartView(chart)
     self.layout.addWidget(chartview)
 
+
 def printTextInfo(self):
     print("\n")
     print(self.emotion_count)
@@ -52,11 +55,12 @@ def printTextInfo(self):
     i = 1
     print("\nExamples of each emotion:")
     for emotion in self.emotion_intensity:
-        print(f" {i}. {emotion} = '{self.sentence_intensity[emotion]}' with a score of {self.emotion_intensity[emotion]:.1%}")
-        i+=1
+        print(f" {i}. {emotion} = '{self.sentence_intensity[emotion]}' with a score of {self.emotion_intensity[emotion]:.1%}") 
+        i += 1
 
         # print(self.emotion_intensity)
         # print(self.sentence_intensity)
+
 
 def contentMessage(self):
     if self.largest_emotion[0] == 'joy':

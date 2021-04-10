@@ -1,11 +1,5 @@
-import enum, platform, logging
+import enum, platform
 
-logger = logging.getLogger(__name__)
-handler = logging.StreamHandler()
-formatter = logging.Formatter("%(levelname)s: %(message)s")
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-logger.setLevel(logging.INFO)
 
 # An enum used to indicate the system's platform
 class Platform(enum.Enum):
@@ -14,6 +8,7 @@ class Platform(enum.Enum):
     LINUX = 1
     MAC = 2
     WINDOWS = 3
+
 
 # Returns the current platform
 def getPlatform():

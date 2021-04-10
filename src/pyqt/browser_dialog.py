@@ -54,7 +54,7 @@ class Ui_browserDialog(object):
 " the dropdown menu"))
         self.label_2.setText(_translate("browserDialog", "You Must Choose A Browser"))
 import pyqt.resource_rc
-
+# flake8: noqa
 
 if __name__ == "__main__":
     import sys

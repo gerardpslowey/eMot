@@ -1,5 +1,6 @@
 import json
 
+
 class Blacklists:
 
     def __init__(self):
@@ -9,7 +10,7 @@ class Blacklists:
         try:
             with open(self.filename, "r") as json_file:
                 data = json.load(json_file)
-                if blacklist != None:
+                if blacklist is not None:
                     return data[blacklist]
                 else:
                     return data
@@ -19,8 +20,8 @@ class Blacklists:
 
     def addItem(self, item, blacklist):
         data = self.getItems()
-        
-        #blacklist is either urlSet or tagSet
+
+        # blacklist is either urlSet or tagSet
         if item not in data[blacklist]:
             data[blacklist].append(item)
             self.dumpItems(data)
@@ -37,4 +38,4 @@ class Blacklists:
 
     def dumpItems(self, data):
         with open(self.filename, "w") as json_file:
-                json.dump(data, json_file, indent=4, sort_keys=True)
+            json.dump(data, json_file, indent=4, sort_keys=True)

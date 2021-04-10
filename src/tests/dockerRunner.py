@@ -1,5 +1,6 @@
 import docker
 
+
 def is_running(container_name):
     """
     verify the status of a sniffer container by it's name
@@ -17,6 +18,7 @@ def is_running(container_name):
     except Exception:
         print("Make sure the Splash Docker container is turned on!")
         return False
+
 
 if __name__ == '__main__':
     my_container_name = "splash"

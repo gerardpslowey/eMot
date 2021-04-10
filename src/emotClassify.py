@@ -1,16 +1,16 @@
 import pandas as pd
 import pickle
-from pyqt import reportsInfo
 
-from urlProcessor.urlFilter import base
+from utils.urlFilter import base
 
-import sys
-
-import threading
+# import sys
+# import threading
+# from pyqt import reportsInfo
 
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+
 
 class EmotClassify:
 
@@ -42,7 +42,7 @@ class EmotClassify:
         self.emotion_total = 0
 
     def classify(self):
-    
+
         df = pd.read_csv('sentimentAnalysis/scraped.csv')
 
         # Sort out urls first
@@ -51,57 +51,54 @@ class EmotClassify:
 
         print(urls_df.base.value_counts())
 
-
         # for _, row in urls_df.iterrows():
         #     for name, values in row.iteritems():
         #         print('{name}: {value}'.format(name=name, value=values))
 
-        model = self.loadFiles(self.svc_model)
-        tfidf = self.loadFiles(self.svc_tfidf_file)
+        # model = self.loadFiles(self.svc_model)
+        # tfidf = self.loadFiles(self.svc_tfidf_file)
 
-
-        # looking at 
+        # looking at
         # for _, row in df.iterrows():
         #     for name, values in row.iteritems():
         #         print('{name}: {value}'.format(name=name, value=values))
 
         #         row = row.str.split(pat=".", expand=True)
 
-                # for _, values in row.iteritems():
-                #     value = values[0]
-                #     print(value)
-                    # sentiment_score = model.predict_proba(tfidf.transform([value]))
-                    # sentiment_name = model.predict(tfidf.transform([value]))
+        #         for _, values in row.iteritems():
+        #             value = values[0]
+        #             print(value)
+        #             sentiment_score = model.predict_proba(tfidf.transform([value]))
+        #             sentiment_name = model.predict(tfidf.transform([value]))
 
-                    # emotion = sentiment_name[0]
-                    # intensity = sentiment_score.max()
+        #             emotion = sentiment_name[0]
+        #             intensity = sentiment_score.max()
 
-                    # if self.emotion_count.get(emotion) == 0:
-                    #     self.emotion_count[emotion] = 1  
-                    # else:
-                    #     self.emotion_count[emotion] += 1
-                
-                    # if intensity > self.emotion_intensity.get(emotion):
-                    #     self.emotion_intensity[emotion] = intensity
-                    #     self.sentence_intensity[emotion] = value
+        #             if self.emotion_count.get(emotion) == 0:
+        #                 self.emotion_count[emotion] = 1
+        #             else:
+        #                 self.emotion_count[emotion] += 1
 
+        #             if intensity > self.emotion_intensity.get(emotion):
+        #                 self.emotion_intensity[emotion] = intensity
+        #                 self.sentence_intensity[emotion] = value
 
-                    emotion = sentiment_name[0]
-                    intensity = sentiment_score.max()
+        #             emotion = sentiment_name[0]
+        #             intensity = sentiment_score.max()
 
-                    if self.emotion_count.get(emotion) == 0:
-                        self.emotion_count[emotion] = 1
-                    else:
-                        self.emotion_count[emotion] += 1
-                    self.emotion_total += 1
-                
-                    if intensity > self.emotion_intensity.get(emotion):
-                        self.emotion_intensity[emotion] = intensity
-                        self.sentence_intensity[emotion] = value
+        #             if self.emotion_count.get(emotion) == 0:
+        #                 self.emotion_count[emotion] = 1
+        #             else:
+        #                 self.emotion_count[emotion] += 1
+        #             self.emotion_total += 1
 
-            reportsInfo.printTextInfo(self)
-        except pd.errors.EmptyDataError:
-            print("Panda file is empty")
+        #             if intensity > self.emotion_intensity.get(emotion):
+        #                 self.emotion_intensity[emotion] = intensity
+        #                 self.sentence_intensity[emotion] = value
+
+        #     reportsInfo.printTextInfo(self)
+        # except pd.errors.EmptyDataError:
+        #     print("Panda file is empty")
 
     def loadFiles(self, filename):
         with open(filename, 'rb') as file:
@@ -138,8 +135,9 @@ class EmotClassify:
                     'data': data,
                     'layout': layout
                 })
-            ])
+            ])  # noqa
         app.run_server(debug=False)
+
 
 if __name__ == '__main__':
     test = EmotClassify()

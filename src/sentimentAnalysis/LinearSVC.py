@@ -13,13 +13,11 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 # classifiers
 from sklearn.svm import LinearSVC
 
-# save and load a file
-import pickle
-
 import sys
 from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent.absolute())) 
-from urlProcessor.textMod import preProcess, saveFiles, spellCheck, preprocessAndTokenise
+sys.path.append(str(Path(__file__).parent.parent.absolute()))
+from utils.textMod import saveFiles, spellCheck, preprocessAndTokenise
+# from utils.textMod import preProcess
 
 from tqdm import tqdm
 tqdm.pandas()
@@ -44,14 +42,14 @@ def main():
 
     print("\nChecking Spelling:")
     data['Text'] = data['Text'].progress_apply(spellCheck)
-  
+
     X = data['Text']
     y = data['Emotion']
 
     X_train, X_test, y_train, y_test = train_test_split(
-        X, 
-        y, 
-        test_size=0.2, 
+        X,
+        y,
+        test_size=0.2,
         random_state=42
     )
 
@@ -61,10 +59,10 @@ def main():
 
     # TFIDF, unigrams and bigrams
     vect = TfidfVectorizer(
-        tokenizer=preprocessAndTokenise, 
-        sublinear_tf=True, 
-        norm='l2', 
-        ngram_range=(1,2)
+        tokenizer=preprocessAndTokenise,
+        sublinear_tf=True,
+        norm='l2',
+        ngram_range=(1, 2)
     )
 
     print("Training")
@@ -75,7 +73,7 @@ def main():
     X_test_vect = vect.transform(X_test)
 
     lsvc = LinearSVC(
-        tol=1e-05, 
+        tol=1e-05,
         max_iter=10000,
         penalty='l2',
         loss='hinge',
@@ -84,7 +82,7 @@ def main():
     )
 
     # used to get classification score
-    clf = CalibratedClassifierCV(lsvc) 
+    clf = CalibratedClassifierCV(lsvc)
     clf.fit(X_train_vect, y_train)
 
     ysvm_pred = clf.predict(X_test_vect)
@@ -93,10 +91,10 @@ def main():
 
     class_names = ['anger', 'fear', 'joy', 'surprise', 'happiness', 'sadness']
     _, plt = plot_confusion_matrix(
-        y_test, 
-        ysvm_pred, 
-        classes=class_names, 
-        normalize=True, 
+        y_test,
+        ysvm_pred,
+        classes=class_names,
+        normalize=True,
         title='Normalized confusion matrix'
     )
 

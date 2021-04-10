@@ -1,8 +1,9 @@
-from dateutil import tz
+# from dateutil import tz
 from os import path
 import platform
 from pathlib import Path
 import pytest
+
 
 @pytest.fixture()
 # Use pytest monkeypatch
@@ -14,17 +15,20 @@ def change_homedir(monkeypatch):
     monkeypatch.setattr(Path, "home", lambda: Path(f"{test_dir}/test_homedirs/{platform.system()}"))
     return platform.system()
 
+
 @pytest.fixture()
 def become_windows(monkeypatch):
     # Changes platform.system to return Windows
     monkeypatch.setattr(platform, "system", lambda: "Windows")
     return platform.system()
 
+
 @pytest.fixture()
 def become_mac(monkeypatch):
     # Changes platform.system to return Darwin (codename for Mac OS)
     monkeypatch.setattr(platform, "system", lambda: "Darwin")
     return platform.system()
+
 
 @pytest.fixture()
 def become_linux(monkeypatch):

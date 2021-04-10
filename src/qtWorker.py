@@ -1,5 +1,7 @@
 from PyQt5.QtCore import QRunnable, pyqtSlot, pyqtSignal, QObject
-import sys, traceback
+import sys
+import traceback
+
 
 class Worker(QRunnable):
     '''
@@ -24,11 +26,11 @@ class Worker(QRunnable):
 
     @pyqtSlot()
     def run(self):
-        #Initialise the runner function with passed args, kwargs.
+        # Initialise the runner function with passed args, kwargs.
         # Retrieve args/kwargs here; and fire processing using them
         try:
             result = self.fn(*self.args, **self.kwargs)
-        except:
+        except:  # noqa
             traceback.print_exc()
             exctype, value = sys.exc_info()[:2]
             self.signals.error.emit((exctype, value, traceback.format_exc()))
@@ -37,7 +39,6 @@ class Worker(QRunnable):
         finally:
             self.signals.finished.emit()  # Done
 
-import traceback, sys
 
 class WorkerSignals(QObject):
     '''

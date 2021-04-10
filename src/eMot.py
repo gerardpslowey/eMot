@@ -2,19 +2,17 @@
 from queue import Queue
 
 # Implement threading
-import threading, concurrent.futures as futures
+import concurrent.futures as futures
 
 # Get browser history
-import os, sys, csv
+import csv
 from browserHistory.getHistory import GetHistory
 
-import pandas as pd
-
 # Scraper and url filter
-from urlProcessor.scraper import Scraper
-from urlProcessor.urlFilter import filterBlacklistedUrl
-from urlProcessor.blacklists import Blacklists
-from urlProcessor.textMod import cleanScrapedText, preProcess
+from utils.scraper import Scraper
+from utils.urlFilter import filterBlacklistedUrl
+from utils.blacklists import Blacklists
+# from utils.textMod import cleanScrapedText, preProcess
 
 import multiprocessing
 
@@ -35,7 +33,7 @@ class Emot:
         urls = GetHistory().getHistory(self.filtr, self.browser)
         print("Starting URL scraping..")
         print(f"History Retrieved: {len(urls)}")
-        
+
         filtered_urls = set(filterBlacklistedUrl(urls.values(), self.blacklist))
         print(f"URLS remaining after filtering: {len(filtered_urls)}")
         return filtered_urls
@@ -85,7 +83,7 @@ class Emot:
         # cleanedText = data[2]
 
         data = []
-        with open(self.scraped_csv, mode='a+', encoding="utf-8",  newline='') as scraped_text:
+        with open(self.scraped_csv, mode='a+', encoding="utf-8", newline='') as scraped_text:
             writer = csv.writer(scraped_text, delimiter=',')
 
             # print(originalText)
@@ -98,11 +96,7 @@ class Emot:
 
             writer.writerow([url, ".".join(data)])
 
-
-
-
-
-        #     writer = csv.DictWriter(scraped_text, fieldnames=fields, delimiter='.') 
+        #     writer = csv.DictWriter(scraped_text, fieldnames=fields, delimiter='.')
 
         #     for sentence in originalText:
         #         if(len(sentence.split()) > 3):
