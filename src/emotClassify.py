@@ -1,6 +1,7 @@
 import pandas as pd
 import pickle
-from threading import Thread
+import threading
+import logging
 
 from utils.urlFilter import base
 from pyqt import reportsInfo
@@ -71,7 +72,7 @@ class EmotClassify:
                         intensity = sentiment_score.max()
 
                         self.emotion_count[emotion] += 1
-                    
+
                         if intensity > self.emotion_intensity.get(emotion):
                             self.emotion_intensity[emotion] = intensity
 
@@ -100,20 +101,55 @@ class EmotClassify:
     def get_largest_emotion(self):
         return self.largest_emotion[0]
 
+    def run_dash(self, data, layout):
+        app = dash.Dash()
+        log = logging.getLogger('werkzeug')
+        log.setLevel(logging.ERROR)
+        
+        app.layout = html.Div(children=[
+            html.H1(children='Hello Dash'),
 
-if __name__ == '__main__':
+            html.Div(children='''
+                Dash: A web application framework for Python.
+            '''),
+
+            dcc.Graph(
+                id='example-graph',
+                figure={
+                    'data': data,
+                    'layout': layout
+                })
+            ])
+        app.run_server(debug=False, port=8051)
+
+
+def main():
     test = EmotClassify()
 
     threads = []
-    process1 = Thread(target=test.classify)
+    process1 = threading.Thread(target=test.classify)
     process1.start()
     threads.append(process1)
 
-    process2 = Thread(target=test.siteCount)
+    process2 = threading.Thread(target=test.siteCount)
     process2.start()
     threads.append(process2)
 
     for process in threads:
         process.join()
 
-    reportsInfo.printTextInfo(test)
+    # data = [
+    #     {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
+    #     {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': u'Montréal'},
+    # ]
+
+    # layout = {
+    #     'title': 'Dash Data Visualization'
+    # }
+
+    # threading.Thread(target=reportsInfo.run_dash, args=(test, data, layout), daemon=True).start()
+    # reportsInfo.run_dash(test, data, layout)
+
+
+if __name__ == '__main__':
+    main()

@@ -118,7 +118,7 @@ def wordCloud(data, color='white'):
 
 
 def saveFiles(data, filename):
-    directory = "models"
+    directory = "../models"
     if not os.path.exists(directory):
         Path(directory).mkdir(parents=True, exist_ok=True)
 

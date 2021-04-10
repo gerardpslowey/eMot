@@ -36,7 +36,14 @@ def main():
     df_sadness = pd.read_csv('../datasets/sadness.csv')
     df_sadness = df_sadness.sample(n=5000)
 
-    data_set = [df_anger, df_fear, df_joy, df_surprise, df_happiness, df_sadness]
+    data_set = [
+        df_anger,
+        df_fear,
+        df_joy,
+        df_surprise,
+        df_happiness,
+        df_sadness
+    ]
 
     data = pd.concat(data_set)
 

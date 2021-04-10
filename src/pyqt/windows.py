@@ -22,6 +22,21 @@ class MetricsDashboard(QtWidgets.QMainWindow, Ui_MetricsDashboard):
     def __init__(self, *args, obj=None, **kwargs):
         super(MetricsDashboard, self).__init__(*args, **kwargs)
         self.setupUi(self)
+        self.setWindowTitle("Metrics Dashboard")
+
+        label = QtWidgets.QLabel("eMot")
+        label.setAlignment(QtCore.Qt.AlignCenter)
+
+        layout = QtWidgets.QVBoxLayout()
+
+        web = QtWebEngineWidgets.QWebEngineView()
+        web.load(QtCore.QUrl("http://127.0.0.1:8051"))
+
+        layout.addWidget(web)
+
+        widget = QtWidgets.QWidget()
+        widget.setLayout(layout)
+        self.setCentralWidget(widget)
 
 
 class Preference(QtWidgets.QMainWindow, PrefWindow):
@@ -74,22 +89,5 @@ class Stream(QtCore.QObject):
     def write(self, text):
         self.newText.emit(str(text))
 
-
-class DashWindow(QtWidgets.QMainWindow):
-    def __init__(self, *args, **kwargs):
-        super(DashWindow, self).__init__(*args, **kwargs)
-
-        self.setWindowTitle("Window Title")
-
-        label = QtGui.QLabel("Label")
-        label.setAlignment(QtCore.Qt.AlignCenter)
-        layout = QtGui.QVBoxLayout()
-
-        web = QtWebEngineWidgets.QWebEngineView()
-        web.load(QtCore.QUrl("http://127.0.0.1:8050"))
-
-        layout.addWidget(web)
-
-        widget = QtGui.QWidget()
-        widget.setLayout(layout)
-        self.setCentralWidget(widget)
+    def flush(self):
+        pass

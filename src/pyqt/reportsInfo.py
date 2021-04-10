@@ -1,6 +1,4 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5 import QtChart
-import pyqtgraph as pg
 # flake8: noqa
 
 import dash
@@ -39,22 +37,3 @@ def contentMessage(self):
         return "You are reading fear based content. Oh no! You should try to avoid this sort of content."
     else:
         return "This is good. You aren't viewing content that is very emotional."
-
-def run_dash(self, data, layout):
-    app = dash.Dash()
-
-    app.layout = html.Div(children=[
-        html.H1(children='Hello Dash'),
-
-        html.Div(children='''
-            Dash: A web application framework for Python.
-        '''),
-
-        dcc.Graph(
-            id='example-graph',
-            figure={
-                'data': data,
-                'layout': layout
-            })
-        ])
-    app.run_server(debug=False)

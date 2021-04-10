@@ -1,5 +1,6 @@
 import sys
 import subprocess
+import threading
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pyqt import main_window, windows  # , reportsInfo
@@ -37,14 +38,14 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
         self.button.clicked.connect(self.go_button)
         self.results_button.setEnabled(False)
-        self.results_button.clicked.connect(
-            lambda checked: self.toggle_item(self.MetricsDashboard))
+        self.results_button.clicked.connect(self.showDash)
 
         self.nextPageButton.clicked.connect(self.changePage)
         self.previousPageButton.clicked.connect(self.changePage)
 
     def restart_window(self):
         self.close()
+        # TODO: bug here
         subprocess.Popen(['python', 'emotQT.py'])
 
     def toggle_item(self, item):
@@ -106,6 +107,24 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
             "color: rgb(255, 255, 255);\n"                                       
             "background-color: rgb(103, 171, 159);\n"
             "border: 1px solid black;")
+
+    def showDash(self):
+        data = [
+            {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
+            {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': u'Montréal'},
+        ]
+
+        layout = {
+            'title': 'Dash Data Visualization'
+        }
+
+        threading.Thread(
+            target=self.emotClassify.run_dash,
+            args=(data, layout),
+            daemon=True).start()
+
+        # self.emotClassify.run_dash(data, layout)
+        self.toggle_item(self.MetricsDashboard)
 
     # def showStatistics(self):
     #     self.stackedWidget.setCurrentWidget(self.reportsPage)
