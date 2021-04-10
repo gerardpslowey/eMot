@@ -23,8 +23,7 @@ class Blacklists:
         #blacklist is either urlSet or tagSet
         if item not in data[blacklist]:
             data[blacklist].append(item)
-            with open(self.filename, "w") as json_file:
-                json.dump(data, json_file)
+            self.dumpItems(data)
         # else:
         #     print(f"{item} already in {blacklist}")
 
@@ -32,7 +31,10 @@ class Blacklists:
         data = self.getItems()
         try:
             data[blacklist].remove(item)
-            with open(self.filename, "w") as json_file:
-                json.dump(data, json_file)
+            self.dumpItems(data)
         except ValueError:
             print(f"{item} not in {blacklist}")
+
+    def dumpItems(self, data):
+        with open(self.filename, "w") as json_file:
+                json.dump(data, json_file, indent=4, sort_keys=True)

@@ -26,24 +26,27 @@ class Emot:
     def __init__(self, filtr, browser):
         self.filtr = filtr
         self.browser = browser
-        urlSet = Blacklists().getItems()['urlSet']
-        urls = self.getUrls(filtr, browser, urlSet)
-        self.startTasks(urls)
+        self.scraped_csv = 'sentimentAnalysis/scraped.csv'
+        self.clearCSV()
 
-    def getUrls(self, filtr, browser, blacklist):
-        urls = GetHistory().getHistory(filtr, browser)
-        print("History Retrieved: " + str(len(urls)))
-        filtered_urls = filterBlacklistedUrl(urls.values(), blacklist)
-        print("URLS remaining after filtering: " + str(len(set(filtered_urls))))
+        self.blacklist = Blacklists().getItems()['urlSet']
+        self.urls = self.getUrls()
+
+    def getUrls(self):
+        urls = GetHistory().getHistory(self.filtr, self.browser)
+        print(f"History Retrieved: {len(urls)}")
+        
+        filtered_urls = set(filterBlacklistedUrl(urls.values(), self.blacklist))
+        print(f"URLS remaining after filtering: {len(filtered_urls)}")
         return filtered_urls
 
     def startTasks(self, urls):
         self.overwriteCSV()
 
         queue = Queue()
-        for url in set(urls):
+        for url in self.urls:
             queue.put(url)
-        print("URLs added to queue")
+        print("URLs added to queue!")
 
         """
         asynchronous execution of tasks using threads
@@ -67,7 +70,15 @@ class Emot:
                     # store scraped data
                     self.writeToCSV(url, originalText)
 
-        print("Finished scraping!")
+        
+        if len(self.urls) > 0:
+            print("Finished scraping!")
+        else:
+            print("Nothing to scrape!")
+
+    def clearCSV(self):
+            f = open(self.scraped_csv, "w+")
+            f.close()
 
 
     def overwriteCSV(self):
@@ -107,13 +118,21 @@ class Emot:
         # row = {'url' : url, 'original_data' : originalText}
 
 
+    def getFilter(self):
+        return self.filtr
+
+    def getNumSites(self):
+        return self.urls
+
+
 def main():
     print("Time filters include 'hour', 'day', 'week', 'month', or 'year' or '' (all time).")
     filtr = input('Filter the date: ').capitalize()
     print("Browser options include 'Chrome', 'Firefox', 'Safari', 'Edge', 'Opera', and 'Brave'.")
     browser = input('Enter the browser: ').capitalize()
 
-    Emot(filtr, browser)
+    emot = Emot(filtr, browser)
+    emot.startTasks()
 
 if __name__ == "__main__":
     main()

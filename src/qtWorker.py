@@ -12,7 +12,6 @@ class Worker(QRunnable):
     :type callback: function
     :param args: Arguments to pass to the callback function
     :param kwargs: Keywords to pass to the callback function
-
     '''
 
     def __init__(self, fn, *args, **kwargs):
@@ -25,15 +24,10 @@ class Worker(QRunnable):
 
     @pyqtSlot()
     def run(self):
-        '''
-        Initialise the runner function with passed args, kwargs.
-        '''
-
+        #Initialise the runner function with passed args, kwargs.
         # Retrieve args/kwargs here; and fire processing using them
         try:
-            result = self.fn(
-                *self.args, **self.kwargs
-            )
+            result = self.fn(*self.args, **self.kwargs)
         except:
             traceback.print_exc()
             exctype, value = sys.exc_info()[:2]
@@ -48,7 +42,6 @@ import traceback, sys
 class WorkerSignals(QObject):
     '''
     Defines the signals available from a running worker thread.
-
     Supported signals are:
 
     finished
