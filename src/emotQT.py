@@ -93,16 +93,16 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.textEdit.ensureCursorVisible()
 
     def startClassify(self):
-        #self.textEdit.clear()
+        # self.textEdit.clear()
         print("Starting Classification..")
-        worker = Worker(self.emotClassify.classify) 
+        worker = Worker(self.emotClassify.classify)
         self.threadpool.start(worker)
         worker.signals.finished.connect(self.enableResultsButton)
 
     def enableResultsButton(self):
         self.results_button.setEnabled(True)
         self.results_button.setStyleSheet(
-            "color: rgb(255, 255, 255);\n"                                        
+            "color: rgb(255, 255, 255);\n"                                       
             "background-color: rgb(103, 171, 159);\n"
             "border: 1px solid black;")
 

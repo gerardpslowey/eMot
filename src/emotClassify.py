@@ -1,20 +1,12 @@
-import pandas as pd
-import pickle
+import pickle, pandas as pd, threading
 from pyqt import reportsInfo
-
 from urlProcessor.urlFilter import base
+from threading import Thread
 
-import sys
-
-import threading
-
-import dash
-import dash_core_components as dcc
-import dash_html_components as html
 
 class EmotClassify:
-
     def __init__(self):
+        # 'anger', 'fear', 'joy', 'surprise', 'happiness', 'sadness'
         self.emotion_count = {
             "anger": 0,
             "fear": 0,
@@ -33,7 +25,7 @@ class EmotClassify:
             "sadness": 0
         }
 
-        # 'anger', 'fear', 'joy', 'surprise', 'happiness', 'sadness'
+        self.site_visit_counts = None
 
         self.svc_model = "models/svc.pkl"
         self.svc_tfidf_file = "models/svc_tfidf.pkl"
@@ -41,65 +33,42 @@ class EmotClassify:
         self.largest_emotion = None
         self.emotion_total = 0
 
-    def classify(self):
-    
-        df = pd.read_csv('sentimentAnalysis/scraped.csv')
+        self.df = pd.read_csv('sentimentAnalysis/scraped.csv')
 
-        # Sort out urls first
-        urls_df = pd.DataFrame(df['url'])
+    # number of times a site is visited
+    def siteCount(self):
+        urls_df = pd.DataFrame(self.df['url'])
         urls_df['base'] = urls_df['url'].apply(base)
+        self.site_visit_counts = urls_df.base.value_counts()
 
-        print(urls_df.base.value_counts())
-
-
-        # for _, row in urls_df.iterrows():
-        #     for name, values in row.iteritems():
-        #         print('{name}: {value}'.format(name=name, value=values))
-
+    def classify(self):
         model = self.loadFiles(self.svc_model)
         tfidf = self.loadFiles(self.svc_tfidf_file)
 
+        try:
+            # rows
+            for _, row in self.df.iterrows():
+                # columns
+                for _, values in row.iteritems():
 
-        # looking at 
-        # for _, row in df.iterrows():
-        #     for name, values in row.iteritems():
-        #         print('{name}: {value}'.format(name=name, value=values))
+                    # individual page sentences
+                    values = values.split(".")
 
-        #         row = row.str.split(pat=".", expand=True)
+                    # score each sentence
+                    for value in values:
+                        # print(value)
 
-                # for _, values in row.iteritems():
-                #     value = values[0]
-                #     print(value)
-                    # sentiment_score = model.predict_proba(tfidf.transform([value]))
-                    # sentiment_name = model.predict(tfidf.transform([value]))
+                        sentiment_score = model.predict_proba(tfidf.transform([value]))
+                        sentiment_name = model.predict(tfidf.transform([value]))
 
-                    # emotion = sentiment_name[0]
-                    # intensity = sentiment_score.max()
+                        emotion = sentiment_name[0]
+                        intensity = sentiment_score.max()
 
-                    # if self.emotion_count.get(emotion) == 0:
-                    #     self.emotion_count[emotion] = 1  
-                    # else:
-                    #     self.emotion_count[emotion] += 1
-                
-                    # if intensity > self.emotion_intensity.get(emotion):
-                    #     self.emotion_intensity[emotion] = intensity
-                    #     self.sentence_intensity[emotion] = value
-
-
-                    emotion = sentiment_name[0]
-                    intensity = sentiment_score.max()
-
-                    if self.emotion_count.get(emotion) == 0:
-                        self.emotion_count[emotion] = 1
-                    else:
                         self.emotion_count[emotion] += 1
-                    self.emotion_total += 1
-                
-                    if intensity > self.emotion_intensity.get(emotion):
-                        self.emotion_intensity[emotion] = intensity
-                        self.sentence_intensity[emotion] = value
+                    
+                        if intensity > self.emotion_intensity.get(emotion):
+                            self.emotion_intensity[emotion] = intensity
 
-            reportsInfo.printTextInfo(self)
         except pd.errors.EmptyDataError:
             print("Panda file is empty")
 
@@ -113,6 +82,9 @@ class EmotClassify:
     def get_emotion_intensity(self):
         return self.emotion_intensity
 
+    def get_site_count(self):
+        return self.site_visit_counts
+
     def get_sentence_intensity(self, emotion=None):
         if emotion is None:
             return self.sentence_intensity
@@ -122,25 +94,20 @@ class EmotClassify:
     def get_largest_emotion(self):
         return self.largest_emotion[0]
 
-    def run_dash(self, data, layout):
-        app = dash.Dash()
-
-        app.layout = html.Div(children=[
-            html.H1(children='Hello Dash'),
-
-            html.Div(children='''
-                Dash: A web application framework for Python.
-            '''),
-
-            dcc.Graph(
-                id='example-graph',
-                figure={
-                    'data': data,
-                    'layout': layout
-                })
-            ])
-        app.run_server(debug=False)
 
 if __name__ == '__main__':
     test = EmotClassify()
-    test.classify()
+
+    threads = []
+    process1 = Thread(target=test.classify)
+    process1.start()
+    threads.append(process1)
+
+    process2 = Thread(target=test.siteCount)
+    process2.start()
+    threads.append(process2)
+
+    for process in threads:
+        process.join()
+
+    reportsInfo.printTextInfo(test)
