@@ -105,7 +105,7 @@ class EmotClassify:
         app = dash.Dash()
         log = logging.getLogger('werkzeug')
         log.setLevel(logging.ERROR)
-        
+
         app.layout = html.Div(children=[
             html.H1(children='Hello Dash'),
 
@@ -137,19 +137,6 @@ def main():
 
     for process in threads:
         process.join()
-
-    # data = [
-    #     {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
-    #     {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': u'Montréal'},
-    # ]
-
-    # layout = {
-    #     'title': 'Dash Data Visualization'
-    # }
-
-    # threading.Thread(target=reportsInfo.run_dash, args=(test, data, layout), daemon=True).start()
-    # reportsInfo.run_dash(test, data, layout)
-
 
 if __name__ == '__main__':
     main()

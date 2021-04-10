@@ -38,7 +38,8 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
         self.button.clicked.connect(self.go_button)
         self.results_button.setEnabled(False)
-        self.results_button.clicked.connect(self.showDash)
+        self.results_button.clicked.connect(
+            lambda checked: self.toggle_item(self.MetricsDashboard))
 
         self.nextPageButton.clicked.connect(self.changePage)
         self.previousPageButton.clicked.connect(self.changePage)
@@ -99,6 +100,8 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         print("Starting Classification..")
         worker = Worker(self.emotClassify.classify)
         self.threadpool.start(worker)
+        # run the dashboard
+        worker.signals.finished.connect(self.showDash)
         worker.signals.finished.connect(self.enableResultsButton)
 
     def enableResultsButton(self):
@@ -109,6 +112,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
             "border: 1px solid black;")
 
     def showDash(self):
+        # TODO: replace with actual data
         data = [
             {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
             {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': u'Montréal'},
@@ -122,9 +126,6 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
             target=self.emotClassify.run_dash,
             args=(data, layout),
             daemon=True).start()
-
-        # self.emotClassify.run_dash(data, layout)
-        self.toggle_item(self.MetricsDashboard)
 
     # def showStatistics(self):
     #     self.stackedWidget.setCurrentWidget(self.reportsPage)
