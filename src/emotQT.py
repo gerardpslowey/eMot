@@ -97,7 +97,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
     def startClassify(self):
         # self.textEdit.clear()
         print("Starting Classification..")
-        worker = Worker(self.emotClassify.classify)
+        worker = Worker(self.emotClassify.sentenceClassify)
         self.threadpool.start(worker)
         # run the dashboard
         worker.signals.finished.connect(self.enableResultsButton)
