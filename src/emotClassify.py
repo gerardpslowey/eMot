@@ -42,7 +42,7 @@ class EmotClassify:
         urls_df = pd.read_csv(scrapedFile, usecols=["url"])
         urls_df['base'] = urls_df['url'].apply(base)
         self.site_visit_counts = urls_df.base.value_counts()
-        print(self.site_visit_counts.to_string())
+        # print(self.site_visit_counts.to_string())
 
     def classify(self):
         scraped_df = pd.read_csv(scrapedFile)
@@ -50,29 +50,24 @@ class EmotClassify:
         tfidf = self.loadFiles(self.svc_tfidf_file)
 
         try:
-            # rows
-            for _, row in scraped_df.iterrows():
-                # columns
-                for _, values in row.iteritems():
+            for row in scraped_df.itertuples(index=False):
+                url = row[0]
+                text = row[1]
 
-                    # individual page sentences
-                    values = values.split(".")
+                # score each sentence
+                for word in text.split("."):
+                    sentiment_score = model.predict_proba(tfidf.transform([word]))
+                    sentiment_name = model.predict(tfidf.transform([word]))
 
-                    # score each sentence
-                    for value in values:
-                        # print(value)
+                    emotion = sentiment_name[0]
+                    intensity = sentiment_score.max()
 
-                        sentiment_score = model.predict_proba(tfidf.transform([value]))
-                        sentiment_name = model.predict(tfidf.transform([value]))
+                    # count in dictionary
+                    self.emotion_count[emotion] += 1
 
-                        emotion = sentiment_name[0]
-                        intensity = sentiment_score.max()
-
-                        self.emotion_count[emotion] += 1
-
-                        if intensity > self.emotion_intensity.get(emotion):
-                            # round the intensity float to 2 decimal place
-                            self.emotion_intensity[emotion] = round(intensity, 2)
+                    if intensity > self.emotion_intensity.get(emotion):
+                        # round the intensity float to 2 decimal place
+                        self.emotion_intensity[emotion] = round(intensity, 2)
 
         except pd.errors.EmptyDataError:
             print("Nothing to classify, the file is empty")
