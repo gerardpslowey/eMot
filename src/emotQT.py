@@ -3,17 +3,16 @@ import subprocess
 import threading
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from pyqt import main_window, windows  # , reportsInfo
+from pyqt import main_window, windows, reportsInfo
 from qtWorker import Worker
 
 from eMot import Emot
 from emotClassify import EmotClassify
 from tests import dockerRunner
-# from wordcloud import WordCloud
+from wordcloud import WordCloud
 
 
 class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
-
     def __init__(self, *args, obj=None, **kwargs):
         super(Main, self).__init__(*args, **kwargs)
         self.setupUi(self)
@@ -101,7 +100,6 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         worker = Worker(self.emotClassify.classify)
         self.threadpool.start(worker)
         # run the dashboard
-        worker.signals.finished.connect(self.showDash)
         worker.signals.finished.connect(self.enableResultsButton)
 
     def enableResultsButton(self):
@@ -111,39 +109,23 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
             "background-color: rgb(103, 171, 159);\n"
             "border: 1px solid black;")
 
-    def showDash(self):
-        # TODO: replace with actual data
-        data = [
-            {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
-            {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': u'Montréal'},
-        ]
+    def showStatistics(self):
+        self.stackedWidget.setCurrentWidget(self.reportsPage)
+        reportsInfo.setStats(self)
 
-        layout = {
-            'title': 'Dash Data Visualization'
-        }
+        worker = Worker(self.draw_WordCloud)
+        self.threadpool.start(worker)
 
-        threading.Thread(
-            target=self.emotClassify.run_dash,
-            args=(data, layout),
-            daemon=True).start()
+    def draw_WordCloud(self):
+        data = ["happy", "sad", "hungry", "hungry", "design", "right", "wrong", "end", "happy"]
+        words = ' '.join(data)
+        wordcloud = WordCloud(
+            background_color="white",
+            width=2500, height=2000).generate(words)
 
-    # def showStatistics(self):
-    #     self.stackedWidget.setCurrentWidget(self.reportsPage)
-    #     reportsInfo.setStats(self)
-
-    #     worker = Worker(self.draw_WordCloud)
-    #     self.threadpool.start(worker)
-
-    # def draw_WordCloud(self):
-    #     data = ["happy", "sad", "hungry", "hungry", "design", "right", "wrong", "end", "happy"]
-    #     words = ' '.join(data)
-    #     wordcloud = WordCloud(
-    #         background_color="white",
-    #         width=2500, height=2000).generate(words)
-
-    #     wordcloud.to_file("pyqt/wordCloud.png")
-    #     self.wordCloud.setPixmap(QtGui.QPixmap("pyqt/wordCloud.png"))
-    #     self.wordCloud.setScaledContents(True)
+        wordcloud.to_file("pyqt/wordCloud.png")
+        self.wordCloud.setPixmap(QtGui.QPixmap("pyqt/wordCloud.png"))
+        self.wordCloud.setScaledContents(True)
 
     def closeEvent(self, event):
         """Shuts down application on close."""

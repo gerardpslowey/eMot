@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtWidgets, QtWebEngineWidgets, QtGui
+from PyQt5 import QtCore, QtWidgets, QtGui
 from pyqt.about_window import Ui_Form
 from pyqt.browser_dialog import Ui_browserDialog
 from pyqt.preferences_window import Ui_Form as PrefWindow
@@ -28,15 +28,6 @@ class MetricsDashboard(QtWidgets.QMainWindow, Ui_MetricsDashboard):
         label.setAlignment(QtCore.Qt.AlignCenter)
 
         layout = QtWidgets.QVBoxLayout()
-
-        web = QtWebEngineWidgets.QWebEngineView()
-        web.load(QtCore.QUrl("http://127.0.0.1:8051"))
-
-        layout.addWidget(web)
-
-        widget = QtWidgets.QWidget()
-        widget.setLayout(layout)
-        self.setCentralWidget(widget)
 
 
 class Preference(QtWidgets.QMainWindow, PrefWindow):
@@ -88,6 +79,3 @@ class Stream(QtCore.QObject):
 
     def write(self, text):
         self.newText.emit(str(text))
-
-    def flush(self):
-        pass

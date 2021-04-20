@@ -2,14 +2,10 @@ import pandas as pd
 import pickle
 import threading
 import logging
-
 from utils.urlFilter import base
 from pyqt import reportsInfo
 
-import dash
-import dash_core_components as dcc
-import dash_html_components as html
-
+scrapedFile = 'sentimentAnalysis/scraped.csv'
 
 class EmotClassify:
     def __init__(self):
@@ -40,21 +36,22 @@ class EmotClassify:
         self.largest_emotion = None
         self.emotion_total = 0
 
-        self.df = pd.read_csv('sentimentAnalysis/scraped.csv')
-
     # number of times a site is visited
     def siteCount(self):
-        urls_df = pd.DataFrame(self.df['url'])
+        # only load the urls column from the file
+        urls_df = pd.read_csv(scrapedFile, usecols=["url"])
         urls_df['base'] = urls_df['url'].apply(base)
         self.site_visit_counts = urls_df.base.value_counts()
+        print(self.site_visit_counts.to_string())
 
     def classify(self):
+        scraped_df = pd.read_csv(scrapedFile)
         model = self.loadFiles(self.svc_model)
         tfidf = self.loadFiles(self.svc_tfidf_file)
 
         try:
             # rows
-            for _, row in self.df.iterrows():
+            for _, row in scraped_df.iterrows():
                 # columns
                 for _, values in row.iteritems():
 
@@ -74,10 +71,14 @@ class EmotClassify:
                         self.emotion_count[emotion] += 1
 
                         if intensity > self.emotion_intensity.get(emotion):
-                            self.emotion_intensity[emotion] = intensity
+                            # round the intensity float to 2 decimal place
+                            self.emotion_intensity[emotion] = round(intensity, 2)
 
         except pd.errors.EmptyDataError:
-            print("Panda file is empty")
+            print("Nothing to classify, the file is empty")
+        finally:
+            print(self.emotion_intensity)
+            print(self.emotion_count)
 
     def loadFiles(self, filename):
         with open(filename, 'rb') as file:
@@ -100,27 +101,6 @@ class EmotClassify:
 
     def get_largest_emotion(self):
         return self.largest_emotion[0]
-
-    def run_dash(self, data, layout):
-        app = dash.Dash()
-        log = logging.getLogger('werkzeug')
-        log.setLevel(logging.ERROR)
-
-        app.layout = html.Div(children=[
-            html.H1(children='Hello Dash'),
-
-            html.Div(children='''
-                Dash: A web application framework for Python.
-            '''),
-
-            dcc.Graph(
-                id='example-graph',
-                figure={
-                    'data': data,
-                    'layout': layout
-                })
-            ])
-        app.run_server(debug=False, port=8051)
 
 
 def main():

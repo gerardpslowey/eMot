@@ -1,10 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 # flake8: noqa
 
-import dash
-import dash_core_components as dcc
-import dash_html_components as html
-
 def setStats(self):
     self.emotClassify.get_largest_emotion()
     self.emotClassify.get_sentence_intensity("joy")
@@ -16,9 +12,9 @@ def setStats(self):
     emotionsDict = self.emotClassify.get_emotion_count()
     emotions = dict(sorted(emotionsDict.items(), key=lambda item: item[1], reverse= True))
     
-    # series = QtChart.QPieSeries()
-    # for emotion in emotions:
-    #     series.append(emotion, emotionsDict[emotion])
+    series = QtChart.QPieSeries()
+    for emotion in emotions:
+        series.append(emotion, emotionsDict[emotion])
 
 def printTextInfo(self):
     print(self.emotion_count)

@@ -1,18 +1,15 @@
+setuptools 
+wheel
 bs4
 python-dateutil
 requests
-setuptools 
-wheel
 spacy
 pyqt5
-# pyqtchart==5.15.2
-# pyqt5-tools
+pyqtchart==5.15.2
+pyqt5-tools
 scikit-learn
 pandas
-nltk
 wordcloud
 pyspellchecker
 pytest
 docker
-PyQtWebEngine
-dash
