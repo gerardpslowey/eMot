@@ -34,11 +34,11 @@ class EmotClassify:
         }
 
         self.site_visit_counts = None
+        self.total_sites = 0
 
         self.svc_model = "models/svc.pkl"
         self.svc_tfidf_file = "models/svc_tfidf.pkl"
 
-        self.largest_emotion = None
         self.emotion_total = 0
 
     # number of times a site is visited
@@ -77,10 +77,13 @@ class EmotClassify:
         except pd.errors.EmptyDataError:
             print("Nothing to classify, the file is empty")
         finally:
-            print("\nEmotion Intensities")
-            print(self.emotion_intensity)
-            print("\nEmotion Counts")
-            print(self.emotion_count)
+            print("\nThe Intensity level of each Emotion:")
+            for key, value in self.emotion_intensity.items():
+                print(f"{key}: {value:.1%}")
+
+            print("\nThe Amount of each Emotion:")
+            for key, value in self.emotion_count.items():
+                print(f"{key}: {value}")
 
     def documentClassify(self):
         scraped_document_df = pd.read_csv(scrapedFile)
@@ -127,14 +130,31 @@ class EmotClassify:
     def get_site_count(self):
         return self.site_visit_counts
 
+    def get_total_site_visit(self):
+        return f"{len(self.site_visit_counts)} Sites"
+
     def get_sentence_intensity(self, emotion=None):
         if emotion is None:
             return self.sentence_intensity
         else:
             return self.sentence_intensity[emotion]
 
-    def get_largest_emotion(self):
-        return self.largest_emotion[0]
+    def startAll(self):
+        threads = []
+        process1 = threading.Thread(target=self.sentenceClassify)
+        process1.start()
+        threads.append(process1)
+
+        process2 = threading.Thread(target=self.siteCount)
+        process2.start()
+        threads.append(process2)
+
+        process3 = threading.Thread(target=self.documentClassify)
+        process3.start()
+        threads.append(process3)
+
+        for process in threads:
+            process.join()
 
 
 def main():

@@ -2,7 +2,7 @@ import sys
 # import threading
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from pyqt import main_window, windows, reportsInfo
+from pyqt import main_window, windows  # reportsInfo
 from qtWorker import Worker
 
 from eMot import Emot
@@ -36,11 +36,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
         self.button.clicked.connect(self.go_button)
         self.results_button.setEnabled(False)
-        self.results_button.clicked.connect(
-            lambda checked: self.toggle_item(self.MetricsDashboard))
-
-        self.nextPageButton.clicked.connect(self.changePage)
-        self.previousPageButton.clicked.connect(self.changePage)
+        self.results_button.clicked.connect(self.createMetrics)
 
     def restart_window(self):
         QtCore.QCoreApplication.quit()
@@ -52,12 +48,6 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
             item.hide()
         else:
             item.show()
-
-    def changePage(self):
-        if self.stackedWidget.currentWidget() == self.reportsPage:
-            self.stackedWidget.setCurrentWidget(self.reportsPage2)
-        else:
-            self.stackedWidget.setCurrentWidget(self.reportsPage)
 
     def go_button(self):
         self.browser = str(self.browserComboBox.currentText()).capitalize()
@@ -75,6 +65,8 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
         else:
             self.setupPrintPage()
+            self.browserUsedEdit.setPlainText(self.browser)
+            self.dateUsedEdit.setPlainText(self.filtr)
 
     def setupPrintPage(self):
         self.stackedWidget.setCurrentWidget(self.printPage)
@@ -95,23 +87,27 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
     def startClassify(self):
         # self.textEdit.clear()
-        print("Starting Classification..")
-        worker = Worker(self.emotClassify.sentenceClassify)
+        print("Starting Classification..\n")
+        worker = Worker(self.emotClassify.startAll)
         self.threadpool.start(worker)
-        # run the dashboard
         worker.signals.finished.connect(self.enableResultsButton)
 
     def enableResultsButton(self):
+        print("Click to find out more!")
+        self.numSitesEdit.setPlainText(self.emotClassify.get_total_site_visit())
+        self.startDrawing()
         self.results_button.setEnabled(True)
+        self.results_button.setText("Show Results!")
         self.results_button.setStyleSheet(
             "color: rgb(255, 255, 255);\n"
             "background-color: rgb(103, 171, 159);\n"
             "border: 1px solid black;")
 
-    def showStatistics(self):
+    def createMetrics(self):
         self.stackedWidget.setCurrentWidget(self.reportsPage)
-        reportsInfo.setStats(self)
+        self.MetricsDashboard.show()
 
+    def startDrawing(self):
         worker = Worker(self.draw_WordCloud)
         self.threadpool.start(worker)
 
