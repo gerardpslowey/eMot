@@ -1,12 +1,13 @@
 import pandas as pd
 import pickle
 import threading
-import logging
+# import logging
 from utils.urlFilter import base
-from pyqt import reportsInfo
+# from pyqt import reportsInfo
 import copy
 
 scrapedFile = 'sentimentAnalysis/scraped.csv'
+
 
 class EmotClassify:
     def __init__(self):
@@ -99,7 +100,7 @@ class EmotClassify:
         try:
             for row in scraped_document_df.itertuples(index=False):
                 text = row[1]
-                url = row[2]             
+                url = row[2]
 
                 # classify on document level
                 sentiment_name = model.predict(tfidf.transform([text]))
@@ -154,6 +155,7 @@ def main():
 
     for process in threads:
         process.join()
+
 
 if __name__ == '__main__':
     main()

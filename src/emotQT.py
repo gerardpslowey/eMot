@@ -1,6 +1,5 @@
 import sys
-import subprocess
-import threading
+# import threading
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pyqt import main_window, windows, reportsInfo
@@ -44,9 +43,9 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.previousPageButton.clicked.connect(self.changePage)
 
     def restart_window(self):
-        self.close()
-        # TODO: bug here
-        subprocess.Popen(['python', 'emotQT.py'])
+        QtCore.QCoreApplication.quit()
+        status = QtCore.QProcess.startDetached(sys.executable, sys.argv)
+        print(status)
 
     def toggle_item(self, item):
         if item.isVisible():
@@ -105,7 +104,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
     def enableResultsButton(self):
         self.results_button.setEnabled(True)
         self.results_button.setStyleSheet(
-            "color: rgb(255, 255, 255);\n"                                       
+            "color: rgb(255, 255, 255);\n"
             "background-color: rgb(103, 171, 159);\n"
             "border: 1px solid black;")
 
