@@ -47,7 +47,7 @@ class EmotClassify:
         urls_df = pd.read_csv(scrapedFile, usecols=["url"])
         urls_df['base'] = urls_df['url'].apply(base)
         self.site_visit_counts = urls_df.base.value_counts()
-        print("Articles read per site")
+        print("Articles read per site: ")
         print(self.site_visit_counts.to_string())
 
     def sentenceClassify(self):
@@ -114,8 +114,9 @@ class EmotClassify:
         except pd.errors.EmptyDataError:
             print("Nothing to classify, the file is empty")
         finally:
-            print("\nSites and associated article primary emotion")
-            print(sites)
+            print("\nSites and associated article primary emotion: ")
+            for key, value in sites.items():
+                print(f"{key}: {value}")
 
     def loadFiles(self, filename):
         with open(filename, 'rb') as file:

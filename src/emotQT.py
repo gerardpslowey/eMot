@@ -65,8 +65,8 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
         else:
             self.setupPrintPage()
-            self.browserUsedEdit.setPlainText(self.browser)
-            self.dateUsedEdit.setPlainText(self.filtr)
+            self.MetricsDashboard.browserUsedEdit.setPlainText(self.browser)
+            self.MetricsDashboard.dateUsedEdit.setPlainText(self.filtr)
 
     def setupPrintPage(self):
         self.stackedWidget.setCurrentWidget(self.printPage)
@@ -93,18 +93,19 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         worker.signals.finished.connect(self.enableResultsButton)
 
     def enableResultsButton(self):
-        print("Click to find out more!")
-        self.numSitesEdit.setPlainText(self.emotClassify.get_total_site_visit())
+        print("\nClick to find out more!")
+        self.MetricsDashboard.sitesVisitedEdit.setPlainText(self.emotClassify.get_total_site_visit())
         self.startDrawing()
         self.results_button.setEnabled(True)
         self.results_button.setText("Show Results!")
         self.results_button.setStyleSheet(
             "color: rgb(255, 255, 255);\n"
             "background-color: rgb(103, 171, 159);\n"
-            "border: 1px solid black;")
+            "border: 1px solid black;\n"
+            "border-radius: 10px;")
 
     def createMetrics(self):
-        self.stackedWidget.setCurrentWidget(self.reportsPage)
+        self.results_button.setEnabled(False)
         self.MetricsDashboard.show()
 
     def startDrawing(self):
@@ -119,8 +120,8 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
             width=2500, height=2000).generate(words)
 
         wordcloud.to_file("pyqt/wordCloud.png")
-        self.wordCloud.setPixmap(QtGui.QPixmap("pyqt/wordCloud.png"))
-        self.wordCloud.setScaledContents(True)
+        self.MetricsDashboard.wordCloud.setPixmap(QtGui.QPixmap("pyqt/wordCloud.png"))
+        self.MetricsDashboard.wordCloud.setScaledContents(True)
 
     def closeEvent(self, event):
         """Shuts down application on close."""
