@@ -157,25 +157,6 @@ class EmotClassify:
             process.join()
 
 
-def main():
-    test = EmotClassify()
-
-    threads = []
-    process1 = threading.Thread(target=test.sentenceClassify)
-    process1.start()
-    threads.append(process1)
-
-    process2 = threading.Thread(target=test.siteCount)
-    process2.start()
-    threads.append(process2)
-
-    process3 = threading.Thread(target=test.documentClassify)
-    process3.start()
-    threads.append(process3)
-
-    for process in threads:
-        process.join()
-
-
 if __name__ == '__main__':
-    main()
+    test = EmotClassify()
+    test.startAll()
