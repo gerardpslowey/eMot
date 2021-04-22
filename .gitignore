@@ -65,3 +65,7 @@ celerybeat.pid
 .venv
 env/
 venv/
+
+# Datasets
+src/datasets/*
+!src/datasets/README.md 
