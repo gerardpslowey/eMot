@@ -95,7 +95,8 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
                 # add that emotion to the barset
                 barSets[j].append(barStatArray[j])       # add amount of emotion to barset.
                 
-            series.append(barSets[i])
+        for barSet in barSets:
+            series.append(barSet)
 
         chart = QChart()
         chart.addSeries(series)
