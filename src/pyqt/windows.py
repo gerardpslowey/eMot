@@ -46,13 +46,32 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         self.barStats = emotClassify.get_emotions_per_site()
         self.lineStats = emotClassify.get_emotion_intensity()
         self.pieStats = emotClassify.get_emotion_count()
+        self.siteVisitStats = emotClassify.get_site_count()
 
-        self.makeBarChart()
         self.makePieChart()
         self.makeLineChart()
         self.makeSplitChart()
+        self.makeBarChart()
 
     def makeBarChart(self):
+
+
+        barSets = [QBarSet(site) for site in self.siteVisitStats]
+
+        
+        chart = QChart()
+        series = QLineSeries()
+
+        series.append(1, 3)
+        series.append(2, 4)
+
+        chart.addSeries(series)
+        chart.setTitle('Example')
+        chart.createDefaultAxes()
+        self.barChart_4.setChart(chart)
+
+
+    def makeSplitChart(self):
 
         # create a new QBarSet for each emotion in emotions
         barSets = [QBarSet(emotion) for emotion in self.emotions]
@@ -142,18 +161,6 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
         chart.legend().setVisible(False)
         self.lineChart.setChart(chart)
-
-    def makeSplitChart(self):
-        chart = QChart()
-        series = QLineSeries()
-
-        series.append(1, 3)
-        series.append(2, 4)
-
-        chart.addSeries(series)
-        chart.setTitle('Example')
-        chart.createDefaultAxes()
-        self.barChart_4.setChart(chart)
 
 
 class Preference(QMainWindow, PrefWindow):

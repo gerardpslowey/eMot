@@ -47,9 +47,14 @@ class EmotClassify:
         # only load the urls column from the file
         urls_df = pd.read_csv(scrapedFile, usecols=["url"])
         urls_df['base'] = urls_df['url'].apply(base)
-        self.site_visit_counts = urls_df.base.value_counts()
-        print("Articles read per site: ")
-        print(self.site_visit_counts.to_string())
+        self.site_visit_counts = urls_df['base'].value_counts()
+        print(self.site_visit_counts.to_list())
+        # print(self.site_visit_counts.tolist())
+
+        # print("Articles read per site: ")
+        # print(self.site_visit_counts.to_string())
+
+        # print(self.site_visit_counts.base.tolist())
 
     def sentenceClassify(self):
         scraped_df = pd.read_csv(scrapedFile)
@@ -117,16 +122,10 @@ class EmotClassify:
             print("\nSites and associated article primary emotion: ")
             for key, value in self.emotions_per_site.items():
                 print(f"{key}: {value}")
-                
+
+            # rearranging the list of emotions 90* for the split bar chart.
             for i in range(len(self.emotions_per_site)):
                 self.splitChartValues.append([list(value.values())[i] for key, value in self.emotions_per_site.items()])
-
-        #     self.splitChartValues.append([value for value in value.values()])
-
-        # print(self.splitChartValues)
-        # print("=======================")
-        # for i in range(len(self.splitChartValues[0])):
-        #     print(list(x[i] for x in self.splitChartValues))
 
     def loadFiles(self, filename):
         with open(filename, 'rb') as file:
