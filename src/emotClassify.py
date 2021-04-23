@@ -1,9 +1,7 @@
 import pandas as pd
 import pickle
 import threading
-# import logging
 from utils.urlFilter import base
-# from pyqt import reportsInfo
 import copy
 
 scrapedFile = 'sentimentAnalysis/scraped.csv'
@@ -12,6 +10,7 @@ scrapedFile = 'sentimentAnalysis/scraped.csv'
 class EmotClassify:
     def __init__(self):
         self.emotions = ['anger', 'fear', 'joy', 'surprise', 'happiness', 'sadness']
+        # make a nested dictionary setting the emotion count values to zero
         self.emotions_dict = dict.fromkeys(self.emotions, 0)
 
         self.emotion_count = {
@@ -32,7 +31,7 @@ class EmotClassify:
             "sadness": 0
         }
 
-        self.emotions_per_site = {}
+        self.emotionsPerSiteDict = {}
 
         self.site_visit_counts = None
         self.total_sites = 0
@@ -40,6 +39,7 @@ class EmotClassify:
         self.svc_model = "models/svc.pkl"
         self.svc_tfidf_file = "models/svc_tfidf.pkl"
 
+        # an emopty array for line chart array values
         self.splitChartValues = []
 
     # number of times a site is visited
@@ -100,7 +100,7 @@ class EmotClassify:
         # create a nested dictionary for each site
         # TODO do a write up on this shallow vs deepcopies
         for site in sitesList:
-            self.emotions_per_site[site] = copy.deepcopy(self.emotions_dict)
+            self.emotionsPerSiteDict[site] = copy.deepcopy(self.emotions_dict)
 
         try:
             for row in scraped_document_df.itertuples(index=False):
@@ -110,19 +110,24 @@ class EmotClassify:
                 # classify on document level
                 sentiment_name = model.predict(tfidf.transform([text]))
                 emotion = sentiment_name[0]
+                # store the emotion result
+                self.emotionsPerSiteDict[url][emotion] += 1
+                        
+            # total site visits = the number of sites visited
+            self.total_sites = len(self.emotionsPerSiteDict)
 
-                self.emotions_per_site[url][emotion] += 1
+            # rearranging the list of emotions 90* for the split bar chart.
+            for _ in range(self.total_sites):
+                for siteEmotionDict in self.emotionsPerSiteDict.values():
+                    self.splitChartValues.append(list(siteEmotionDict.values()))
 
         except pd.errors.EmptyDataError:
             print("Nothing to classify, the file is empty")
         finally:
             print("\nSites and associated article primary emotion: ")
-            for key, value in self.emotions_per_site.items():
+            for key, value in self.emotionsPerSiteDict.items():
                 print(f"{key}: {value}")
 
-            # rearranging the list of emotions 90* for the split bar chart.
-            for i in range(len(self.emotions_per_site)):
-                self.splitChartValues.append([list(value.values())[i] for key, value in self.emotions_per_site.items()])
 
     def loadFiles(self, filename):
         with open(filename, 'rb') as file:
@@ -138,7 +143,7 @@ class EmotClassify:
         return self.emotion_intensity
 
     def get_emotions_per_site(self):
-        return self.emotions_per_site
+        return self.emotionsPerSiteDict
 
     def get_site_count(self):
         return self.site_visit_counts
@@ -146,6 +151,9 @@ class EmotClassify:
     def get_total_site_visit(self):
         return f"{len(self.site_visit_counts)} Sites"
 
+    def get_total_sites(self):
+        return self.total_sites
+    
     def get_split_chart_values(self):
         return self.splitChartValues
 

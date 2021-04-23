@@ -43,7 +43,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
     def makeCharts(self, emotClassify):
         self.emotions = emotClassify.get_emotions()
         self.splitBarStats = emotClassify.get_split_chart_values()
-        self.barStats = emotClassify.get_site_count()
+        self.visitedUniqueSites = emotClassify.get_total_sites()
         self.lineStats = emotClassify.get_emotion_intensity()
         self.pieStats = emotClassify.get_emotion_count()
         self.siteVisitStats = emotClassify.get_site_count()
@@ -58,7 +58,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
         series = QBarSeries()
 
-        for i, value in enumerate(self.barStats.values()):
+        for i, value in enumerate(self.siteVisitStats.values()):
             barSets[i].append(value)       # add number of visits to set
             series.append(barSets[i])
 
@@ -84,11 +84,17 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
     def makeSplitChart(self):
         # create a new QBarSet for each emotion in emotions
-        barSets = [QBarSet(emotion) for emotion in self.emotions]
+        barSets = [QBarSet(emotion) for emotion in self.emotions] # 6 emotions
         series = QStackedBarSeries()
 
-        for i in range(len(self.barStats)):
-            barSets[i].append(self.splitBarStats[i])       # add amount of emotion to barset.
+        # for each website
+        for i in range(self.visitedUniqueSites):
+            # iterate through the array of emotions associated with that site
+            barStatArray = self.splitBarStats[i]
+            for j in range(len(barStatArray)):
+                # add that emotion to the barset
+                barSets[j].append(barStatArray[j])       # add amount of emotion to barset.
+                
             series.append(barSets[i])
 
         chart = QChart()
@@ -97,7 +103,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         chart.setAnimationOptions(QChart.SeriesAnimations)
 
         # categories are the website names
-        categories = list(self.barStats.keys())
+        categories = list(self.siteVisitStats.keys())
         axis = QBarCategoryAxis()
         axis.append(categories)
 
