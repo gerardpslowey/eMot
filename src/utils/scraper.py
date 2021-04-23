@@ -8,7 +8,8 @@ from .blacklists import Blacklists
 
 class Scraper:
     def scrape(self, url):
-        tagSet = Blacklists().getItems()['tagSet']
+        blacklist = Blacklists("blacklists.json")
+        tagSet = blacklist.getItems()['tagSet']
         print(f"scraping site: {url}", end="\n")
         soup = self.getSoup(url)
 

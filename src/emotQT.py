@@ -65,8 +65,8 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
         else:
             self.setupPrintPage()
-            self.MetricsDashboard.browserUsedEdit.setPlainText(self.browser)
-            self.MetricsDashboard.dateUsedEdit.setPlainText(self.filtr)
+            self.MetricsDashboard.browserUsedEdit.setText(self.browser)
+            self.MetricsDashboard.dateUsedEdit.setText(self.filtr)
 
     def setupPrintPage(self):
         self.stackedWidget.setCurrentWidget(self.printPage)
@@ -96,7 +96,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         print("\nClick to find out more!")
 
         self.MetricsDashboard.makeCharts(self.emotClassify)
-        self.MetricsDashboard.sitesVisitedEdit.setPlainText(self.emotClassify.get_total_site_visit())
+        self.MetricsDashboard.sitesVisitedEdit.setText(self.emotClassify.get_total_site_visit())
         self.startDrawing()
         self.results_button.setEnabled(True)
         self.results_button.setText("Show Results!")
@@ -120,12 +120,9 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
             background_color="white",
             width=2500, height=2000).generate(words)
 
-        wordcloud.to_file("pyqt/wordCloud.png")
-        self.MetricsDashboard.wordCloud.setPixmap(QtGui.QPixmap("pyqt/wordCloud.png"))
-        self.MetricsDashboard.wordCloud.setScaledContents(True)
-
-        # self.pixmap = QtGui.QPixmap("pyqt/wordCloud.png")
-        # TODO: fix scaling of photo
+        wordCloudImage = "pyqt/wordCloud.png"
+        wordcloud.to_file(wordCloudImage)
+        self.MetricsDashboard.showImage(wordCloudImage)
 
     def closeEvent(self, event):
         """Shuts down application on close."""

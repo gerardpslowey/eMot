@@ -121,8 +121,8 @@ class EmotClassify:
                 print(f"{key}: {value}")
 
             # rearranging the list of emotions 90* for the split bar chart.
-            for i in range(len(self.emotions_per_site)):
-                self.splitChartValues.append([list(value.values())[i] for key, value in self.emotions_per_site.items()])
+                for value in self.emotions_per_site.values():
+                    self.splitChartValues.append(list(value.values()))
 
     def loadFiles(self, filename):
         with open(filename, 'rb') as file:

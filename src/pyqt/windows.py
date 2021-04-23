@@ -5,7 +5,7 @@ from pyqt.metrics import Ui_MetricsDashboard
 from utils.blacklists import Blacklists
 from PyQt5 import QtCore
 from PyQt5.QtCore import Qt, QObject
-from PyQt5.QtGui import QPen, QColor
+from PyQt5.QtGui import QPen, QColor, QPixmap
 from PyQt5.QtWidgets import QMessageBox, QMainWindow
 from PyQt5.QtChart import QChart, QLineSeries, QValueAxis, QCategoryAxis
 from PyQt5.QtChart import QBarSet, QStackedBarSeries, QBarCategoryAxis
@@ -34,6 +34,13 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         self.nextPageButton.clicked.connect(self.changePage)
         self.previousPageButton.clicked.connect(self.changePage)
 
+    def showImage(self, image):
+
+        self.image = QPixmap(image)
+        self.image.scaled(self.wordCloud.size(), Qt.KeepAspectRatio)
+        self.wordCloud.setPixmap(self.image)
+        self.wordCloud.setScaledContents(True)
+
     def changePage(self):
         if self.stackedWidget.currentWidget() == self.chartPage:
             self.stackedWidget.setCurrentWidget(self.wordCloudPage)
@@ -43,14 +50,14 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
     def makeCharts(self, emotClassify):
         self.emotions = emotClassify.get_emotions()
         self.splitBarStats = emotClassify.get_split_chart_values()
-        self.barStats = emotClassify.get_site_count()
+        self.siteVisitCounts = emotClassify.get_site_count()
         self.lineStats = emotClassify.get_emotion_intensity()
         self.pieStats = emotClassify.get_emotion_count()
         self.siteVisitStats = emotClassify.get_site_count()
 
         self.makePieChart()
         self.makeLineChart()
-        self.makeSplitChart()
+        # self.makeSplitChart()
         self.makeBarChart()
 
     def makeBarChart(self):
@@ -58,7 +65,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
         series = QBarSeries()
 
-        for i, value in enumerate(self.barStats.values()):
+        for i, value in enumerate(self.siteVisitCounts.values()):
             barSets[i].append(value)       # add number of visits to set
             series.append(barSets[i])
 
@@ -83,11 +90,16 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         self.barChart.setChart(chart)
 
     def makeSplitChart(self):
-        # create a new QBarSet for each emotion in emotions
+        # create a new QBarSet for each emotion in emotions (6 in total)
         barSets = [QBarSet(emotion) for emotion in self.emotions]
         series = QStackedBarSeries()
 
-        for i in range(len(self.barStats)):
+        # barsets = 6 emotions (FIXED)
+        # siteVisitCounts = 7
+        for i in range(len(self.siteVisitCounts)):
+            # for each site.
+            # get the 6 values.
+
             barSets[i].append(self.splitBarStats[i])       # add amount of emotion to barset.
             series.append(barSets[i])
 
@@ -97,7 +109,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         chart.setAnimationOptions(QChart.SeriesAnimations)
 
         # categories are the website names
-        categories = list(self.barStats.keys())
+        categories = list(self.siteVisitCounts.keys())
         axis = QBarCategoryAxis()
         axis.append(categories)
 
@@ -114,7 +126,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         emotions = dict(sorted(self.pieStats.items(), key=lambda item: item[1], reverse=True))
 
         colours = [QColor("#83677B"), QColor("#379683"), QColor("salmon"),
-                   QColor("#7395AE"), QColor("#D79922"),QColor("#99738E")]
+                   QColor("#7395AE"), QColor("#D79922"), QColor("#99738E")]
 
         series = QPieSeries()
         for i, (emotion, value) in enumerate(emotions.items()):
