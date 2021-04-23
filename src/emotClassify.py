@@ -47,14 +47,11 @@ class EmotClassify:
         # only load the urls column from the file
         urls_df = pd.read_csv(scrapedFile, usecols=["url"])
         urls_df['base'] = urls_df['url'].apply(base)
-        self.site_visit_counts = urls_df['base'].value_counts()
-        print(self.site_visit_counts.to_list())
-        # print(self.site_visit_counts.tolist())
+        self.site_visit_counts = urls_df['base'].value_counts().to_dict()
 
-        # print("Articles read per site: ")
-        # print(self.site_visit_counts.to_string())
+        print("Articles read per site: ")
+        print(self.site_visit_counts)
 
-        # print(self.site_visit_counts.base.tolist())
 
     def sentenceClassify(self):
         scraped_df = pd.read_csv(scrapedFile)

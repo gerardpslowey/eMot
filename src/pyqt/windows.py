@@ -9,7 +9,7 @@ from PyQt5.QtGui import QPen  # QPainter,
 from PyQt5.QtWidgets import QMessageBox, QMainWindow
 from PyQt5.QtChart import QChart, QLineSeries, QValueAxis, QCategoryAxis
 from PyQt5.QtChart import QBarSet, QStackedBarSeries, QBarCategoryAxis
-from PyQt5.QtChart import QPieSeries
+from PyQt5.QtChart import QPieSeries, QBarSeries
 
 
 class About(QMainWindow, Ui_Form):
@@ -43,7 +43,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
     def makeCharts(self, emotClassify):
         self.emotions = emotClassify.get_emotions()
         self.splitBarStats = emotClassify.get_split_chart_values()
-        self.barStats = emotClassify.get_emotions_per_site()
+        self.barStats = emotClassify.get_site_count()
         self.lineStats = emotClassify.get_emotion_intensity()
         self.pieStats = emotClassify.get_emotion_count()
         self.siteVisitStats = emotClassify.get_site_count()
@@ -54,31 +54,33 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         self.makeBarChart()
 
     def makeBarChart(self):
+        barSets = [QBarSet(site) for site in self.siteVisitStats.keys()]
 
+        series = QBarSeries()
+    
+        for i, (key, value) in enumerate(self.barStats.items()):
+            barSets[i].append(self.barStats[key])       # add number of visits to set
+            series.append(barSets[i])
 
-        barSets = [QBarSet(site) for site in self.siteVisitStats]
-
-        
         chart = QChart()
-        series = QLineSeries()
-
-        series.append(1, 3)
-        series.append(2, 4)
 
         chart.addSeries(series)
-        chart.setTitle('Example')
+        chart.setTitle('Site Visit Counts Chart')
         chart.createDefaultAxes()
+
+        chart.legend().setVisible(True)
+        chart.legend().setAlignment(Qt.AlignBottom)
+
         self.barChart_4.setChart(chart)
+        # TODO: chnage to bar chart
 
 
     def makeSplitChart(self):
-
         # create a new QBarSet for each emotion in emotions
         barSets = [QBarSet(emotion) for emotion in self.emotions]
         series = QStackedBarSeries()
 
         for i in range(len(self.barStats)):
-
             barSets[i].append(self.splitBarStats[i])       # add amount of emotion to barset.
             series.append(barSets[i])
 
@@ -99,6 +101,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         chart.legend().setAlignment(Qt.AlignBottom)
 
         self.barChart.setChart(chart)
+        # TODO: Change to split chart
 
     def makePieChart(self):
         # get the data
