@@ -54,7 +54,10 @@ class EmotClassify:
             print(f"{key}: {value}")
 
     def sentenceClassify(self):
-        scraped_df = pd.read_csv(scrapedFile)
+        scraped_df = pd.read_csv(scrapedFile).astype('U')
+        scraped_df.dropna()
+
+        # scraped_df = scraped_df[scraped_df['ColumnName'].notnull()]
         model = self.loadFiles(self.svc_model)
         tfidf = self.loadFiles(self.svc_tfidf_file)
 
@@ -89,7 +92,8 @@ class EmotClassify:
                 print(f"{key}: {value}")
 
     def documentClassify(self):
-        scraped_document_df = pd.read_csv(scrapedFile)
+        scraped_document_df = pd.read_csv(scrapedFile).astype('U')
+        scraped_document_df.dropna()
 
         model = self.loadFiles(self.svc_model)
         tfidf = self.loadFiles(self.svc_tfidf_file)

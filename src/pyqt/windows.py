@@ -75,6 +75,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         yAxis.setTitleText("No. Sites")
         yAxis.setGridLineVisible(True)
 
+        chart.setAnimationOptions(QChart.SeriesAnimations)
         chart.legend().setVisible(True)
         chart.legend().setAlignment(Qt.AlignBottom)
         chart.addAxis(yAxis, Qt.AlignLeft)
@@ -110,7 +111,6 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
         chart.createDefaultAxes()
         chart.setAxisX(axis, series)
-
         chart.legend().setVisible(True)
         chart.legend().setAlignment(Qt.AlignBottom)
 
