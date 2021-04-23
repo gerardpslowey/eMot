@@ -58,22 +58,30 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
         series = QBarSeries()
     
-        for i, (key, value) in enumerate(self.barStats.items()):
-            barSets[i].append(self.barStats[key])       # add number of visits to set
+        for i, value in enumerate(self.barStats.values()):
+            barSets[i].append(value)       # add number of visits to set
             series.append(barSets[i])
 
         chart = QChart()
 
         chart.addSeries(series)
         chart.setTitle('Site Visit Counts Chart')
-        chart.createDefaultAxes()
+        # chart.createDefaultAxes()
+
+        yAxis = QValueAxis()
+        # yAxis.setRange(0, len(self.siteVisitStats))
+        yAxis.setLabelFormat("%.1f")
+        # yAxis.setTickCount(len(self.siteVisitStats))
+        yAxis.setTitleText("No. Sites")
+        yAxis.setGridLineVisible(True)
 
         chart.legend().setVisible(True)
         chart.legend().setAlignment(Qt.AlignBottom)
+        chart.addAxis(yAxis, Qt.AlignLeft)
+        series.attachAxis(yAxis)
 
         self.barChart_4.setChart(chart)
         # TODO: chnage to bar chart
-
 
     def makeSplitChart(self):
         # create a new QBarSet for each emotion in emotions
