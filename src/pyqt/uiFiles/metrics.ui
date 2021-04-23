@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1076</width>
-    <height>764</height>
+    <width>1059</width>
+    <height>770</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,19 +25,19 @@
        <string notr="true">background-color: rgb(255, 255, 255);</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="chartPage">
        <layout class="QVBoxLayout" name="verticalLayout_8">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_7" stretch="3,3,1">
+         <layout class="QVBoxLayout" name="verticalLayout_7" stretch="4,4,1">
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout">
             <property name="leftMargin">
              <number>50</number>
             </property>
             <property name="topMargin">
-             <number>50</number>
+             <number>0</number>
             </property>
             <property name="rightMargin">
              <number>50</number>
@@ -59,7 +59,7 @@
              <number>50</number>
             </property>
             <property name="bottomMargin">
-             <number>50</number>
+             <number>0</number>
             </property>
             <item>
              <widget class="QChartView" name="lineChart"/>
@@ -72,13 +72,13 @@
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_6">
             <property name="leftMargin">
-             <number>250</number>
+             <number>400</number>
             </property>
             <property name="topMargin">
              <number>25</number>
             </property>
             <property name="rightMargin">
-             <number>250</number>
+             <number>400</number>
             </property>
             <item>
              <widget class="QPushButton" name="nextPageButton">
@@ -112,7 +112,7 @@ border-radius: 10px;</string>
       <widget class="QWidget" name="wordCloudPage">
        <layout class="QVBoxLayout" name="verticalLayout_11">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_10" stretch="2,1,1">
+         <layout class="QVBoxLayout" name="verticalLayout_10" stretch="4,4,1">
           <property name="spacing">
            <number>7</number>
           </property>
@@ -291,13 +291,13 @@ border-radius: 10px;</string>
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_3">
             <property name="leftMargin">
-             <number>250</number>
+             <number>400</number>
             </property>
             <property name="topMargin">
              <number>25</number>
             </property>
             <property name="rightMargin">
-             <number>250</number>
+             <number>400</number>
             </property>
             <property name="bottomMargin">
              <number>0</number>
@@ -340,7 +340,7 @@ border-radius: 10px;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1076</width>
+     <width>1059</width>
      <height>26</height>
     </rect>
    </property>

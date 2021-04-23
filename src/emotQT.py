@@ -94,6 +94,8 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
     def enableResultsButton(self):
         print("\nClick to find out more!")
+
+        self.MetricsDashboard.makeCharts(self.emotClassify)
         self.MetricsDashboard.sitesVisitedEdit.setPlainText(self.emotClassify.get_total_site_visit())
         self.startDrawing()
         self.results_button.setEnabled(True)
@@ -121,7 +123,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
         wordcloud.to_file("pyqt/wordCloud.png")
         self.MetricsDashboard.wordCloud.setPixmap(QtGui.QPixmap("pyqt/wordCloud.png"))
-        self.MetricsDashboard.wordCloud.setScaledContents(True)
+        # self.MetricsDashboard.wordCloud.setScaledContents(True)
 
     def closeEvent(self, event):
         """Shuts down application on close."""
