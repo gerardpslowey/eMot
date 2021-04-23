@@ -1,9 +1,10 @@
-from PyQt5 import QtCore, QtWidgets, QtGui
+from PyQt5 import QtCore, QtWidgets
 from pyqt.about_window import Ui_Form
 from pyqt.browser_dialog import Ui_browserDialog
 from pyqt.preferences_window import Ui_Form as PrefWindow
 from pyqt.metrics import Ui_MetricsDashboard
 from utils.blacklists import Blacklists
+from PyQt5.QtChart import QChart, QLineSeries
 
 
 class About(QtWidgets.QMainWindow, Ui_Form):
@@ -23,11 +24,67 @@ class MetricsDashboard(QtWidgets.QMainWindow, Ui_MetricsDashboard):
         super(MetricsDashboard, self).__init__(*args, **kwargs)
         self.setupUi(self)
         self.setWindowTitle("Metrics Dashboard")
+        self.makeBarChart()
+        self.makePieChart()
+        self.makeLineChart()
+        self.makeChart()
+        self.stackedWidget.setCurrentWidget(self.chartPage)
+        self.nextPageButton.clicked.connect(self.changePage)
+        self.previousPageButton.clicked.connect(self.changePage)
 
-        label = QtWidgets.QLabel("eMot")
-        label.setAlignment(QtCore.Qt.AlignCenter)
+    def changePage(self):
+        if self.stackedWidget.currentWidget() == self.chartPage:
+            self.stackedWidget.setCurrentWidget(self.wordCloudPage)
+        else:
+            self.stackedWidget.setCurrentWidget(self.chartPage)
 
-        layout = QtWidgets.QVBoxLayout()
+    def makeBarChart(self):
+        chart = QChart()
+        series = QLineSeries()
+
+        series.append(1, 3)
+        series.append(2, 4)
+
+        chart.addSeries(series)
+        chart.setTitle('Bar Chart')
+        chart.createDefaultAxes()
+        self.barChart.setChart(chart)
+
+    def makePieChart(self):
+        chart = QChart()
+        series = QLineSeries()
+
+        series.append(1, 3)
+        series.append(2, 4)
+
+        chart.addSeries(series)
+        chart.setTitle('Pie Chart')
+        chart.createDefaultAxes()
+        self.pieChart.setChart(chart)
+
+    def makeLineChart(self):
+        chart = QChart()
+        series = QLineSeries()
+
+        series.append(1, 3)
+        series.append(2, 4)
+
+        chart.addSeries(series)
+        chart.setTitle('Line Chart')
+        chart.createDefaultAxes()
+        self.lineChart.setChart(chart)
+
+    def makeChart(self):
+        chart = QChart()
+        series = QLineSeries()
+
+        series.append(1, 3)
+        series.append(2, 4)
+
+        chart.addSeries(series)
+        chart.setTitle('Example')
+        chart.createDefaultAxes()
+        self.barChart_4.setChart(chart)
 
 
 class Preference(QtWidgets.QMainWindow, PrefWindow):
