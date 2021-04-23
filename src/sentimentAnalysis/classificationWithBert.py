@@ -3,6 +3,8 @@
 import pandas as pd
 import numpy as np
 
+# use ktrain as a lightweight wrapper 
+# for deep learning in TensorFlow Keras
 import ktrain
 from ktrain import text
 

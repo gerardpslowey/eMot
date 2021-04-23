@@ -13,3 +13,4 @@ wordcloud
 pyspellchecker
 pytest
 docker
+# ktrain
