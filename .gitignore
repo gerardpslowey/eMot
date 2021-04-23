@@ -7,6 +7,9 @@ __pycache__/*
 # Text Files
 *.txt
 
+# Word cloud images
+src/pyqt/*.png
+
 # VSCode
 .vscode
 .vscode/*
@@ -65,3 +68,7 @@ celerybeat.pid
 .venv
 env/
 venv/
+
+# Datasets
+src/datasets/*
+!src/datasets/README.md 

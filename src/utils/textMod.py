@@ -19,15 +19,10 @@ nlp.tokenizer.token_match = re.compile(re_token_match).match
 
 # Used for datasets
 def preprocessAndTokenise(data):
-    # remove html markup
     data = removehtmlMarkup(data)
-    # remove urls
     data = removeURLs(data)
-    # remove hashtags and @ symbols
     data = removeHashandSymbols(data)
-    # remove punctuation and non-ascii digits
     data = removeAscii(data)
-    # remove whitespace
     data = data.strip()
 
     mytokens = nlp(data)
@@ -39,23 +34,24 @@ def preprocessAndTokenise(data):
 
 
 def preProcess(data):
-    # remove html markup
     data = removehtmlMarkup(data)
-    # remove urls
     data = removeURLs(data)
-    # remove hashtags and @ symbols
     data = removeHashandSymbols(data)
-    # remove punctuation and non-ascii digits
     data = removeAscii(data)
-    # remove whitespace
+    data = removeNums(data)
     data = data.strip()
-
+    # tokenise
     mytokens = nlp(data)
 
     stem_data = [word.lemma_.strip() for word in mytokens
-                 if word.lemma_ != '-PRON-' and not word.is_punct and not word.is_stop and not word.is_space]
+            if word.lemma_ != '-PRON-' and not word.is_punct and not word.is_stop and not word.is_space]
 
     return " ".join(stem_data)
+
+
+# remove floats and ints
+def removeNums(sentence):
+    return re.sub("/(\d+(?:\.\d+)?)/", "", sentence)
 
 
 def cleanScrapedText(document):
