@@ -40,7 +40,7 @@ class EmotClassify:
         self.svc_model = "models/svc.pkl"
         self.svc_tfidf_file = "models/svc_tfidf.pkl"
 
-        self.emotion_total = 0
+        self.splitChartValues = []
 
     # number of times a site is visited
     def siteCount(self):
@@ -117,6 +117,16 @@ class EmotClassify:
             print("\nSites and associated article primary emotion: ")
             for key, value in self.emotions_per_site.items():
                 print(f"{key}: {value}")
+                
+            for i in range(len(self.emotions_per_site)):
+                self.splitChartValues.append([list(value.values())[i] for key, value in self.emotions_per_site.items()])
+
+        #     self.splitChartValues.append([value for value in value.values()])
+
+        # print(self.splitChartValues)
+        # print("=======================")
+        # for i in range(len(self.splitChartValues[0])):
+        #     print(list(x[i] for x in self.splitChartValues))
 
     def loadFiles(self, filename):
         with open(filename, 'rb') as file:
@@ -140,11 +150,8 @@ class EmotClassify:
     def get_total_site_visit(self):
         return f"{len(self.site_visit_counts)} Sites"
 
-    def get_sentence_intensity(self, emotion=None):
-        if emotion is None:
-            return self.sentence_intensity
-        else:
-            return self.sentence_intensity[emotion]
+    def get_split_chart_values(self):
+        return self.splitChartValues
 
     def startAll(self):
         threads = []

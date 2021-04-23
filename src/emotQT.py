@@ -107,7 +107,6 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
             "border-radius: 10px;")
 
     def createMetrics(self):
-        self.results_button.setEnabled(False)
         self.MetricsDashboard.show()
 
     def startDrawing(self):

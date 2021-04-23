@@ -8,7 +8,7 @@ from PyQt5.QtCore import Qt, QObject
 from PyQt5.QtGui import QPen  # QPainter,
 from PyQt5.QtWidgets import QMessageBox, QMainWindow
 from PyQt5.QtChart import QChart, QLineSeries, QValueAxis, QCategoryAxis
-from PyQt5.QtChart import QBarSet, QPercentBarSeries, QBarCategoryAxis
+from PyQt5.QtChart import QBarSet, QStackedBarSeries, QBarCategoryAxis
 from PyQt5.QtChart import QPieSeries
 
 
@@ -42,27 +42,26 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
     def makeCharts(self, emotClassify):
         self.emotions = emotClassify.get_emotions()
-        barStats = emotClassify.get_emotions_per_site()
-        lineStats = emotClassify.get_emotion_intensity()
-        pieStats = emotClassify.get_emotion_count()
+        self.splitBarStats = emotClassify.get_split_chart_values()
+        self.barStats = emotClassify.get_emotions_per_site()
+        self.lineStats = emotClassify.get_emotion_intensity()
+        self.pieStats = emotClassify.get_emotion_count()
 
-        self.makeBarChart(barStats)
-        self.makePieChart(pieStats)
-        self.makeLineChart(lineStats)
+        self.makeBarChart()
+        self.makePieChart()
+        self.makeLineChart()
         self.makeSplitChart()
 
-    def makeBarChart(self, barStats):
+    def makeBarChart(self):
+
         # create a new QBarSet for each emotion in emotions
         barSets = [QBarSet(emotion) for emotion in self.emotions]
+        series = QStackedBarSeries()
 
-        series = QPercentBarSeries()
-        i = 0
-        for key, value in barStats.items():
+        for i in range(len(self.barStats)):
 
-            values = list(value.values())
-            barSets[i].append(values)       # add amount of emotion to barset.
+            barSets[i].append(self.splitBarStats[i])       # add amount of emotion to barset.
             series.append(barSets[i])
-            i+=1
 
         chart = QChart()
         chart.addSeries(series)
@@ -70,22 +69,25 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         chart.setAnimationOptions(QChart.SeriesAnimations)
 
         # categories are the website names
-        categories = list(barStats.keys())
+        categories = list(self.barStats.keys())
         axis = QBarCategoryAxis()
         axis.append(categories)
 
         chart.createDefaultAxes()
         chart.setAxisX(axis, series)
 
+        chart.legend().setVisible(True)
+        chart.legend().setAlignment(Qt.AlignBottom)
+
         self.barChart.setChart(chart)
 
-    def makePieChart(self, pieStats):
+    def makePieChart(self):
         # get the data
-        emotions = dict(sorted(pieStats.items(), key=lambda item: item[1], reverse=True))
+        emotions = dict(sorted(self.pieStats.items(), key=lambda item: item[1], reverse=True))
 
         series = QPieSeries()
         for emotion in emotions:
-            series.append(emotion, pieStats[emotion])
+            series.append(emotion, self.pieStats[emotion])
 
         # largest emotion
         pieSlice = series.slices()[0]
@@ -101,15 +103,15 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         chart.setAnimationOptions(QChart.SeriesAnimations)
         self.pieChart.setChart(chart)
 
-    def makeLineChart(self, lineStats):
+    def makeLineChart(self):
         series = QLineSeries()
         series.setPointLabelsVisible(True)
         series.setPointLabelsColor(Qt.black)
         series.setPointLabelsFormat("@yPoint" + "%")
 
-        for i, (key, value) in enumerate(lineStats.items()):
+        for i, (key, value) in enumerate(self.lineStats.items()):
             i += 0.5
-            series.append(i, lineStats[key])
+            series.append(i, self.lineStats[key])
 
         yAxis = QValueAxis()
         yAxis.setRange(0, 1)
@@ -119,11 +121,11 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         yAxis.setGridLineVisible(False)
 
         xAxis = QCategoryAxis()
-        for i, emotion in enumerate(lineStats.keys(), start=1):
+        for i, emotion in enumerate(self.lineStats.keys(), start=1):
             xAxis.append(emotion, i)
 
-        xAxis.setRange(0, len(lineStats))
-        xAxis.setTickCount(len(lineStats) + 1)
+        xAxis.setRange(0, len(self.lineStats))
+        xAxis.setTickCount(len(self.lineStats) + 1)
         xAxis.setTitleText("Emotions")
         xAxis.setGridLineVisible(False)
 
