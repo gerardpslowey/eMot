@@ -122,7 +122,10 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
         wordcloud.to_file("pyqt/wordCloud.png")
         self.MetricsDashboard.wordCloud.setPixmap(QtGui.QPixmap("pyqt/wordCloud.png"))
-        # self.MetricsDashboard.wordCloud.setScaledContents(True)
+        self.MetricsDashboard.wordCloud.setScaledContents(True)
+
+        # self.pixmap = QtGui.QPixmap("pyqt/wordCloud.png")
+        # TODO: fix scaling of photo
 
     def closeEvent(self, event):
         """Shuts down application on close."""

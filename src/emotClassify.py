@@ -50,8 +50,8 @@ class EmotClassify:
         self.site_visit_counts = urls_df['base'].value_counts().to_dict()
 
         print("Articles read per site: ")
-        print(self.site_visit_counts)
-
+        for key, value in self.site_visit_counts.items():
+            print(f"{key}: {value}")
 
     def sentenceClassify(self):
         scraped_df = pd.read_csv(scrapedFile)

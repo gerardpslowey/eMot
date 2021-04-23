@@ -5,7 +5,7 @@ from pyqt.metrics import Ui_MetricsDashboard
 from utils.blacklists import Blacklists
 from PyQt5 import QtCore
 from PyQt5.QtCore import Qt, QObject
-from PyQt5.QtGui import QPen  # QPainter,
+from PyQt5.QtGui import QPen, QColor
 from PyQt5.QtWidgets import QMessageBox, QMainWindow
 from PyQt5.QtChart import QChart, QLineSeries, QValueAxis, QCategoryAxis
 from PyQt5.QtChart import QBarSet, QStackedBarSeries, QBarCategoryAxis
@@ -57,7 +57,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         barSets = [QBarSet(site) for site in self.siteVisitStats.keys()]
 
         series = QBarSeries()
-    
+
         for i, value in enumerate(self.barStats.values()):
             barSets[i].append(value)       # add number of visits to set
             series.append(barSets[i])
@@ -80,8 +80,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         chart.addAxis(yAxis, Qt.AlignLeft)
         series.attachAxis(yAxis)
 
-        self.barChart_4.setChart(chart)
-        # TODO: chnage to bar chart
+        self.barChart.setChart(chart)
 
     def makeSplitChart(self):
         # create a new QBarSet for each emotion in emotions
@@ -108,16 +107,19 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         chart.legend().setVisible(True)
         chart.legend().setAlignment(Qt.AlignBottom)
 
-        self.barChart.setChart(chart)
-        # TODO: Change to split chart
+        self.splitChart.setChart(chart)
 
     def makePieChart(self):
         # get the data
         emotions = dict(sorted(self.pieStats.items(), key=lambda item: item[1], reverse=True))
 
+        colours = [QColor("#83677B"), QColor("#379683"), QColor("salmon"),
+                   QColor("#7395AE"), QColor("#D79922"),QColor("#99738E")]
+
         series = QPieSeries()
-        for emotion in emotions:
-            series.append(emotion, self.pieStats[emotion])
+        for i, (emotion, value) in enumerate(emotions.items()):
+            slices = series.append(emotion, value)
+            slices.setBrush(colours[i])
 
         # largest emotion
         pieSlice = series.slices()[0]
@@ -128,7 +130,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
         chart = QChart()
         chart.addSeries(series)
-        chart.setTitle('Overall Emotion Counts')
+        chart.setTitle('Overall Emotion Counts Of Sentences')
         chart.createDefaultAxes()
         chart.setAnimationOptions(QChart.SeriesAnimations)
         self.pieChart.setChart(chart)
