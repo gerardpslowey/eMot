@@ -39,8 +39,11 @@ class EmotClassify:
 
         self.svc_model = "models/svc.pkl"
         self.svc_tfidf_file = "models/svc_tfidf.pkl"
+        self.model = self.loadFiles(self.svc_model)
+        self.tfidf = self.loadFiles(self.svc_tfidf_file)
 
         self.splitChartValues = []
+        self.wordCloudBag = []
 
     # number of times a site is visited
     def siteCount(self):
@@ -55,8 +58,6 @@ class EmotClassify:
 
     def sentenceClassify(self):
         scraped_df = pd.read_csv(scrapedFile)
-        model = self.loadFiles(self.svc_model)
-        tfidf = self.loadFiles(self.svc_tfidf_file)
 
         try:
             for row in scraped_df.itertuples(index=False):
@@ -64,8 +65,8 @@ class EmotClassify:
 
                 # score each sentence
                 for sentence in text.split("|"):
-                    sentiment_score = model.predict_proba(tfidf.transform([sentence]))
-                    sentiment_name = model.predict(tfidf.transform([sentence]))
+                    sentiment_score = self.model.predict_proba(self.tfidf.transform([sentence]))
+                    sentiment_name = self.model.predict(self.tfidf.transform([sentence]))
 
                     emotion = sentiment_name[0]
                     intensity = sentiment_score.max()
@@ -91,9 +92,6 @@ class EmotClassify:
     def documentClassify(self):
         scraped_document_df = pd.read_csv(scrapedFile)
 
-        model = self.loadFiles(self.svc_model)
-        tfidf = self.loadFiles(self.svc_tfidf_file)
-
         scraped_document_df['base'] = scraped_document_df['url'].apply(base)
         # create a list of unique base sites
         sitesList = scraped_document_df['base'].unique().tolist()
@@ -108,7 +106,7 @@ class EmotClassify:
                 url = row[2]
 
                 # classify on document level
-                sentiment_name = model.predict(tfidf.transform([text]))
+                sentiment_name = self.model.predict(self.tfidf.transform([text]))
                 emotion = sentiment_name[0]
 
                 self.emotions_per_site[url][emotion] += 1
@@ -123,6 +121,27 @@ class EmotClassify:
             # rearranging the list of emotions 90* for the split bar chart.
                 for value in self.emotions_per_site.values():
                     self.splitChartValues.append(list(value.values()))
+
+    def negAndPos(self):
+
+        coef_avg = 0
+        for i in self.model.calibrated_classifiers_:
+            coef_avg = coef_avg + i.base_estimator.coef_
+        coef_avg = coef_avg / len(self.model.calibrated_classifiers_)
+        # print(coef_avg)
+
+        feature_to_coef = {
+            word: coef for word, coef in zip(self.tfidf.get_feature_names(), coef_avg[0])}
+
+        # print('Angry Words')
+        for best_positive in sorted(feature_to_coef.items(), key=lambda x: x[1], reverse=True)[:25]:
+            # print(best_positive)
+            self.wordCloudBag.append(best_positive[0])
+
+        # print('Sad Words')
+        for best_negative in sorted(feature_to_coef.items(), key=lambda x: x[1])[:10]:
+            # print(best_negative)
+            self.wordCloudBag.append(best_negative[0])
 
     def loadFiles(self, filename):
         with open(filename, 'rb') as file:
@@ -149,6 +168,9 @@ class EmotClassify:
     def get_split_chart_values(self):
         return self.splitChartValues
 
+    def get_wordcloud_bag(self):
+        return self.wordCloudBag
+
     def startAll(self):
         threads = []
         process1 = threading.Thread(target=self.sentenceClassify)
@@ -163,6 +185,10 @@ class EmotClassify:
         process3.start()
         threads.append(process3)
 
+        process4 = threading.Thread(target=self.negAndPos)
+        process4.start()
+        threads.append(process3)
+
         for process in threads:
             process.join()
 
@@ -170,6 +196,8 @@ class EmotClassify:
 def main():
     test = EmotClassify()
     test.startAll()
+
+    print(test.get_wordcloud_bag())
 
 
 if __name__ == '__main__':

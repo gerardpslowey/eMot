@@ -114,7 +114,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.threadpool.start(worker)
 
     def draw_WordCloud(self):
-        data = ["happy", "sad", "hungry", "hungry", "design", "right", "wrong", "end", "happy"]
+        data = self.emotClassify.get_wordcloud_bag()
         words = ' '.join(data)
         wordcloud = WordCloud(
             background_color="white",

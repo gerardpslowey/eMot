@@ -134,13 +134,13 @@ border-radius: 10px;</string>
        </layout>
       </widget>
       <widget class="QWidget" name="wordCloudPage">
-       <layout class="QVBoxLayout" name="verticalLayout_18">
+       <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_17">
+         <layout class="QVBoxLayout" name="verticalLayout_3" stretch="6,1">
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="5,1">
+           <layout class="QHBoxLayout" name="cloudTextLayout" stretch="4,1">
             <item>
-             <layout class="QVBoxLayout" name="verticalLayout">
+             <layout class="QVBoxLayout" name="cloudLayout">
               <item>
                <widget class="QLabel" name="wordCloud">
                 <property name="sizePolicy">
@@ -190,11 +190,14 @@ border-radius: 10px;</string>
              </layout>
             </item>
             <item>
-             <layout class="QVBoxLayout" name="verticalLayout_16">
+             <layout class="QVBoxLayout" name="textLayout">
+              <property name="topMargin">
+               <number>100</number>
+              </property>
               <item>
-               <layout class="QVBoxLayout" name="verticalLayout_4">
+               <layout class="QVBoxLayout" name="bLayout">
                 <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_10" stretch="1,1">
+                 <layout class="QVBoxLayout" name="verticalLayout_10" stretch="0,0">
                   <property name="topMargin">
                    <number>0</number>
                   </property>
@@ -206,8 +209,8 @@ border-radius: 10px;</string>
                     <property name="font">
                      <font>
                       <pointsize>16</pointsize>
-                      <weight>75</weight>
-                      <bold>true</bold>
+                      <weight>50</weight>
+                      <bold>false</bold>
                      </font>
                     </property>
                     <property name="text">
@@ -230,12 +233,25 @@ border-radius: 10px;</string>
                        </font>
                       </property>
                       <property name="text">
-                       <string/>
+                       <string>Opera</string>
                       </property>
                       <property name="alignment">
                        <set>Qt::AlignCenter</set>
                       </property>
                      </widget>
+                    </item>
+                    <item>
+                     <spacer name="verticalSpacer">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </spacer>
                     </item>
                    </layout>
                   </item>
@@ -244,68 +260,22 @@ border-radius: 10px;</string>
                </layout>
               </item>
               <item>
-               <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0">
+               <layout class="QVBoxLayout" name="dLayout" stretch="0">
                 <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_12" stretch="1,1">
+                 <layout class="QVBoxLayout" name="verticalLayout_13">
                   <item>
-                   <widget class="QLabel" name="dateUsed">
-                    <property name="font">
-                     <font>
-                      <pointsize>16</pointsize>
-                      <weight>75</weight>
-                      <bold>true</bold>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>Date Filter Used</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <layout class="QVBoxLayout" name="verticalLayout_13">
+                   <layout class="QVBoxLayout" name="verticalLayout_20">
                     <item>
-                     <widget class="QLabel" name="dateUsedEdit">
-                      <property name="font">
-                       <font>
-                        <pointsize>14</pointsize>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                       </font>
-                      </property>
-                      <property name="text">
-                       <string/>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QVBoxLayout" name="verticalLayout_15">
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_14" stretch="1,1">
-                  <item>
-                   <layout class="QVBoxLayout" name="verticalLayout_9" stretch="1">
-                    <item>
-                     <widget class="QLabel" name="sitesLabel">
+                     <widget class="QLabel" name="dateUsed">
                       <property name="font">
                        <font>
                         <pointsize>16</pointsize>
-                        <weight>75</weight>
-                        <bold>true</bold>
+                        <weight>50</weight>
+                        <bold>false</bold>
                        </font>
                       </property>
                       <property name="text">
-                       <string>Sites Visited</string>
+                       <string>Date Filter Used</string>
                       </property>
                       <property name="alignment">
                        <set>Qt::AlignCenter</set>
@@ -315,7 +285,7 @@ border-radius: 10px;</string>
                    </layout>
                   </item>
                   <item>
-                   <widget class="QLabel" name="sitesVisitedEdit">
+                   <widget class="QLabel" name="dateUsedEdit">
                     <property name="font">
                      <font>
                       <pointsize>14</pointsize>
@@ -324,12 +294,84 @@ border-radius: 10px;</string>
                      </font>
                     </property>
                     <property name="text">
-                     <string/>
+                     <string>All</string>
                     </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
                    </widget>
+                  </item>
+                  <item>
+                   <spacer name="verticalSpacer_3">
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>20</width>
+                      <height>40</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="sLayout">
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_9" stretch="0,0">
+                  <item>
+                   <widget class="QLabel" name="sitesLabel">
+                    <property name="font">
+                     <font>
+                      <pointsize>16</pointsize>
+                      <weight>50</weight>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Sites Visited</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <layout class="QVBoxLayout" name="verticalLayout">
+                    <item>
+                     <widget class="QLabel" name="sitesVisitedEdit">
+                      <property name="font">
+                       <font>
+                        <pointsize>14</pointsize>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>6 Sites</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="verticalSpacer_2">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
                   </item>
                  </layout>
                 </item>
@@ -340,7 +382,7 @@ border-radius: 10px;</string>
            </layout>
           </item>
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_3">
+           <layout class="QVBoxLayout" name="buttonLayout">
             <property name="leftMargin">
              <number>0</number>
             </property>
