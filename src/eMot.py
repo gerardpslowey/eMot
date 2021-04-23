@@ -80,29 +80,16 @@ class Emot:
             writer.writeheader()
 
     def writeToCSV(self, url, originalText):
-        # cleanedText = data[2]
-
         data = []
         with open(self.scraped_csv, mode='a+', encoding="utf-8", newline='') as scraped_text:
             writer = csv.writer(scraped_text, delimiter=',')
-
-            # print(originalText)
-            # print(sentence)
 
             for sentence in originalText:
                 # remove silly sentences
                 if(len(sentence.split()) > 3):
                     data.append(sentence)
 
-            writer.writerow([url, ".".join(data)])
-
-        #     writer = csv.DictWriter(scraped_text, fieldnames=fields, delimiter='.')
-
-        #     for sentence in originalText:
-        #         if(len(sentence.split()) > 3):
-        #             cleaned.append(sentence)
-
-        # row = {'url' : url, 'original_data' : originalText}
+            writer.writerow([url, "|".join(data)])
 
     def getFilter(self):
         return self.filtr

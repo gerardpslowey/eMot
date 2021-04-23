@@ -12,7 +12,6 @@ scrapedFile = 'sentimentAnalysis/scraped.csv'
 class EmotClassify:
     def __init__(self):
         self.emotions = ['anger', 'fear', 'joy', 'surprise', 'happiness', 'sadness']
-
         self.emotions_dict = dict.fromkeys(self.emotions, 0)
 
         self.emotion_count = {
@@ -32,6 +31,8 @@ class EmotClassify:
             "happiness": 0,
             "sadness": 0
         }
+
+        self.emotions_per_site = {}
 
         self.site_visit_counts = None
         self.total_sites = 0
@@ -60,7 +61,7 @@ class EmotClassify:
                 text = row[1]
 
                 # score each sentence
-                for sentence in text.split("."):
+                for sentence in text.split("|"):
                     sentiment_score = model.predict_proba(tfidf.transform([sentence]))
                     sentiment_name = model.predict(tfidf.transform([sentence]))
 
@@ -96,9 +97,8 @@ class EmotClassify:
         sitesList = scraped_document_df['base'].unique().tolist()
         # create a nested dictionary for each site
         # TODO do a write up on this shallow vs deepcopies
-        sites = {}
         for site in sitesList:
-            sites[site] = copy.deepcopy(self.emotions_dict)
+            self.emotions_per_site[site] = copy.deepcopy(self.emotions_dict)
 
         try:
             for row in scraped_document_df.itertuples(index=False):
@@ -109,24 +109,30 @@ class EmotClassify:
                 sentiment_name = model.predict(tfidf.transform([text]))
                 emotion = sentiment_name[0]
 
-                sites[url][emotion] += 1
+                self.emotions_per_site[url][emotion] += 1
 
         except pd.errors.EmptyDataError:
             print("Nothing to classify, the file is empty")
         finally:
             print("\nSites and associated article primary emotion: ")
-            for key, value in sites.items():
+            for key, value in self.emotions_per_site.items():
                 print(f"{key}: {value}")
 
     def loadFiles(self, filename):
         with open(filename, 'rb') as file:
             return pickle.load(file)
 
+    def get_emotions(self):
+        return self.emotions
+
     def get_emotion_count(self):
         return self.emotion_count
 
     def get_emotion_intensity(self):
         return self.emotion_intensity
+
+    def get_emotions_per_site(self):
+        return self.emotions_per_site
 
     def get_site_count(self):
         return self.site_visit_counts
@@ -160,22 +166,7 @@ class EmotClassify:
 
 def main():
     test = EmotClassify()
-
-    threads = []
-    process1 = threading.Thread(target=test.sentenceClassify)
-    process1.start()
-    threads.append(process1)
-
-    process2 = threading.Thread(target=test.siteCount)
-    process2.start()
-    threads.append(process2)
-
-    process3 = threading.Thread(target=test.documentClassify)
-    process3.start()
-    threads.append(process3)
-
-    for process in threads:
-        process.join()
+    test.startAll()
 
 
 if __name__ == '__main__':

@@ -41,42 +41,36 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
             self.stackedWidget.setCurrentWidget(self.chartPage)
 
     def makeCharts(self, emotClassify):
-
+        self.emotions = emotClassify.get_emotions()
+        barStats = emotClassify.get_emotions_per_site()
         lineStats = emotClassify.get_emotion_intensity()
         pieStats = emotClassify.get_emotion_count()
-        self.makeBarChart()
+
+        self.makeBarChart(barStats)
         self.makePieChart(pieStats)
         self.makeLineChart(lineStats)
         self.makeSplitChart()
 
-    def makeBarChart(self):
-
-        set0 = QBarSet("One") # noqa
-        set1 = QBarSet("Two") # noqa
-        set2 = QBarSet("Three") # noqa
-        set3 = QBarSet("Four") # noqa
-        set4 = QBarSet("Five") # noqa
-
-        data = {
-            0: [1, 2, 3, 4, 5, 6],
-            1: [5, 0, 0, 4, 0, 7],
-            2: [3, 5, 8, 4, 13, 4],
-            3: [5, 1, 5, 9, 11, 2],
-            4: [11, 3, 7, 4, 3, 6]
-        }
+    def makeBarChart(self, barStats):
+        # create a new QBarSet for each emotion in emotions
+        barSets = [QBarSet(emotion) for emotion in self.emotions]
 
         series = QPercentBarSeries()
-        for key, value in data.items():
-            barSet = eval(f"set{key}")
-            barSet.append(data[key])
-            series.append(barSet)
+        i = 0
+        for key, value in barStats.items():
+
+            values = list(value.values())
+            barSets[i].append(values)       # add amount of emotion to barset.
+            series.append(barSets[i])
+            i+=1
 
         chart = QChart()
         chart.addSeries(series)
-        chart.setTitle('Bar Chart')
+        chart.setTitle('Split Chart of Emotions per Site')
         chart.setAnimationOptions(QChart.SeriesAnimations)
 
-        categories = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
+        # categories are the website names
+        categories = list(barStats.keys())
         axis = QBarCategoryAxis()
         axis.append(categories)
 
