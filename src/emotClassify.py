@@ -43,8 +43,7 @@ class EmotClassify:
         self.site_visit_counts = urls_df['base'].value_counts().to_dict()
 
         print("Articles read per site: ")
-        for key, value in self.site_visit_counts.items():
-            print(f"{key}: {value}")
+        self.prettyPrint(self.site_visit_counts.items())
 
     def sentenceClassify(self):
         scraped_df = pd.read_csv(scrapedFile).astype('U')
@@ -73,12 +72,10 @@ class EmotClassify:
             print("Nothing to classify, the file is empty")
         finally:
             print("\nThe Intensity level of each Emotion:")
-            for key, value in self.emotion_intensity.items():
-                print(f"{key}: {value:.1%}")
+            self.prettyPrint(self.emotion_intensity.items(), "percent")
 
             print("\nThe Amount of each Emotion:")
-            for key, value in self.emotion_count.items():
-                print(f"{key}: {value}")
+            self.prettyPrint(self.emotion_count.items())
 
     def documentClassify(self):
         scraped_document_df = pd.read_csv(scrapedFile).astype('U')
@@ -116,8 +113,7 @@ class EmotClassify:
         finally:
             print("\nSites and associated article primary emotion: ")
             print(f"website: {*self.emotions,}")
-            for key, value in self.emotionsPerSiteDict.items():
-                print(f"{key}: {*list(value.values()),}")
+            self.prettyPrint(self.emotionsPerSiteDict.items(), "lst")
 
     def negAndPos(self):
 
@@ -139,6 +135,18 @@ class EmotClassify:
         for most_sad in sorted(feature_to_coef.items(), key=lambda x: x[1])[:10]:
             # print(most_sad)
             self.wordCloudBag.append(most_sad[0])
+
+    def prettyPrint(self, items, format=None):
+        for key, value in items:
+
+            if format == "lst":
+                print(f"{key}: {*list(value.values()),}")
+
+            elif format == "percent":
+                print(f"{key}: {value:.1%}")
+
+            else:
+                print(f"{key}: {value}")
 
     def loadFiles(self, filename):
         with open(filename, 'rb') as file:

@@ -18,13 +18,11 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.stackedWidget.setCurrentWidget(self.homePage)
 
         self.threadpool = QtCore.QThreadPool()
-        self.emotClassify = EmotClassify()
 
         # Set all the UI windows
         self.AboutWindow = windows.About()
         self.DialogWindow = windows.Dialog()
         self.PreferenceWindow = windows.Preference()
-        self.MetricsDashboard = metrics.MetricsDashboard()
 
         # file menu
         self.actionAbout.triggered.connect(
@@ -40,8 +38,8 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
     def restart_window(self):
         QtCore.QCoreApplication.quit()
-        status = QtCore.QProcess.startDetached(sys.executable, sys.argv)
-        print(status)
+        QtCore.QProcess.startDetached(sys.executable, sys.argv)
+        # print(status)
 
     def toggle_item(self, item):
         if item.isVisible():
@@ -65,6 +63,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
         else:
             self.setupPrintPage()
+            self.MetricsDashboard = metrics.MetricsDashboard()
             self.MetricsDashboard.browserUsedEdit.setText(self.browser)
             self.MetricsDashboard.dateUsedEdit.setText(self.filtr)
 
@@ -86,8 +85,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.textEdit.ensureCursorVisible()
 
     def startClassify(self):
-        # self.textEdit.clear()
-        print("Starting Classification..\n")
+        self.emotClassify = EmotClassify()
         worker = Worker(self.emotClassify.startAll)
         self.threadpool.start(worker)
         worker.signals.finished.connect(self.enableResultsButton)

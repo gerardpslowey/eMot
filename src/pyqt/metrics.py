@@ -9,6 +9,7 @@ from PyQt5 import QtCore
 
 
 class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
+
     def __init__(self, *args, obj=None, **kwargs):
         super(MetricsDashboard, self).__init__(*args, **kwargs)
         self.setupUi(self)
