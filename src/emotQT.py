@@ -90,7 +90,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         worker.signals.finished.connect(self.enableResultsButton)
 
     def enableResultsButton(self):
-        print("\nClick to find out more!")
+        print("\nClick the 'Show Results' button to view the results!")
 
         self.MetricsDashboard.makeCharts(self.emotClassify)
         self.MetricsDashboard.sitesVisitedEdit.setText(self.emotClassify.get_total_site_visit())
@@ -101,7 +101,8 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
             "color: rgb(255, 255, 255);\n"
             "background-color: rgb(103, 171, 159);\n"
             "border: 1px solid black;\n"
-            "border-radius: 10px;")
+            "border-radius: 10px;"
+            )
 
     def createMetrics(self):
         self.MetricsDashboard.show()

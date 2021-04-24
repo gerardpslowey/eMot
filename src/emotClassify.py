@@ -4,7 +4,6 @@ import threading
 from utils.urlFilter import base
 import copy
 from collections import OrderedDict
-from utils.urlFilter import base
 
 scrapedFile = 'sentimentAnalysis/scraped.csv'
 
@@ -110,47 +109,6 @@ class EmotClassify:
             print(f"website: {*self.emotions,}")
             self.prettyPrint(self.emotionsPerSiteDict.items(), "lst")
 
-
-    # def documentClassify(self):
-    #     scraped_document_df = pd.read_csv(scrapedFile).astype('U')
-
-    #     model = self.loadFiles(self.svc_model)
-    #     tfidf = self.loadFiles(self.svc_tfidf_file)
-
-    #     scraped_document_df['base'] = scraped_document_df['url'].apply(base)
-    #     # create a list of unique base sites
-    #     sitesList = scraped_document_df['base'].unique().tolist()
-    #     # create a nested dictionary for each site
-    #     # TODO do a write up on this shallow vs deepcopies
-    #     for site in sitesList:
-    #         self.emotionsPerSiteDict[site] = copy.deepcopy(self.emotions_dict)
-
-    #     try:
-    #         for row in scraped_document_df.itertuples(index=False):
-    #             text = row[1]
-    #             url = row[2]
-
-    #             # classify on document level
-    #             sentiment_name = model.predict(tfidf.transform([text]))
-    #             emotion = sentiment_name[0]
-    #             # store the emotion result
-    #             self.emotionsPerSiteDict[url][emotion] += 1
-                        
-    #         # total site visits = the number of sites visited
-    #         self.total_sites = len(self.emotionsPerSiteDict)
-
-    #         # rearranging the list of emotions 90* for the split bar chart.
-    #         for _ in range(self.total_sites):
-    #             for siteEmotionDict in self.emotionsPerSiteDict.values():
-    #                 self.splitChartValues.append(list(siteEmotionDict.values()))
-
-    #     except pd.errors.EmptyDataError:
-    #         print("Nothing to classify, the file is empty")
-    #     finally:
-    #         print("\nSites and associated article primary emotion: ")
-    #         for key, value in self.emotionsPerSiteDict.items():
-    #             print(f"{key}: {value}")
-
     def negAndPos(self):
         coef_avg = 0
         for i in self.model.calibrated_classifiers_:
@@ -227,13 +185,9 @@ class EmotClassify:
         process2.start()
         threads.append(process2)
 
-        # process3 = threading.Thread(target=self.documentClassify)
-        # process3.start()
-        # threads.append(process3)
-
-        process4 = threading.Thread(target=self.negAndPos)
-        process4.start()
-        threads.append(process4)
+        process3 = threading.Thread(target=self.negAndPos)
+        process3.start()
+        threads.append(process3)
 
         for process in threads:
             process.join()
