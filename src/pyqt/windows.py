@@ -1,36 +1,29 @@
-from PyQt5 import QtCore, QtWidgets, QtGui
 from pyqt.about_window import Ui_Form
 from pyqt.browser_dialog import Ui_browserDialog
 from pyqt.preferences_window import Ui_Form as PrefWindow
-from pyqt.metrics import Ui_MetricsDashboard
 from utils.blacklists import Blacklists
+from PyQt5 import QtCore
+from PyQt5.QtCore import Qt, QObject
+from PyQt5.QtGui import QPen, QColor
+from PyQt5.QtWidgets import QMessageBox, QMainWindow
+from PyQt5.QtChart import QChart, QLineSeries, QValueAxis, QCategoryAxis
+from PyQt5.QtChart import QBarSet, QPercentBarSeries, QBarCategoryAxis
+from PyQt5.QtChart import QPieSeries, QBarSeries
 
 
-class About(QtWidgets.QMainWindow, Ui_Form):
+class About(QMainWindow, Ui_Form):
     def __init__(self, *args, obj=None, **kwargs):
         super(About, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
 
-class Dialog(QtWidgets.QMainWindow, Ui_browserDialog):
+class Dialog(QMainWindow, Ui_browserDialog):
     def __init__(self, *args, obj=None, **kwargs):
         super(Dialog, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
 
-class MetricsDashboard(QtWidgets.QMainWindow, Ui_MetricsDashboard):
-    def __init__(self, *args, obj=None, **kwargs):
-        super(MetricsDashboard, self).__init__(*args, **kwargs)
-        self.setupUi(self)
-        self.setWindowTitle("Metrics Dashboard")
-
-        label = QtWidgets.QLabel("eMot")
-        label.setAlignment(QtCore.Qt.AlignCenter)
-
-        layout = QtWidgets.QVBoxLayout()
-
-
-class Preference(QtWidgets.QMainWindow, PrefWindow):
+class Preference(QMainWindow, PrefWindow):
     def __init__(self, *args, obj=None, **kwargs):
         super(Preference, self).__init__(*args, **kwargs)
         self.setupUi(self)
@@ -65,15 +58,15 @@ class Preference(QtWidgets.QMainWindow, PrefWindow):
         self.PreferenceWindow.urlEdit.clear()
 
     def showPopUp(self, message):
-        msg = QtWidgets.QMessageBox()
+        msg = QMessageBox()
         msg.setWindowTitle("Message")
         msg.setText(message)
-        msg.setIcon(QtWidgets.QMessageBox.Information)
-        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        msg.setIcon(QMessageBox.Information)
+        msg.setStandardButtons(QMessageBox.Ok)
         msg.exec_()
 
 
-class Stream(QtCore.QObject):
+class Stream(QObject):
     """Redirects console output to text widget."""
     newText = QtCore.pyqtSignal(str)
 

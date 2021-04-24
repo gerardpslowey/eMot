@@ -4,7 +4,7 @@ import json
 class Blacklists:
 
     def __init__(self):
-        self.filename = "blacklists.json"
+        self.filename = "utils/blacklists.json"
 
     def getItems(self, blacklist=None):
         try:

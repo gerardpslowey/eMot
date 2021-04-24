@@ -1,8 +1,7 @@
 import sys
-# import threading
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from pyqt import main_window, windows  # reportsInfo
+from pyqt import main_window, windows, metrics  # reportsInfo
 from qtWorker import Worker
 
 from eMot import Emot
@@ -18,13 +17,11 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.stackedWidget.setCurrentWidget(self.homePage)
 
         self.threadpool = QtCore.QThreadPool()
-        self.emotClassify = EmotClassify()
 
         # Set all the UI windows
         self.AboutWindow = windows.About()
         self.DialogWindow = windows.Dialog()
         self.PreferenceWindow = windows.Preference()
-        self.MetricsDashboard = windows.MetricsDashboard()
 
         # file menu
         self.actionAbout.triggered.connect(
@@ -40,8 +37,8 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
     def restart_window(self):
         QtCore.QCoreApplication.quit()
-        status = QtCore.QProcess.startDetached(sys.executable, sys.argv)
-        print(status)
+        QtCore.QProcess.startDetached(sys.executable, sys.argv)
+        # print(status)
 
     def toggle_item(self, item):
         if item.isVisible():
@@ -65,8 +62,9 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
         else:
             self.setupPrintPage()
-            self.browserUsedEdit.setPlainText(self.browser)
-            self.dateUsedEdit.setPlainText(self.filtr)
+            self.MetricsDashboard = metrics.MetricsDashboard()
+            self.MetricsDashboard.browserUsedEdit.setText(self.browser)
+            self.MetricsDashboard.dateUsedEdit.setText(self.filtr)
 
     def setupPrintPage(self):
         self.stackedWidget.setCurrentWidget(self.printPage)
@@ -86,25 +84,27 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.textEdit.ensureCursorVisible()
 
     def startClassify(self):
-        # self.textEdit.clear()
-        print("Starting Classification..\n")
+        self.emotClassify = EmotClassify()
         worker = Worker(self.emotClassify.startAll)
         self.threadpool.start(worker)
         worker.signals.finished.connect(self.enableResultsButton)
 
     def enableResultsButton(self):
-        print("Click to find out more!")
-        self.numSitesEdit.setPlainText(self.emotClassify.get_total_site_visit())
+        print("\nClick the 'Show Results' button to view the results!")
+
+        self.MetricsDashboard.makeCharts(self.emotClassify)
+        self.MetricsDashboard.sitesVisitedEdit.setText(self.emotClassify.get_total_site_visit())
         self.startDrawing()
         self.results_button.setEnabled(True)
         self.results_button.setText("Show Results!")
         self.results_button.setStyleSheet(
             "color: rgb(255, 255, 255);\n"
             "background-color: rgb(103, 171, 159);\n"
-            "border: 1px solid black;")
+            "border: 1px solid black;\n"
+            "border-radius: 10px;"
+            )
 
     def createMetrics(self):
-        self.stackedWidget.setCurrentWidget(self.reportsPage)
         self.MetricsDashboard.show()
 
     def startDrawing(self):
@@ -112,15 +112,15 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.threadpool.start(worker)
 
     def draw_WordCloud(self):
-        data = ["happy", "sad", "hungry", "hungry", "design", "right", "wrong", "end", "happy"]
+        data = self.emotClassify.get_wordcloud_bag()
         words = ' '.join(data)
         wordcloud = WordCloud(
             background_color="white",
             width=2500, height=2000).generate(words)
 
-        wordcloud.to_file("pyqt/wordCloud.png")
-        self.wordCloud.setPixmap(QtGui.QPixmap("pyqt/wordCloud.png"))
-        self.wordCloud.setScaledContents(True)
+        wordCloudImage = "pyqt/wordCloud.png"
+        wordcloud.to_file(wordCloudImage)
+        self.MetricsDashboard.showImage(wordCloudImage)
 
     def closeEvent(self, event):
         """Shuts down application on close."""

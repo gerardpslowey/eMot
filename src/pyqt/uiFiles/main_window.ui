@@ -65,7 +65,7 @@
      <enum>QFrame::NoFrame</enum>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="homePage">
      <widget class="QLabel" name="browserTextLabel">
@@ -134,6 +134,9 @@
        <font>
         <pointsize>12</pointsize>
        </font>
+      </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
       </property>
       <property name="statusTip">
        <string>Choose a date filter</string>
@@ -256,6 +259,9 @@
         <pointsize>20</pointsize>
        </font>
       </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
       <property name="statusTip">
        <string>Click to start the sentiment analysis</string>
       </property>
@@ -280,7 +286,7 @@ border-radius: 10px;</string>
         <x>430</x>
         <y>200</y>
         <width>199</width>
-        <height>55</height>
+        <height>58</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -293,6 +299,9 @@ border-radius: 10px;</string>
        <font>
         <pointsize>12</pointsize>
        </font>
+      </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
       </property>
       <property name="statusTip">
        <string>Choose the browser you want to use</string>
@@ -414,6 +423,9 @@ border-radius: 10px;</string>
         <pointsize>20</pointsize>
        </font>
       </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
       <property name="statusTip">
        <string>Click to start the sentiment analysis</string>
       </property>
@@ -429,235 +441,6 @@ border-radius: 10px;</string>
       <property name="text">
        <string>Calculating...</string>
       </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="reportsPage">
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(236, 236, 236);</string>
-     </property>
-     <widget class="QLabel" name="wordCloud">
-      <property name="geometry">
-       <rect>
-        <x>170</x>
-        <y>30</y>
-        <width>741</width>
-        <height>501</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>16</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(103, 171, 159,255));
-color: rgb(255, 255, 255);
-border-radius: 10px;</string>
-      </property>
-      <property name="text">
-       <string>Loading WordCloud..</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-     <widget class="QFrame" name="frame">
-      <property name="geometry">
-       <rect>
-        <x>170</x>
-        <y>550</y>
-        <width>231</width>
-        <height>91</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 10px;</string>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <widget class="QPlainTextEdit" name="browserUsedEdit">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>50</y>
-         <width>201</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QLabel" name="browserUsed">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>15</y>
-         <width>201</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Browser Used</string>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QFrame" name="frame_2">
-      <property name="geometry">
-       <rect>
-        <x>420</x>
-        <y>551</y>
-        <width>231</width>
-        <height>91</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 10px;</string>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <widget class="QLabel" name="dateUsed">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>15</y>
-         <width>201</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Date Filter Used</string>
-       </property>
-      </widget>
-      <widget class="QPlainTextEdit" name="dateUsedEdit">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>50</y>
-         <width>201</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QFrame" name="frame_3">
-      <property name="geometry">
-       <rect>
-        <x>680</x>
-        <y>551</y>
-        <width>231</width>
-        <height>91</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 10px;</string>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <widget class="QLabel" name="sitesVisitedLabel">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>15</y>
-         <width>201</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Sites Visited</string>
-       </property>
-      </widget>
-      <widget class="QPlainTextEdit" name="numSitesEdit">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>50</y>
-         <width>201</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
      </widget>
     </widget>
    </widget>

@@ -3,7 +3,6 @@ import spacy, re, os, pickle
 from spacy.tokenizer import _get_regex_pattern
 nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner'])
 
-from wordcloud import WordCloud
 from pathlib import Path
 
 from spellchecker import SpellChecker
@@ -19,15 +18,10 @@ nlp.tokenizer.token_match = re.compile(re_token_match).match
 
 # Used for datasets
 def preprocessAndTokenise(data):
-    # remove html markup
     data = removehtmlMarkup(data)
-    # remove urls
     data = removeURLs(data)
-    # remove hashtags and @ symbols
     data = removeHashandSymbols(data)
-    # remove punctuation and non-ascii digits
     data = removeAscii(data)
-    # remove whitespace
     data = data.strip()
 
     mytokens = nlp(data)
@@ -39,23 +33,24 @@ def preprocessAndTokenise(data):
 
 
 def preProcess(data):
-    # remove html markup
     data = removehtmlMarkup(data)
-    # remove urls
     data = removeURLs(data)
-    # remove hashtags and @ symbols
     data = removeHashandSymbols(data)
-    # remove punctuation and non-ascii digits
     data = removeAscii(data)
-    # remove whitespace
+    data = removeNums(data)
     data = data.strip()
-
+    # tokenise
     mytokens = nlp(data)
 
     stem_data = [word.lemma_.strip() for word in mytokens
                  if word.lemma_ != '-PRON-' and not word.is_punct and not word.is_stop and not word.is_space]
 
     return " ".join(stem_data)
+
+
+# remove floats and ints
+def removeNums(sentence):
+    return re.sub("/(\d+(?:\.\d+)?)/", "", sentence) # noqa
 
 
 def cleanScrapedText(document):
@@ -101,20 +96,6 @@ def removeRepetitions(sentence):
 def spellCheck(sentence):
     words = spell.split_words(sentence)
     return " ".join([spell.correction(word) for word in words])
-
-
-def wordCloud(data, color='white'):
-    words = ' '.join(data)
-    wordcloud = WordCloud(
-        background_color=color,
-        width=2500, height=2000).generate(words)
-
-    wordcloud.to_file("wordCloud.png")
-
-    # plt.figure(1,figsize=(10, 7))
-    # plt.imshow(wordcloud)
-    # plt.axis('off')
-    # plt.show()
 
 
 def saveFiles(data, filename):
