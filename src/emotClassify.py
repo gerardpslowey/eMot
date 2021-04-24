@@ -35,6 +35,8 @@ class EmotClassify:
         self.emotionsPerSiteDict = {}
         # self.emotionsPerSiteDict = OrderedDict()
 
+        self.sentenceExamples = []
+
         self.site_visit_counts = None
         self.total_sites = 0
 
@@ -88,6 +90,7 @@ class EmotClassify:
                     if intensity > self.emotion_intensity.get(emotion):
                         # round the intensity float to 2 decimal place
                         self.emotion_intensity[emotion] = round(intensity, 2)
+                        self.sentenceExamples.append(tuple((intensity, emotion, sentence)))
 
             # total site visits = the number of sites visited
             self.total_sites = len(self.emotionsPerSiteDict)
@@ -108,6 +111,10 @@ class EmotClassify:
             print("\nSites and associated article primary emotion: ")
             print(f"website: {*self.emotions,}")
             self.prettyPrint(self.emotionsPerSiteDict.items(), "lst")
+
+            print("\nExamples of emotion based sentences")
+            self.sentenceExamples.sort(key=lambda tup: tup[0], reverse=True)  # sorts in place
+            print(self.sentenceExamples[:10])
 
     def negAndPos(self):
         coef_avg = 0
@@ -193,12 +200,6 @@ class EmotClassify:
             process.join()
 
 
-def main():
+if __name__ == '__main__':
     test = EmotClassify()
     test.startAll()
-
-    print(test.get_wordcloud_bag())
-
-
-if __name__ == '__main__':
-    main()
