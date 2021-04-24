@@ -45,7 +45,7 @@ class EmotClassify:
     # number of times a site is visited
     def siteCount(self):
         # only load the urls column from the file
-        urls_df = pd.read_csv(scrapedFile, usecols=["url"])
+        urls_df = pd.read_csv(scrapedFile, usecols=["url"]).astype('U')
         urls_df['base'] = urls_df['url'].apply(base)
         self.site_visit_counts = urls_df['base'].value_counts().to_dict()
 
@@ -55,15 +55,21 @@ class EmotClassify:
 
     def sentenceClassify(self):
         scraped_df = pd.read_csv(scrapedFile).astype('U')
-        scraped_df.dropna()
 
-        # scraped_df = scraped_df[scraped_df['ColumnName'].notnull()]
         model = self.loadFiles(self.svc_model)
         tfidf = self.loadFiles(self.svc_tfidf_file)
+
+        scraped_df['base'] = scraped_df['url'].apply(base)
+        # create a list of unique base sites
+        sitesList = scraped_df['base'].unique().tolist()
+        # create a nested dictionary for each site
+        for site in sitesList:
+            self.emotionsPerSiteDict[site] = copy.deepcopy(self.emotions_dict)
 
         try:
             for row in scraped_df.itertuples(index=False):
                 text = row[1]
+                url = row[2]
 
                 # score each sentence
                 for sentence in text.split("|"):
@@ -73,12 +79,21 @@ class EmotClassify:
                     emotion = sentiment_name[0]
                     intensity = sentiment_score.max()
 
-                    # count in dictionary
+                    # count total emotion count
                     self.emotion_count[emotion] += 1
+                    # count of distribution of emotions per site
+                    self.emotionsPerSiteDict[url][emotion] += 1
 
                     if intensity > self.emotion_intensity.get(emotion):
                         # round the intensity float to 2 decimal place
                         self.emotion_intensity[emotion] = round(intensity, 2)
+
+            # total site visits = the number of sites visited
+            self.total_sites = len(self.emotionsPerSiteDict)
+
+            for _ in range(self.total_sites):
+                for siteEmotionDict in self.emotionsPerSiteDict.values():
+                    self.splitChartValues.append(list(siteEmotionDict.values()))
 
         except pd.errors.EmptyDataError:
             print("Nothing to classify, the file is empty")
@@ -91,46 +106,49 @@ class EmotClassify:
             for key, value in self.emotion_count.items():
                 print(f"{key}: {value}")
 
-    def documentClassify(self):
-        scraped_document_df = pd.read_csv(scrapedFile).astype('U')
-        scraped_document_df.dropna()
-
-        model = self.loadFiles(self.svc_model)
-        tfidf = self.loadFiles(self.svc_tfidf_file)
-
-        scraped_document_df['base'] = scraped_document_df['url'].apply(base)
-        # create a list of unique base sites
-        sitesList = scraped_document_df['base'].unique().tolist()
-        # create a nested dictionary for each site
-        # TODO do a write up on this shallow vs deepcopies
-        for site in sitesList:
-            self.emotionsPerSiteDict[site] = copy.deepcopy(self.emotions_dict)
-
-        try:
-            for row in scraped_document_df.itertuples(index=False):
-                text = row[1]
-                url = row[2]
-
-                # classify on document level
-                sentiment_name = model.predict(tfidf.transform([text]))
-                emotion = sentiment_name[0]
-                # store the emotion result
-                self.emotionsPerSiteDict[url][emotion] += 1
-                        
-            # total site visits = the number of sites visited
-            self.total_sites = len(self.emotionsPerSiteDict)
-
-            # rearranging the list of emotions 90* for the split bar chart.
-            for _ in range(self.total_sites):
-                for siteEmotionDict in self.emotionsPerSiteDict.values():
-                    self.splitChartValues.append(list(siteEmotionDict.values()))
-
-        except pd.errors.EmptyDataError:
-            print("Nothing to classify, the file is empty")
-        finally:
             print("\nSites and associated article primary emotion: ")
             for key, value in self.emotionsPerSiteDict.items():
                 print(f"{key}: {value}")
+
+    # def documentClassify(self):
+    #     scraped_document_df = pd.read_csv(scrapedFile).astype('U')
+
+    #     model = self.loadFiles(self.svc_model)
+    #     tfidf = self.loadFiles(self.svc_tfidf_file)
+
+    #     scraped_document_df['base'] = scraped_document_df['url'].apply(base)
+    #     # create a list of unique base sites
+    #     sitesList = scraped_document_df['base'].unique().tolist()
+    #     # create a nested dictionary for each site
+    #     # TODO do a write up on this shallow vs deepcopies
+    #     for site in sitesList:
+    #         self.emotionsPerSiteDict[site] = copy.deepcopy(self.emotions_dict)
+
+    #     try:
+    #         for row in scraped_document_df.itertuples(index=False):
+    #             text = row[1]
+    #             url = row[2]
+
+    #             # classify on document level
+    #             sentiment_name = model.predict(tfidf.transform([text]))
+    #             emotion = sentiment_name[0]
+    #             # store the emotion result
+    #             self.emotionsPerSiteDict[url][emotion] += 1
+                        
+    #         # total site visits = the number of sites visited
+    #         self.total_sites = len(self.emotionsPerSiteDict)
+
+    #         # rearranging the list of emotions 90* for the split bar chart.
+    #         for _ in range(self.total_sites):
+    #             for siteEmotionDict in self.emotionsPerSiteDict.values():
+    #                 self.splitChartValues.append(list(siteEmotionDict.values()))
+
+    #     except pd.errors.EmptyDataError:
+    #         print("Nothing to classify, the file is empty")
+    #     finally:
+    #         print("\nSites and associated article primary emotion: ")
+    #         for key, value in self.emotionsPerSiteDict.items():
+    #             print(f"{key}: {value}")
 
 
     def loadFiles(self, filename):
@@ -171,9 +189,9 @@ class EmotClassify:
         process2.start()
         threads.append(process2)
 
-        process3 = threading.Thread(target=self.documentClassify)
-        process3.start()
-        threads.append(process3)
+        # process3 = threading.Thread(target=self.documentClassify)
+        # process3.start()
+        # threads.append(process3)
 
         for process in threads:
             process.join()

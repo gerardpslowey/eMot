@@ -8,7 +8,7 @@ from PyQt5.QtCore import Qt, QObject
 from PyQt5.QtGui import QPen, QColor
 from PyQt5.QtWidgets import QMessageBox, QMainWindow
 from PyQt5.QtChart import QChart, QLineSeries, QValueAxis, QCategoryAxis
-from PyQt5.QtChart import QBarSet, QStackedBarSeries, QBarCategoryAxis
+from PyQt5.QtChart import QBarSet, QPercentBarSeries, QBarCategoryAxis
 from PyQt5.QtChart import QPieSeries, QBarSeries
 
 
@@ -86,7 +86,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
     def makeSplitChart(self):
         # create a new QBarSet for each emotion in emotions
         barSets = [QBarSet(emotion) for emotion in self.emotions] # 6 emotions
-        series = QStackedBarSeries()
+        series = QPercentBarSeries()
 
         # for each website
         for i in range(self.visitedUniqueSites):
@@ -94,8 +94,8 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
             barStatArray = self.splitBarStats[i]
             for j in range(len(barStatArray)):
                 # add that emotion to the barset
-                barSets[j].append(barStatArray[j])       # add amount of emotion to barset.
-                
+                barSets[j].append(barStatArray[j])
+        # append the completed barSet to the series
         for barSet in barSets:
             series.append(barSet)
 
@@ -106,11 +106,18 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
         # categories are the website names
         categories = list(self.siteVisitStats.keys())
-        axis = QBarCategoryAxis()
-        axis.append(categories)
+        axisX = QBarCategoryAxis()
+        axisX.append(categories)
+
+        axisY = QValueAxis()
+        axisY.setTickCount(11)
+        axisY.setRange(0, 100)
+        axisY.setTitleText("% Emotion Per Site")
 
         chart.createDefaultAxes()
-        chart.setAxisX(axis, series)
+        chart.setAxisX(axisX, series)
+        chart.setAxisY(axisY)
+
         chart.legend().setVisible(True)
         chart.legend().setAlignment(Qt.AlignBottom)
 
