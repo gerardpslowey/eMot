@@ -1,5 +1,4 @@
 import sys
-# import threading
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pyqt import main_window, windows, metrics  # reportsInfo

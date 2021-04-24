@@ -1,6 +1,7 @@
 from pyqt.about_window import Ui_Form
 from pyqt.browser_dialog import Ui_browserDialog
 from pyqt.preferences_window import Ui_Form as PrefWindow
+from pyqt.metrics import Ui_MetricsDashboard
 from utils.blacklists import Blacklists
 from PyQt5 import QtCore
 from PyQt5.QtCore import Qt, QObject
@@ -94,6 +95,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
             for j in range(len(barStatArray)):
                 # add that emotion to the barset
                 barSets[j].append(barStatArray[j])
+
         # append the completed barSet to the series
         for barSet in barSets:
             series.append(barSet)

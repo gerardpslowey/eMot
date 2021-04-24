@@ -62,9 +62,6 @@ class EmotClassify:
     def sentenceClassify(self):
         scraped_df = pd.read_csv(scrapedFile).astype('U')
 
-        model = self.loadFiles(self.svc_model)
-        tfidf = self.loadFiles(self.svc_tfidf_file)
-
         scraped_df['base'] = scraped_df['url'].apply(base)
         # create a list of unique base sites
         sitesList = scraped_df['base'].unique().tolist()
@@ -155,6 +152,26 @@ class EmotClassify:
     #         print("\nSites and associated article primary emotion: ")
     #         for key, value in self.emotionsPerSiteDict.items():
     #             print(f"{key}: {value}")
+
+    def negAndPos(self):
+        coef_avg = 0
+        for i in self.model.calibrated_classifiers_:
+            coef_avg = coef_avg + i.base_estimator.coef_
+        coef_avg = coef_avg / len(self.model.calibrated_classifiers_)
+        # print(coef_avg)
+
+        feature_to_coef = {
+            word: coef for word, coef in zip(self.tfidf.get_feature_names(), coef_avg[0])}
+
+        # print('Angry Words')
+        for most_angry in sorted(feature_to_coef.items(), key=lambda x: x[1], reverse=True)[:25]:
+            # print(most_angry)
+            self.wordCloudBag.append(most_angry[0])
+
+        # print('Sad Words')
+        for most_sad in sorted(feature_to_coef.items(), key=lambda x: x[1])[:10]:
+            # print(most_sad)
+            self.wordCloudBag.append(most_sad[0])
 
 
     def loadFiles(self, filename):
