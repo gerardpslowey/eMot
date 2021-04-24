@@ -1,7 +1,6 @@
 from pyqt.about_window import Ui_Form
 from pyqt.browser_dialog import Ui_browserDialog
 from pyqt.preferences_window import Ui_Form as PrefWindow
-from pyqt.metrics import Ui_MetricsDashboard
 from utils.blacklists import Blacklists
 from PyQt5 import QtCore
 from PyQt5.QtCore import Qt, QObject

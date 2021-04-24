@@ -3,6 +3,8 @@ import pickle
 import threading
 from utils.urlFilter import base
 import copy
+from collections import OrderedDict
+from utils.urlFilter import base
 
 scrapedFile = 'sentimentAnalysis/scraped.csv'
 
@@ -32,15 +34,19 @@ class EmotClassify:
         }
 
         self.emotionsPerSiteDict = {}
+        # self.emotionsPerSiteDict = OrderedDict()
 
         self.site_visit_counts = None
         self.total_sites = 0
 
         self.svc_model = "models/svc.pkl"
         self.svc_tfidf_file = "models/svc_tfidf.pkl"
+        self.model = self.loadFiles(self.svc_model)
+        self.tfidf = self.loadFiles(self.svc_tfidf_file)
 
-        # an emopty array for line chart array values
+        # an empty array for line chart array values
         self.splitChartValues = []
+        self.wordCloudBag = []
 
     # number of times a site is visited
     def siteCount(self):
@@ -73,8 +79,8 @@ class EmotClassify:
 
                 # score each sentence
                 for sentence in text.split("|"):
-                    sentiment_score = model.predict_proba(tfidf.transform([sentence]))
-                    sentiment_name = model.predict(tfidf.transform([sentence]))
+                    sentiment_score = self.model.predict_proba(self.tfidf.transform([sentence]))
+                    sentiment_name = self.model.predict(self.tfidf.transform([sentence]))
 
                     emotion = sentiment_name[0]
                     intensity = sentiment_score.max()
@@ -170,6 +176,9 @@ class EmotClassify:
     def get_site_count(self):
         return self.site_visit_counts
 
+    def get_total_sites(self):
+        return self.total_sites
+
     def get_total_site_visit(self):
         return f"{len(self.site_visit_counts)} Sites"
 
@@ -178,6 +187,9 @@ class EmotClassify:
     
     def get_split_chart_values(self):
         return self.splitChartValues
+
+    def get_wordcloud_bag(self):
+        return self.wordCloudBag
 
     def startAll(self):
         threads = []
@@ -193,6 +205,10 @@ class EmotClassify:
         # process3.start()
         # threads.append(process3)
 
+        process4 = threading.Thread(target=self.negAndPos)
+        process4.start()
+        threads.append(process4)
+
         for process in threads:
             process.join()
 
@@ -200,6 +216,8 @@ class EmotClassify:
 def main():
     test = EmotClassify()
     test.startAll()
+
+    print(test.get_wordcloud_bag())
 
 
 if __name__ == '__main__':

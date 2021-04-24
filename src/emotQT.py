@@ -2,7 +2,7 @@ import sys
 # import threading
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from pyqt import main_window, windows  # reportsInfo
+from pyqt import main_window, windows, metrics  # reportsInfo
 from qtWorker import Worker
 
 from eMot import Emot
@@ -24,7 +24,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.AboutWindow = windows.About()
         self.DialogWindow = windows.Dialog()
         self.PreferenceWindow = windows.Preference()
-        self.MetricsDashboard = windows.MetricsDashboard()
+        self.MetricsDashboard = metrics.MetricsDashboard()
 
         # file menu
         self.actionAbout.triggered.connect(
@@ -65,8 +65,8 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
         else:
             self.setupPrintPage()
-            self.MetricsDashboard.browserUsedEdit.setPlainText(self.browser)
-            self.MetricsDashboard.dateUsedEdit.setPlainText(self.filtr)
+            self.MetricsDashboard.browserUsedEdit.setText(self.browser)
+            self.MetricsDashboard.dateUsedEdit.setText(self.filtr)
 
     def setupPrintPage(self):
         self.stackedWidget.setCurrentWidget(self.printPage)
@@ -96,7 +96,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         print("\nClick to find out more!")
 
         self.MetricsDashboard.makeCharts(self.emotClassify)
-        self.MetricsDashboard.sitesVisitedEdit.setPlainText(self.emotClassify.get_total_site_visit())
+        self.MetricsDashboard.sitesVisitedEdit.setText(self.emotClassify.get_total_site_visit())
         self.startDrawing()
         self.results_button.setEnabled(True)
         self.results_button.setText("Show Results!")
@@ -114,18 +114,15 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.threadpool.start(worker)
 
     def draw_WordCloud(self):
-        data = ["happy", "sad", "hungry", "hungry", "design", "right", "wrong", "end", "happy"]
+        data = self.emotClassify.get_wordcloud_bag()
         words = ' '.join(data)
         wordcloud = WordCloud(
             background_color="white",
             width=2500, height=2000).generate(words)
 
-        wordcloud.to_file("pyqt/wordCloud.png")
-        self.MetricsDashboard.wordCloud.setPixmap(QtGui.QPixmap("pyqt/wordCloud.png"))
-        self.MetricsDashboard.wordCloud.setScaledContents(True)
-
-        # self.pixmap = QtGui.QPixmap("pyqt/wordCloud.png")
-        # TODO: fix scaling of photo
+        wordCloudImage = "pyqt/wordCloud.png"
+        wordcloud.to_file(wordCloudImage)
+        self.MetricsDashboard.showImage(wordCloudImage)
 
     def closeEvent(self, event):
         """Shuts down application on close."""

@@ -7,14 +7,13 @@ import sys
 # import cProfile, io, pstats
 
 from sklearn.linear_model import LogisticRegression
-from sklearn.feature_extraction.text import CountVectorizer  # , TfidfVectorizer
+from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics import accuracy_score, f1_score
 from sklearn.model_selection import train_test_split, GridSearchCV
 
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.absolute()))
 from utils.textMod import saveFiles, spellCheck, preprocessAndTokenise
-# from utils.textMod import preProcess
 
 
 def calculateCValue(x_train_fit, y_train):

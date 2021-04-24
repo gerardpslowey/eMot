@@ -3,8 +3,8 @@ import json
 
 class Blacklists:
 
-    def __init__(self):
-        self.filename = "blacklists.json"
+    def __init__(self, filename=None):
+        self.filename = "utils/blacklists.json"
 
     def getItems(self, blacklist=None):
         try:
