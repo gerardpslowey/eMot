@@ -8,7 +8,8 @@ from PyQt5.QtWidgets import QMainWindow
 from PyQt5 import QtCore
 
 colours = [QColor("#83677B"), QColor("#379683"), QColor("salmon"),
-            QColor("#7395AE"), QColor("#D79922"),QColor("#99738E")]
+           QColor("#7395AE"), QColor("#D79922"), QColor("#99738E")]
+
 
 class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
@@ -54,6 +55,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         for i, value in enumerate(self.siteVisitStats.values()):
             barSets[i].append(value)       # add number of visits to set
             series.append(barSets[i])
+            barSets[i].setColor(colours[i % 6])
 
         chart = QChart()
 
@@ -78,7 +80,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
     def makeSplitChart(self):
         # create a new QBarSet for each emotion in emotions
-        barSets = [QBarSet(emotion) for emotion in self.emotions] # 6 emotions
+        barSets = [QBarSet(emotion) for emotion in self.emotions]  # 6 emotions
         series = QPercentBarSeries()
 
         # for each website
@@ -91,9 +93,8 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
         # append the completed barSet to the series
         for i in range(len(barSets)):
-            chunks = series.append(barSets[i])
-            # chunks.setBrush(colours[i])
-
+            series.append(barSets[i])
+            barSets[i].setColor(colours[i])
 
         chart = QChart()
         chart.addSeries(series)
@@ -169,7 +170,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         xAxis.setGridLineVisible(False)
 
         chart = QChart()
-        chart.setAnimationOptions(QChart.SeriesAnimations)
+        chart.setAnimationOptions(QChart.GridAxisAnimations)
         chart.addSeries(series)
 
         chart.addAxis(yAxis, Qt.AlignLeft)

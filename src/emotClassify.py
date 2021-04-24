@@ -3,7 +3,6 @@ import pickle
 import threading
 from utils.urlFilter import base
 import copy
-from collections import OrderedDict
 
 scrapedFile = 'sentimentAnalysis/scraped.csv'
 
@@ -14,23 +13,12 @@ class EmotClassify:
         # make a nested dictionary setting the emotion count values to zero
         self.emotions_dict = dict.fromkeys(self.emotions, 0)
 
-        self.emotion_count = {
-            "anger": 0,
-            "fear": 0,
-            "joy": 0,
-            "surprise": 0,
-            "happiness": 0,
-            "sadness": 0
-        }
+        self.emotion_count = {}
+        self.emotion_intensity = {}
 
-        self.emotion_intensity = {
-            "anger": 0,
-            "fear": 0,
-            "joy": 0,
-            "surprise": 0,
-            "happiness": 0,
-            "sadness": 0
-        }
+        for emotion in self.emotions:
+            self.emotion_count[emotion] = 0
+            self.emotion_intensity[emotion] = 0
 
         self.emotionsPerSiteDict = {}
         # self.emotionsPerSiteDict = OrderedDict()
@@ -90,7 +78,8 @@ class EmotClassify:
                     if intensity > self.emotion_intensity.get(emotion):
                         # round the intensity float to 2 decimal place
                         self.emotion_intensity[emotion] = round(intensity, 2)
-                        self.sentenceExamples.append(tuple((intensity, emotion, sentence)))
+                        self.wordCloudBag.append(sentence)
+                        self.sentenceExamples.append(tuple((round(intensity, 2), emotion, sentence)))
 
             # total site visits = the number of sites visited
             self.total_sites = len(self.emotionsPerSiteDict)
@@ -112,9 +101,10 @@ class EmotClassify:
             print(f"website: {*self.emotions,}")
             self.prettyPrint(self.emotionsPerSiteDict.items(), "lst")
 
-            print("\nExamples of emotion based sentences")
+            print("\nExamples of emotion based sentences: ")
             self.sentenceExamples.sort(key=lambda tup: tup[0], reverse=True)  # sorts in place
-            print(self.sentenceExamples[:10])
+            for item in self.sentenceExamples[:10]:
+                print(f"{item[0]:.1%} {item[1]} = {item[2]}")
 
     def negAndPos(self):
         coef_avg = 0
@@ -173,9 +163,6 @@ class EmotClassify:
     def get_total_site_visit(self):
         return f"{len(self.site_visit_counts)} Sites"
 
-    def get_total_sites(self):
-        return self.total_sites
-    
     def get_split_chart_values(self):
         return self.splitChartValues
 
@@ -192,9 +179,9 @@ class EmotClassify:
         process2.start()
         threads.append(process2)
 
-        process3 = threading.Thread(target=self.negAndPos)
-        process3.start()
-        threads.append(process3)
+        # process3 = threading.Thread(target=self.negAndPos)
+        # process3.start()
+        # threads.append(process3)
 
         for process in threads:
             process.join()

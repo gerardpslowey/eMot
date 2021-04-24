@@ -102,7 +102,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
             "background-color: rgb(103, 171, 159);\n"
             "border: 1px solid black;\n"
             "border-radius: 10px;"
-            )
+        )
 
     def createMetrics(self):
         self.MetricsDashboard.show()
