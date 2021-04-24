@@ -44,7 +44,7 @@ class Emot:
         queue = Queue()
         for url in self.urls:
             queue.put(url)
-        print("URLs added to queue!")
+        print("URLs added to queue! \nScraping Sites: ")
 
         """
         asynchronous execution of tasks using threads
@@ -52,9 +52,11 @@ class Emot:
         """
         with futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
             f = []
+            i = 1
             while not queue.empty():
                 url = queue.get()
-                f.append(executor.submit(Scraper().scrape, url=url))
+                f.append(executor.submit(Scraper().scrape, url=url, task=i))
+                i += 1
 
             # Deal with the threads as they complete individually
             for future in futures.as_completed(f):
@@ -69,9 +71,9 @@ class Emot:
                     self.writeToCSV(url, originalText)
 
         if len(self.urls) > 0:
-            print("Finished scraping!")
+            print("Finished Scraping!\n")
         else:
-            print("Nothing to scrape!")
+            print("Nothing to scrape!\n")
 
     def overwriteCSV(self):
         with open(self.scraped_csv, mode='w', encoding="utf-8", newline='') as scraped_text:

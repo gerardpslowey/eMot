@@ -11,6 +11,7 @@ colours = [QColor("#83677B"), QColor("#379683"), QColor("salmon"),
             QColor("#7395AE"), QColor("#D79922"),QColor("#99738E")]
 
 class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
+
     def __init__(self, *args, obj=None, **kwargs):
         super(MetricsDashboard, self).__init__(*args, **kwargs)
         self.setupUi(self)

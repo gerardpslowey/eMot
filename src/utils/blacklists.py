@@ -3,7 +3,7 @@ import json
 
 class Blacklists:
 
-    def __init__(self, filename=None):
+    def __init__(self):
         self.filename = "utils/blacklists.json"
 
     def getItems(self, blacklist=None):

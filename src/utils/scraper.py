@@ -7,18 +7,18 @@ from .blacklists import Blacklists
 
 
 class Scraper:
-    def scrape(self, url):
-        blacklist = Blacklists("blacklists.json")
+    def scrape(self, url, task):
+        blacklist = Blacklists()
         tagSet = blacklist.getItems()['tagSet']
-        print(f"scraping site: {url}", end="\n")
+        print(f"{task}. {url}")
         soup = self.getSoup(url)
 
         if(len(soup) != 0):
             text = self.getText(soup, tagSet)
-            print(f'task {url} finished')
+            print(f'Task {task} Finished')
             return (url, text)
 
-        print(f"task {url} returned null, skipped")
+        print(f"{task}. {url} returned null, skipped")
         return None
 
     def getSoup(self, url):
@@ -43,8 +43,8 @@ class Scraper:
             sentence = sentence.strip().lower()
             if (str(sentence) and not re.search(
                 '(we and our partners use|we and our partners store|'
-                + 'personalised ads and content|our privacy policy|'  # noqa
-                + 'click below to consent)',  # noqa
+                + 'personalised ads and content|our privacy policy|'    # noqa
+                + 'click below to consent)',                            # noqa
                     sentence.lower())):
 
                 cleaned.append(preProcess(sentence))
@@ -54,7 +54,7 @@ class Scraper:
 
 def main():
     url = 'https://webscraper.io/test-sites/e-commerce/allinone/computers'
-    print(Scraper().scrape(url))
+    print(Scraper().scrape(url, 1))
 
 
 if __name__ == "__main__":
