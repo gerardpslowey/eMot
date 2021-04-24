@@ -7,6 +7,8 @@ from PyQt5.QtGui import QPen, QColor, QPixmap
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5 import QtCore
 
+colours = [QColor("#83677B"), QColor("#379683"), QColor("salmon"),
+            QColor("#7395AE"), QColor("#D79922"),QColor("#99738E")]
 
 class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
     def __init__(self, *args, obj=None, **kwargs):
@@ -87,8 +89,10 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
                 barSets[j].append(barStatArray[j])
 
         # append the completed barSet to the series
-        for barSet in barSets:
-            series.append(barSet)
+        for i in range(len(barSets)):
+            chunks = series.append(barSets[i])
+            # chunks.setBrush(colours[i])
+
 
         chart = QChart()
         chart.addSeries(series)
@@ -117,9 +121,6 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
     def makePieChart(self):
         # get the data
         emotions = dict(sorted(self.pieStats.items(), key=lambda item: item[1], reverse=True))
-
-        colours = [QColor("#83677B"), QColor("#379683"), QColor("salmon"),
-                   QColor("#7395AE"), QColor("#D79922"),QColor("#99738E")]
 
         series = QPieSeries()
         for i, (emotion, value) in enumerate(emotions.items()):
