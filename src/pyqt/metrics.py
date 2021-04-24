@@ -1,6 +1,6 @@
 from pyqt.metrics_window import Ui_MetricsDashboard
 from PyQt5.QtChart import QChart, QLineSeries, QValueAxis, QCategoryAxis
-from PyQt5.QtChart import QBarSet, QStackedBarSeries, QBarCategoryAxis
+from PyQt5.QtChart import QBarSet, QPercentBarSeries, QBarCategoryAxis
 from PyQt5.QtChart import QPieSeries, QBarSeries
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPen, QColor, QPixmap
@@ -19,7 +19,6 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         self.previousPageButton.clicked.connect(self.changePage)
 
     def showImage(self, image):
-
         self.image = QPixmap(image)
         self.image.scaled(self.wordCloud.size(), Qt.KeepAspectRatio)
         self.wordCloud.setPixmap(self.image)
@@ -76,8 +75,8 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
     def makeSplitChart(self):
         # create a new QBarSet for each emotion in emotions
-        barSets = [QBarSet(emotion) for emotion in self.emotions]  # 6 emotions
-        series = QStackedBarSeries()
+        barSets = [QBarSet(emotion) for emotion in self.emotions] # 6 emotions
+        series = QPercentBarSeries()
 
         # for each website
         for i in range(self.visitedUniqueSites):
@@ -85,8 +84,9 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
             barStatArray = self.splitBarStats[i]
             for j in range(len(barStatArray)):
                 # add that emotion to the barset
-                barSets[j].append(barStatArray[j])       # add amount of emotion to barset.
+                barSets[j].append(barStatArray[j])
 
+        # append the completed barSet to the series
         for barSet in barSets:
             series.append(barSet)
 
@@ -97,11 +97,18 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
         # categories are the website names
         categories = list(self.siteVisitStats.keys())
-        axis = QBarCategoryAxis()
-        axis.append(categories)
+        axisX = QBarCategoryAxis()
+        axisX.append(categories)
+
+        axisY = QValueAxis()
+        axisY.setTickCount(11)
+        axisY.setRange(0, 100)
+        axisY.setTitleText("% Emotion Per Site")
 
         chart.createDefaultAxes()
-        chart.setAxisX(axis, series)
+        chart.setAxisX(axisX, series)
+        chart.setAxisY(axisY)
+
         chart.legend().setVisible(True)
         chart.legend().setAlignment(Qt.AlignBottom)
 
@@ -112,7 +119,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         emotions = dict(sorted(self.pieStats.items(), key=lambda item: item[1], reverse=True))
 
         colours = [QColor("#83677B"), QColor("#379683"), QColor("salmon"),
-                   QColor("#7395AE"), QColor("#D79922"), QColor("#99738E")]
+                   QColor("#7395AE"), QColor("#D79922"),QColor("#99738E")]
 
         series = QPieSeries()
         for i, (emotion, value) in enumerate(emotions.items()):
@@ -160,6 +167,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         xAxis.setGridLineVisible(False)
 
         chart = QChart()
+        chart.setAnimationOptions(QChart.SeriesAnimations)
         chart.addSeries(series)
 
         chart.addAxis(yAxis, Qt.AlignLeft)

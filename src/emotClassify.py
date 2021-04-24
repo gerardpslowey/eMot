@@ -110,8 +110,10 @@ class EmotClassify:
                 print(f"{key}: {value}")
 
             print("\nSites and associated article primary emotion: ")
+            print(f"website: {*self.emotions,}")
             for key, value in self.emotionsPerSiteDict.items():
-                print(f"{key}: {value}")
+                print(f"{key}: {*list(value.values()),}")
+
 
     # def documentClassify(self):
     #     scraped_document_df = pd.read_csv(scrapedFile).astype('U')
