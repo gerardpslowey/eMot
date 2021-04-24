@@ -2,7 +2,7 @@ import sys
 # import threading
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from pyqt import main_window, windows  # reportsInfo
+from pyqt import main_window, windows, metrics  # reportsInfo
 from qtWorker import Worker
 
 from eMot import Emot
@@ -24,7 +24,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.AboutWindow = windows.About()
         self.DialogWindow = windows.Dialog()
         self.PreferenceWindow = windows.Preference()
-        self.MetricsDashboard = windows.MetricsDashboard()
+        self.MetricsDashboard = metrics.MetricsDashboard()
 
         # file menu
         self.actionAbout.triggered.connect(

@@ -50,7 +50,7 @@ def preProcess(data):
 
 # remove floats and ints
 def removeNums(sentence):
-    return re.sub("/(\d+(?:\.\d+)?)/", "", sentence)
+    return re.sub("/(\d+(?:\.\d+)?)/", "", sentence) # noqa
 
 
 def cleanScrapedText(document):

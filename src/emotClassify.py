@@ -1,10 +1,9 @@
 import pandas as pd
 import pickle
 import threading
-# import logging
-from utils.urlFilter import base
-# from pyqt import reportsInfo
 import copy
+from collections import OrderedDict
+from utils.urlFilter import base
 
 scrapedFile = 'sentimentAnalysis/scraped.csv'
 
@@ -12,27 +11,17 @@ scrapedFile = 'sentimentAnalysis/scraped.csv'
 class EmotClassify:
     def __init__(self):
         self.emotions = ['anger', 'fear', 'joy', 'surprise', 'happiness', 'sadness']
+
+        # make a nested dictionary setting the emotion count values to zero
         self.emotions_dict = dict.fromkeys(self.emotions, 0)
 
-        self.emotion_count = {
-            "anger": 0,
-            "fear": 0,
-            "joy": 0,
-            "surprise": 0,
-            "happiness": 0,
-            "sadness": 0
-        }
+        self.emotion_count = OrderedDict()
+        self.emotion_intensity = OrderedDict()
+        for emotion in self.emotions:
+            self.emotion_count[emotion] = 0
+            self.emotion_intensity[emotion] = 0
 
-        self.emotion_intensity = {
-            "anger": 0,
-            "fear": 0,
-            "joy": 0,
-            "surprise": 0,
-            "happiness": 0,
-            "sadness": 0
-        }
-
-        self.emotions_per_site = {}
+        self.emotionsPerSiteDict = OrderedDict()
 
         self.site_visit_counts = None
         self.total_sites = 0
@@ -42,6 +31,7 @@ class EmotClassify:
         self.model = self.loadFiles(self.svc_model)
         self.tfidf = self.loadFiles(self.svc_tfidf_file)
 
+        # an emopty array for line chart array values
         self.splitChartValues = []
         self.wordCloudBag = []
 
@@ -57,7 +47,8 @@ class EmotClassify:
             print(f"{key}: {value}")
 
     def sentenceClassify(self):
-        scraped_df = pd.read_csv(scrapedFile)
+        scraped_df = pd.read_csv(scrapedFile).astype('U')
+        scraped_df.dropna()
 
         try:
             for row in scraped_df.itertuples(index=False):
@@ -90,7 +81,8 @@ class EmotClassify:
                 print(f"{key}: {value}")
 
     def documentClassify(self):
-        scraped_document_df = pd.read_csv(scrapedFile)
+        scraped_document_df = pd.read_csv(scrapedFile).astype('U')
+        scraped_document_df.dropna()
 
         scraped_document_df['base'] = scraped_document_df['url'].apply(base)
         # create a list of unique base sites
@@ -98,7 +90,7 @@ class EmotClassify:
         # create a nested dictionary for each site
         # TODO do a write up on this shallow vs deepcopies
         for site in sitesList:
-            self.emotions_per_site[site] = copy.deepcopy(self.emotions_dict)
+            self.emotionsPerSiteDict[site] = copy.deepcopy(self.emotions_dict)
 
         try:
             for row in scraped_document_df.itertuples(index=False):
@@ -109,18 +101,23 @@ class EmotClassify:
                 sentiment_name = self.model.predict(self.tfidf.transform([text]))
                 emotion = sentiment_name[0]
 
-                self.emotions_per_site[url][emotion] += 1
+                self.emotionsPerSiteDict[url][emotion] += 1
+
+            # total site visits = the number of sites visited
+            self.total_sites = len(self.emotionsPerSiteDict)
+
+            # rearranging the list of emotions 90* for the split bar chart.
+            for _ in range(self.total_sites):
+                for siteEmotionDict in self.emotionsPerSiteDict.values():
+                    self.splitChartValues.append(list(siteEmotionDict.values()))
 
         except pd.errors.EmptyDataError:
             print("Nothing to classify, the file is empty")
         finally:
             print("\nSites and associated article primary emotion: ")
-            for key, value in self.emotions_per_site.items():
-                print(f"{key}: {value}")
-
-            # rearranging the list of emotions 90* for the split bar chart.
-                for value in self.emotions_per_site.values():
-                    self.splitChartValues.append(list(value.values()))
+            print(f"website: {*self.emotions,}")
+            for key, value in self.emotionsPerSiteDict.items():
+                print(f"{key}: {*list(value.values()),}")
 
     def negAndPos(self):
 
@@ -134,14 +131,14 @@ class EmotClassify:
             word: coef for word, coef in zip(self.tfidf.get_feature_names(), coef_avg[0])}
 
         # print('Angry Words')
-        for best_positive in sorted(feature_to_coef.items(), key=lambda x: x[1], reverse=True)[:25]:
-            # print(best_positive)
-            self.wordCloudBag.append(best_positive[0])
+        for most_angry in sorted(feature_to_coef.items(), key=lambda x: x[1], reverse=True)[:25]:
+            # print(most_angry)
+            self.wordCloudBag.append(most_angry[0])
 
         # print('Sad Words')
-        for best_negative in sorted(feature_to_coef.items(), key=lambda x: x[1])[:10]:
-            # print(best_negative)
-            self.wordCloudBag.append(best_negative[0])
+        for most_sad in sorted(feature_to_coef.items(), key=lambda x: x[1])[:10]:
+            # print(most_sad)
+            self.wordCloudBag.append(most_sad[0])
 
     def loadFiles(self, filename):
         with open(filename, 'rb') as file:
@@ -156,11 +153,14 @@ class EmotClassify:
     def get_emotion_intensity(self):
         return self.emotion_intensity
 
-    def get_emotions_per_site(self):
-        return self.emotions_per_site
+    def get_emotionsPerSiteDict(self):
+        return self.emotionsPerSiteDict
 
     def get_site_count(self):
         return self.site_visit_counts
+
+    def get_total_sites(self):
+        return self.total_sites
 
     def get_total_site_visit(self):
         return f"{len(self.site_visit_counts)} Sites"

@@ -2,7 +2,7 @@ import requests, re
 # import cProfile, io, pstats
 from bs4 import BeautifulSoup, Comment, Doctype
 
-from .textMod import preProcess  # , preprocessAndTokenise, removeURLs
+from .textMod import preProcess
 from .blacklists import Blacklists
 
 
@@ -43,8 +43,8 @@ class Scraper:
             sentence = sentence.strip().lower()
             if (str(sentence) and not re.search(
                 '(we and our partners use|we and our partners store|'
-                + 'personalised ads and content|our privacy policy|'
-                + 'click below to consent)',
+                + 'personalised ads and content|our privacy policy|'  # noqa
+                + 'click below to consent)',  # noqa
                     sentence.lower())):
 
                 cleaned.append(preProcess(sentence))

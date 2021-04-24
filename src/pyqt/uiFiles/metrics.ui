@@ -20,8 +20,8 @@
    <string>Metrics Dashboard</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>../resources/icon.png</normaloff>../resources/icon.png</iconset>
+   <iconset resource="../resources/resource.qrc">
+    <normaloff>:/newPrefix/icon.png</normaloff>:/newPrefix/icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -140,7 +140,26 @@ border-radius: 10px;</string>
           <item>
            <layout class="QHBoxLayout" name="cloudTextLayout" stretch="4,1">
             <item>
-             <layout class="QVBoxLayout" name="cloudLayout">
+             <layout class="QVBoxLayout" name="cloudLayout" stretch="1,5">
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_5">
+                <item>
+                 <widget class="QLabel" name="label">
+                  <property name="font">
+                   <font>
+                    <pointsize>16</pointsize>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>WordCloud of Negative Emotions Found</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
               <item>
                <widget class="QLabel" name="wordCloud">
                 <property name="sizePolicy">
@@ -151,8 +170,8 @@ border-radius: 10px;</string>
                 </property>
                 <property name="maximumSize">
                  <size>
-                  <width>625</width>
-                  <height>500</height>
+                  <width>750</width>
+                  <height>600</height>
                  </size>
                 </property>
                 <property name="font">
