@@ -67,16 +67,17 @@ class EmotClassify:
                     emotion = sentiment_name[0]
                     intensity = sentiment_score.max()
 
-                    # count total emotion count
-                    self.emotion_count[emotion] += 1
-                    # count of distribution of emotions per site
-                    self.emotionsPerSiteDict[url][emotion] += 1
+                    if intensity >= 0.6:
+                        # count total emotion count
+                        self.emotion_count[emotion] += 1
+                        # count of distribution of emotions per site
+                        self.emotionsPerSiteDict[url][emotion] += 1
 
-                    if intensity > self.emotion_intensity.get(emotion):
-                        # round the intensity float to 2 decimal place
-                        self.emotion_intensity[emotion] = round(intensity, 2)
-                        self.wordCloudBag.append(sentence)
-                        self.sentenceExamples.append(tuple((round(intensity, 2), emotion, sentence)))
+                        if intensity > self.emotion_intensity.get(emotion):
+                            # round the intensity float to 2 decimal place
+                            self.emotion_intensity[emotion] = round(intensity, 2)
+                            self.wordCloudBag.append(sentence)
+                            self.sentenceExamples.append(tuple((round(intensity, 2), emotion, sentence)))
 
             # total site visits = the number of sites visited
             self.total_sites = len(self.emotionsPerSiteDict)
