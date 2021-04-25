@@ -54,7 +54,7 @@ class GetHistory():
             return ''
 
         else:
-            print(f"Filter spelling error: is {times} valid?")
+            print(f"Filter error: is {times} valid?")
             return None
 
     def strFormat(self, time):

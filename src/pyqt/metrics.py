@@ -6,6 +6,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPen, QColor, QPixmap
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5 import QtCore
+import sys
 
 colours = [
     QColor("#83677B"), QColor("#379683"), QColor("salmon"),
@@ -187,3 +188,9 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
         chart.legend().setVisible(False)
         self.lineChart.setChart(chart)
+
+    def closeEvent(self, event):
+        """Shuts down application on close."""
+        # Return stdout to defaults.
+        sys.stdout = sys.__stdout__
+        super().closeEvent(event)
