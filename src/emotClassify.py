@@ -19,14 +19,14 @@ class EmotClassify:
         self.emotionsPerSiteDict = {}
         # self.emotionsPerSiteDict = OrderedDict()
 
-        self.sentenceExamples = []
+        self.sentenceExamples = set()
 
         self.site_visit_counts = None
         self.total_sites = 0
 
         self.svc_model = "models/svc.pkl"
         self.svc_tfidf_file = "models/svc_tfidf.pkl"
-        self.model = self.loadFiles(self.svc_model)
+        self.model_1 = self.loadFiles(self.svc_model)
         self.tfidf = self.loadFiles(self.svc_tfidf_file)
 
         # an empty array for line chart array values
@@ -61,8 +61,8 @@ class EmotClassify:
 
                 # score each sentence
                 for sentence in text.split("|"):
-                    sentiment_score = self.model.predict_proba(self.tfidf.transform([sentence]))
-                    sentiment_name = self.model.predict(self.tfidf.transform([sentence]))
+                    sentiment_score = self.model_1.predict_proba(self.tfidf.transform([sentence]))
+                    sentiment_name = self.model_1.predict(self.tfidf.transform([sentence]))
 
                     emotion = sentiment_name[0]
                     intensity = sentiment_score.max()
@@ -77,7 +77,7 @@ class EmotClassify:
                             # round the intensity float to 2 decimal place
                             self.emotion_intensity[emotion] = round(intensity, 2)
                             self.wordCloudBag.append(sentence)
-                            self.sentenceExamples.append(tuple((round(intensity, 2), emotion, sentence)))
+                            self.sentenceExamples.update([tuple((round(intensity, 2), emotion, sentence))])
 
             # total site visits = the number of sites visited
             self.total_sites = len(self.emotionsPerSiteDict)
@@ -100,8 +100,10 @@ class EmotClassify:
             self.prettyPrint(self.emotionsPerSiteDict.items(), "lst")
 
             print("\nExamples of emotion based sentences: ")
-            self.sentenceExamples.sort(key=lambda tup: tup[0], reverse=True)  # sorts in place
-            for item in self.sentenceExamples[:10]:
+
+            sentenceExampleList = list(self.sentenceExamples)
+            sentenceExampleList.sort(key=lambda tup: tup[0], reverse=True)
+            for item in sentenceExampleList[0:int(len(sentenceExampleList) / 2)]:
                 print(f"{item[0]:.1%} {item[1]} = {item[2]}")
 
     def prettyPrint(self, items, format=None):
