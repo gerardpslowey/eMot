@@ -40,7 +40,6 @@ def preProcess(data):
     data = removeURLs(data)
     data = removeHashandSymbols(data)
     data = removeAscii(data)
-    data = removeNums(data)
     data = data.strip()
     # tokenise
     mytokens = nlp(data)
@@ -51,11 +50,6 @@ def preProcess(data):
     ]
 
     return " ".join(stem_data)
-
-
-# remove floats and ints
-def removeNums(sentence):
-    return re.sub("/(\d+(?:\.\d+)?)/", "", sentence) # noqa
 
 
 # remove html markup
