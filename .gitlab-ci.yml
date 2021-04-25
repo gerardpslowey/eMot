@@ -4,9 +4,6 @@ stages:
   - lint
   - test
 
-before_script:
-  - apt-get update
-
 flake8:
   stage: lint
   script:

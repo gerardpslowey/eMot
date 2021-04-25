@@ -16,7 +16,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.absolute()))
 from utils.textMod import spellCheck, preprocessAndTokenise
 
-from .modelFuncs import saveFiles
+from modelFuncs import saveFiles
 
 
 def main():
@@ -25,12 +25,8 @@ def main():
     df_fear = pd.read_csv('../datasets/fear.csv')
     df_joy = pd.read_csv('../datasets/joy.csv')
     df_surprise = pd.read_csv('../datasets/surprise.csv')
-
     df_happiness = pd.read_csv('../datasets/happiness.csv')
-    df_happiness = df_happiness.sample(n=5000)
-
     df_sadness = pd.read_csv('../datasets/sadness.csv')
-    df_sadness = df_sadness.sample(n=5000)
 
     data_set = [df_anger, df_fear, df_joy, df_surprise, df_happiness, df_sadness]
 

@@ -2,7 +2,7 @@
 import pandas as pd
 
 # plots and metrics
-from modelFuncs import plot_confusion_matrix
+from modelFuncs import plot_confusion_matrix, saveFiles
 from sklearn.metrics import accuracy_score, f1_score
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.model_selection import train_test_split
@@ -18,24 +18,18 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.absolute()))
 from utils.textMod import spellCheck, preprocessAndTokenise
 
-from .modelFuncs import saveFiles
-
 from tqdm import tqdm
 tqdm.pandas()
 
 
 def main():
     print("Loading Data Sets")
-    df_anger = pd.read_csv('../datasets/anger.csv')
-    df_fear = pd.read_csv('../datasets/fear.csv')
-    df_joy = pd.read_csv('../datasets/joy.csv')
-    df_surprise = pd.read_csv('../datasets/surprise.csv')
-
-    df_happiness = pd.read_csv('../datasets/happiness.csv')
-    df_happiness = df_happiness.sample(n=5000)
-
-    df_sadness = pd.read_csv('../datasets/sadness.csv')
-    df_sadness = df_sadness.sample(n=5000)
+    df_anger = pd.read_csv('../datasets/anger.csv').astype('U')
+    df_fear = pd.read_csv('../datasets/fear.csv').astype('U')
+    df_joy = pd.read_csv('../datasets/joy.csv').astype('U')
+    df_surprise = pd.read_csv('../datasets/surprise.csv').astype('U')
+    df_happiness = pd.read_csv('../datasets/happiness.csv').astype('U')
+    df_sadness = pd.read_csv('../datasets/sadness.csv').astype('U')
 
     data_set = [
         df_anger,
@@ -81,7 +75,6 @@ def main():
     X_test_vect = vect.transform(X_test)
 
     lsvc = LinearSVC(
-        tol=1e-05,
         max_iter=10000,
         penalty='l2',
         loss='hinge',
