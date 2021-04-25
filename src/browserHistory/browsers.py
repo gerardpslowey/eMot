@@ -1,7 +1,6 @@
 # Functions to define all supported browsers and their functionality.
-
-import datetime, os, sys  # noqa
-from .generic import Browser, ChromiumBasedBrowser
+import datetime  # noqa
+from .outputConfig import Browser, ChromiumBasedBrowser
 
 
 # Google Chrome on Windows, Linux and Mac
@@ -29,7 +28,11 @@ class Firefox(Browser):
 
     history_SQL = """
         SELECT
-            datetime(visit_date/1000000, 'unixepoch', 'localtime') AS 'visit_time',
+            datetime(
+                visit_date/1000000,
+                'unixepoch',
+                'localtime'
+            ) AS 'visit_time',
             url
         FROM
             moz_historyvisits
@@ -52,7 +55,11 @@ class Safari(Browser):
 
     history_SQL = """
         SELECT
-            datetime(visit_time + 978307200, 'unixepoch', 'localtime') as visit_time,
+            datetime(
+                visit_time + 978307200,
+                'unixepoch',
+                'localtime'
+            ) as visit_time,
             url
         FROM
             history_visits

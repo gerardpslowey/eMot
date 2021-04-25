@@ -1,12 +1,10 @@
 # This module defines the generic base class and the functionality.
 from abc import ABC
-# from abc import abstractmethod
 from datetime import datetime
 import os, shutil, sqlite3, tempfile, typing
 from collections import defaultdict
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
-# from typing import Callable
 from urllib.parse import urlparse
 from . import platform
 
@@ -19,7 +17,6 @@ Currently, only browsers which save the history in SQLite files are supported.
 
 
 class Browser(ABC):
-
     # Boolean indicating whether the browser supports multiple profiles.
     profile_support = False
 
@@ -79,8 +76,10 @@ class Browser(ABC):
         for files in os.walk(str(self.history_dir)):
 
             # Generator expression to reduce cognitive complexity.
-            paths = (str(files[0]).split(str(self.history_dir), maxsplit=1)[-1] for item in files[2]
-                     if os.path.split(os.path.join(files[0], item))[-1] == profile_file)
+            paths = (
+                str(files[0]).split(str(self.history_dir), maxsplit=1)[-1] for item in files[2]
+                if os.path.split(os.path.join(files[0], item))[-1] == profile_file
+            )
 
             for path in paths:
                 if path.startswith(os.sep):             # os.sep checks if '/' or '\' used
@@ -160,7 +159,6 @@ class Browser(ABC):
 
 # A generic class to encapsulate history outputs
 class Outputs:
-
     # List of tuples of timestamp & URL
     histories: List[Tuple[datetime, str]]
 

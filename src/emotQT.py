@@ -93,7 +93,8 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         print("\nClick the 'Show Results' button to view the results!")
 
         self.MetricsDashboard.makeCharts(self.emotClassify)
-        self.MetricsDashboard.sitesVisitedEdit.setText(self.emotClassify.get_total_site_visit())
+        sites = f"{len(self.emotClassify.get_site_count())} Sites"
+        self.MetricsDashboard.sitesVisitedEdit.setText(sites)
         self.startDrawing()
         self.results_button.setEnabled(True)
         self.results_button.setText("Show Results!")

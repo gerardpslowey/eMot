@@ -3,12 +3,8 @@ from pyqt.browser_dialog import Ui_browserDialog
 from pyqt.preferences_window import Ui_Form as PrefWindow
 from utils.blacklists import Blacklists
 from PyQt5 import QtCore
-from PyQt5.QtCore import Qt, QObject
-from PyQt5.QtGui import QPen, QColor
+from PyQt5.QtCore import QObject
 from PyQt5.QtWidgets import QMessageBox, QMainWindow
-from PyQt5.QtChart import QChart, QLineSeries, QValueAxis, QCategoryAxis
-from PyQt5.QtChart import QBarSet, QPercentBarSeries, QBarCategoryAxis
-from PyQt5.QtChart import QPieSeries, QBarSeries
 
 
 class About(QMainWindow, Ui_Form):

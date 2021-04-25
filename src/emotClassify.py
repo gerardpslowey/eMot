@@ -13,12 +13,8 @@ class EmotClassify:
         # make a nested dictionary setting the emotion count values to zero
         self.emotions_dict = dict.fromkeys(self.emotions, 0)
 
-        self.emotion_count = {}
-        self.emotion_intensity = {}
-
-        for emotion in self.emotions:
-            self.emotion_count[emotion] = 0
-            self.emotion_intensity[emotion] = 0
+        self.emotion_count = copy.deepcopy(self.emotions_dict)
+        self.emotion_intensity = copy.deepcopy(self.emotions_dict)
 
         self.emotionsPerSiteDict = {}
         # self.emotionsPerSiteDict = OrderedDict()
@@ -55,6 +51,7 @@ class EmotClassify:
         sitesList = scraped_df['base'].unique().tolist()
         # create a nested dictionary for each site
         for site in sitesList:
+            # dictionary key maps to a nested dictionary
             self.emotionsPerSiteDict[site] = copy.deepcopy(self.emotions_dict)
 
         try:
@@ -106,26 +103,6 @@ class EmotClassify:
             for item in self.sentenceExamples[:10]:
                 print(f"{item[0]:.1%} {item[1]} = {item[2]}")
 
-    def negAndPos(self):
-        coef_avg = 0
-        for i in self.model.calibrated_classifiers_:
-            coef_avg = coef_avg + i.base_estimator.coef_
-        coef_avg = coef_avg / len(self.model.calibrated_classifiers_)
-        # print(coef_avg)
-
-        feature_to_coef = {
-            word: coef for word, coef in zip(self.tfidf.get_feature_names(), coef_avg[0])}
-
-        # print('Angry Words')
-        for most_angry in sorted(feature_to_coef.items(), key=lambda x: x[1], reverse=True)[:25]:
-            # print(most_angry)
-            self.wordCloudBag.append(most_angry[0])
-
-        # print('Sad Words')
-        for most_sad in sorted(feature_to_coef.items(), key=lambda x: x[1])[:10]:
-            # print(most_sad)
-            self.wordCloudBag.append(most_sad[0])
-
     def prettyPrint(self, items, format=None):
         for key, value in items:
 
@@ -151,17 +128,11 @@ class EmotClassify:
     def get_emotion_intensity(self):
         return self.emotion_intensity
 
-    def get_emotions_per_site(self):
-        return self.emotionsPerSiteDict
-
     def get_site_count(self):
         return self.site_visit_counts
 
     def get_total_sites(self):
         return self.total_sites
-
-    def get_total_site_visit(self):
-        return f"{len(self.site_visit_counts)} Sites"
 
     def get_split_chart_values(self):
         return self.splitChartValues
@@ -178,10 +149,6 @@ class EmotClassify:
         process2 = threading.Thread(target=self.siteCount)
         process2.start()
         threads.append(process2)
-
-        # process3 = threading.Thread(target=self.negAndPos)
-        # process3.start()
-        # threads.append(process3)
 
         for process in threads:
             process.join()

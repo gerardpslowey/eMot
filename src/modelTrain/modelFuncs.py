@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt, numpy as np
 from sklearn.metrics import confusion_matrix
+import pickle, os
+from pathlib import Path
 
 
 def plot_confusion_matrix(y_true, y_pred, classes, normalize=False, title=None, cmap=plt.cm.Blues):
@@ -31,14 +33,16 @@ def plot_confusion_matrix(y_true, y_pred, classes, normalize=False, title=None, 
     ax.grid(False)
 
     # We want to show all ticks...
-    ax.set(xticks=np.arange(cm.shape[1]),
-           yticks=np.arange(cm.shape[0]),
+    ax.set(
+        xticks=np.arange(cm.shape[1]),
+        yticks=np.arange(cm.shape[0]),
 
-           # ... and label them with the respective list entries
-           xticklabels=classes, yticklabels=classes,
-           title=title,
-           ylabel='True label',
-           xlabel='Predicted label')
+        # ... and label them with the respective list entries
+        xticklabels=classes, yticklabels=classes,
+        title=title,
+        ylabel='True label',
+        xlabel='Predicted label'
+    )
 
     # Rotate the tick labels and set their alignment.
     plt.setp(
@@ -57,3 +61,14 @@ def plot_confusion_matrix(y_true, y_pred, classes, normalize=False, title=None, 
                     color="white" if cm[i, j] > thresh else "black")
     fig.tight_layout()
     return ax, plt
+
+
+# save model as pickle file
+def saveFiles(data, filename):
+    directory = "../models"
+    if not os.path.exists(directory):
+        Path(directory).mkdir(parents=True, exist_ok=True)
+
+    model_location = os.path.join(directory, filename)
+    with open(model_location, 'wb') as file:
+        pickle.dump(data, file)

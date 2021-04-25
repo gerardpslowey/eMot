@@ -12,10 +12,8 @@ from browserHistory.getHistory import GetHistory
 from utils.scraper import Scraper
 from utils.urlFilter import filterBlacklistedUrl
 from utils.blacklists import Blacklists
-# from utils.textMod import cleanScrapedText, preProcess
 
 import multiprocessing
-
 cpu_cores = multiprocessing.cpu_count()
 MAX_WORKERS = cpu_cores * 2
 
@@ -92,15 +90,6 @@ class Emot:
                     data.append(sentence)
 
             writer.writerow([url, "|".join(data)])
-
-    def getFilter(self):
-        return self.filtr
-
-    def getBrowser(self):
-        return self.browser
-
-    def getNumSites(self):
-        return self.urls
 
 
 def main():

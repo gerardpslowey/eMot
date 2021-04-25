@@ -1,10 +1,7 @@
 import pandas as pd
 from tqdm import tqdm
 tqdm.pandas()
-
 import sys
-# import re, pickle, numpy as np
-# import cProfile, io, pstats
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import CountVectorizer
@@ -13,7 +10,9 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.absolute()))
-from utils.textMod import saveFiles, spellCheck, preprocessAndTokenise
+from utils.textMod import spellCheck, preprocessAndTokenise
+
+from .modelFuncs import saveFiles
 
 
 def calculateCValue(x_train_fit, y_train):
@@ -90,15 +89,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    # pr = cProfile.Profile()
-    # pr.enable()
-
-    # my_result = main()
-
-    # pr.disable()
-    # s = io.StringIO()
-    # ps = pstats.Stats(pr, stream=s).sort_stats('tottime')
-    # ps.print_stats()
-
-    # with open('scikit_cprofile.txt', 'w+') as f:
-    #     f.write(s.getvalue())

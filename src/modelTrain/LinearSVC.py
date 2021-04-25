@@ -2,7 +2,7 @@
 import pandas as pd
 
 # plots and metrics
-from check_train import plot_confusion_matrix
+from modelFuncs import plot_confusion_matrix
 from sklearn.metrics import accuracy_score, f1_score
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.model_selection import train_test_split
@@ -16,7 +16,9 @@ from sklearn.svm import LinearSVC
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.absolute()))
-from utils.textMod import saveFiles, spellCheck, preprocessAndTokenise
+from utils.textMod import spellCheck, preprocessAndTokenise
+
+from .modelFuncs import saveFiles
 
 from tqdm import tqdm
 tqdm.pandas()
