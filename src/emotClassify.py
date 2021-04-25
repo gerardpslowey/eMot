@@ -119,8 +119,8 @@ class EmotClassify:
         self.totalSiteCount = len(self.emotionsPerSite)
 
         for _ in range(self.totalSiteCount):
-            for siteEmotionDict in self.emotionsPerSite.values():
-                self.splitChartValues.append(list(siteEmotionDict.values()))
+            for emotionsPerSite in self.emotionsPerSite.values():
+                self.splitChartValues.append(list(emotionsPerSite.values()))
 
     def prettyPrint(self, items, format=None):
         for key, value in items:
@@ -158,6 +158,9 @@ class EmotClassify:
 
     def getWordCloudBag(self):
         return self.wordCloudBag
+
+    def getEmotionsPerSite(self):
+        return self.emotionsPerSite
 
     def startAll(self):
         threads = []

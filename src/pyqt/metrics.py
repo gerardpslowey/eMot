@@ -44,6 +44,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         # pie chart data
         self.emotionCounts = emotClassify.getEmotionCount()
         self.siteVisitCounts = emotClassify.getSiteVisitCounts()
+        self.emotionsPerSite = emotClassify.getEmotionsPerSite()
 
         self.makePieChart()
         self.makeLineChart()
@@ -105,7 +106,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         chart.setAnimationOptions(QChart.SeriesAnimations)
 
         # categories are the website names
-        categories = list(self.siteVisitCounts.keys())
+        categories = list(self.emotionsPerSite.keys())
         axisX = QBarCategoryAxis()
         axisX.append(categories)
 
