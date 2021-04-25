@@ -11,27 +11,26 @@ class EmotClassify:
     def __init__(self):
         self.emotions = ['anger', 'fear', 'joy', 'surprise', 'happiness', 'sadness']
         # make a nested dictionary setting the emotion_1 count values to zero
-        self.emotions_dict = dict.fromkeys(self.emotions, 0)
+        self.emotionsDict = dict.fromkeys(self.emotions, 0)
 
-        self.emotion_count = copy.deepcopy(self.emotions_dict)
-        self.emotion_intensity = copy.deepcopy(self.emotions_dict)
+        self.emotionCounts = copy.deepcopy(self.emotionsDict)
+        self.emotionIntensities = copy.deepcopy(self.emotionsDict)
 
-        self.emotionsPerSiteDict = {}
-        # self.emotionsPerSiteDict = OrderedDict()
+        self.emotionsPerSite = {}
 
         self.sentenceExamples = set()
 
-        self.site_visit_counts = None
-        self.total_sites = 0
+        self.siteVisitCounts = None
+        self.totalSiteCount = 0
 
-        self.svc_model = "models/svc.pkl"
-        self.svc_tfidf_file = "models/svc_tfidf.pkl"
-        self.sgd_model = "models/sgd.pkl"
+        self.svcModel = "models/svc.pkl"
+        self.svcTfidfModel = "models/svc_tfidf.pkl"
+        self.sgdModel = "models/sgd.pkl"
         self.sgd_cv_file = "models/sgd_cv.pkl"
 
-        self.model_1 = self.loadFiles(self.svc_model)
-        self.tfidf = self.loadFiles(self.svc_tfidf_file)
-        self.model_2 = self.loadFiles(self.sgd_model)
+        self.model_1 = self.loadFiles(self.svcModel)
+        self.tfidf = self.loadFiles(self.svcTfidfModel)
+        self.model_2 = self.loadFiles(self.sgdModel)
         self.cv = self.loadFiles(self.sgd_cv_file)
 
         # an empty array for line chart array values
@@ -43,10 +42,10 @@ class EmotClassify:
         # only load the urls column from the file
         urls_df = pd.read_csv(scrapedFile, usecols=["url"]).astype('U')
         urls_df['base'] = urls_df['url'].apply(base)
-        self.site_visit_counts = urls_df['base'].value_counts().to_dict()
+        self.siteVisitCounts = urls_df['base'].value_counts().to_dict()
 
         print("Articles read per site: ")
-        self.prettyPrint(self.site_visit_counts.items())
+        self.prettyPrint(self.siteVisitCounts.items())
 
     def sentenceClassify(self):
         # read scraped file
@@ -58,7 +57,7 @@ class EmotClassify:
         # create a nested dictionary for each site
         for site in sitesList:
             # dictionary key maps to a nested dictionary
-            self.emotionsPerSiteDict[site] = copy.deepcopy(self.emotions_dict)
+            self.emotionsPerSite[site] = copy.deepcopy(self.emotionsDict)
 
         try:
             for row in scraped_df.itertuples(index=False):
@@ -83,13 +82,13 @@ class EmotClassify:
                     # for a sentiment to be accepted both models have to have a score greater than 0.6
                     if intensity_1 >= 0.6 and intensity_2 >= 0.6 and emotion_1 == emotion_2:
                         # count total emotion count
-                        self.emotion_count[emotion_1] += 1
+                        self.emotionCounts[emotion_1] += 1
                         # count of distribution of emotions per site
-                        self.emotionsPerSiteDict[url][emotion_1] += 1
+                        self.emotionsPerSite[url][emotion_1] += 1
 
-                    if intensity > self.emotion_intensity.get(emotion_1):
+                    if intensity > self.emotionIntensities.get(emotion_1):
                         # round the intensity float to 2 decimal place
-                        self.emotion_intensity[emotion_1] = round(intensity, 2)
+                        self.emotionIntensities[emotion_1] = round(intensity, 2)
                         self.wordCloudBag.append(sentence)
                         self.sentenceExamples.update([tuple((round(intensity, 2), emotion_1, sentence))])
 
@@ -100,14 +99,14 @@ class EmotClassify:
             print("Nothing to classify, the file is empty")
         finally:
             print("\nThe Intensity level of each Emotion:")
-            self.prettyPrint(self.emotion_intensity.items(), "percent")
+            self.prettyPrint(self.emotionIntensities.items(), "percent")
 
             print("\nThe Amount of each Emotion:")
-            self.prettyPrint(self.emotion_count.items())
+            self.prettyPrint(self.emotionCounts.items())
 
             print("\nSites and associated article primary emotion_1: ")
             print(f"website: {*self.emotions,}")
-            self.prettyPrint(self.emotionsPerSiteDict.items(), "lst")
+            self.prettyPrint(self.emotionsPerSite.items(), "lst")
 
             print("\nExamples of emotion_1 based sentences: ")
             sentenceExampleList = list(self.sentenceExamples)
@@ -117,10 +116,10 @@ class EmotClassify:
 
     def processSplitChartValues(self):
         # total site visits = the number of sites visited
-        self.total_sites = len(self.emotionsPerSiteDict)
+        self.totalSiteCount = len(self.emotionsPerSite)
 
-        for _ in range(self.total_sites):
-            for siteEmotionDict in self.emotionsPerSiteDict.values():
+        for _ in range(self.totalSiteCount):
+            for siteEmotionDict in self.emotionsPerSite.values():
                 self.splitChartValues.append(list(siteEmotionDict.values()))
 
     def prettyPrint(self, items, format=None):
@@ -139,25 +138,25 @@ class EmotClassify:
         with open(filename, 'rb') as file:
             return pickle.load(file)
 
-    def get_emotions(self):
+    def getEmotions(self):
         return self.emotions
 
-    def get_emotion_count(self):
-        return self.emotion_count
+    def getEmotionCount(self):
+        return self.emotionCounts
 
-    def get_emotion_intensity(self):
-        return self.emotion_intensity
+    def getEmotionIntensities(self):
+        return self.emotionIntensities
 
-    def get_site_count(self):
-        return self.site_visit_counts
+    def getSiteVisitCounts(self):
+        return self.siteVisitCounts
 
-    def get_total_sites(self):
-        return self.total_sites
+    def getUniqueSiteCount(self):
+        return self.totalSiteCount
 
-    def get_split_chart_values(self):
+    def getSplitChartValues(self):
         return self.splitChartValues
 
-    def get_wordcloud_bag(self):
+    def getWordCloudBag(self):
         return self.wordCloudBag
 
     def startAll(self):

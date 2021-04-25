@@ -72,7 +72,3 @@ venv/
 # Datasets
 src/datasets/*
 !src/datasets/README.md 
-
-# Models
-src/datasets/*
-!src/datasets/README.md 

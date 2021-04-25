@@ -93,7 +93,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         print("\nClick the 'Show Results' button to view the results!")
 
         self.MetricsDashboard.makeCharts(self.emotClassify)
-        sites = f"{len(self.emotClassify.get_site_count())} Sites"
+        sites = f"{len(self.emotClassify.getSiteVisitCounts())} Sites"
         self.MetricsDashboard.sitesVisitedEdit.setText(sites)
         self.startDrawing()
         self.results_button.setEnabled(True)
@@ -113,7 +113,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.threadpool.start(worker)
 
     def draw_WordCloud(self):
-        data = self.emotClassify.get_wordcloud_bag()
+        data = self.emotClassify.getWordCloudBag()
         words = ' '.join(data)
         wordcloud = WordCloud(
             background_color="white",
