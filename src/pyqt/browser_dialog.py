@@ -18,11 +18,11 @@ class Ui_browserDialog(object):
         browserDialog.setMinimumSize(QtCore.QSize(417, 161))
         browserDialog.setMaximumSize(QtCore.QSize(417, 161))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/newPrefix/resources/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/newPrefix/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         browserDialog.setWindowIcon(icon)
         browserDialog.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.label = QtWidgets.QLabel(browserDialog)
-        self.label.setGeometry(QtCore.QRect(100, 60, 201, 51))
+        self.label.setGeometry(QtCore.QRect(30, 60, 351, 51))
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
         self.label_2 = QtWidgets.QLabel(browserDialog)
@@ -55,6 +55,7 @@ class Ui_browserDialog(object):
         self.label_2.setText(_translate("browserDialog", "You Must Choose A Browser"))
 import pyqt.resource_rc
 # flake8: noqa
+
 
 if __name__ == "__main__":
     import sys

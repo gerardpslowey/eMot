@@ -18,7 +18,7 @@ class Ui_MainWindow(object):
         MainWindow.setMinimumSize(QtCore.QSize(1081, 720))
         MainWindow.setMaximumSize(QtCore.QSize(1081, 720))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/newPrefix/resources/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/newPrefix/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
         MainWindow.setAutoFillBackground(False)
         MainWindow.setStyleSheet("background-color: rgb(255, 255, 255);")
@@ -67,6 +67,7 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(12)
         self.dateComboBox.setFont(font)
+        self.dateComboBox.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.dateComboBox.setStyleSheet("border: 1px solid black")
         self.dateComboBox.setObjectName("dateComboBox")
         self.dateComboBox.addItem("")
@@ -108,6 +109,7 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(20)
         self.button.setFont(font)
+        self.button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.button.setAutoFillBackground(False)
         self.button.setStyleSheet("color: rgb(255, 255, 255);\n"
 "selection-color: rgb(0, 0, 0);\n"
@@ -126,6 +128,7 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(12)
         self.browserComboBox.setFont(font)
+        self.browserComboBox.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.browserComboBox.setStyleSheet("border: 1px solid black")
         self.browserComboBox.setPlaceholderText("")
         self.browserComboBox.setObjectName("browserComboBox")
@@ -171,6 +174,7 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(20)
         self.results_button.setFont(font)
+        self.results_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.results_button.setAutoFillBackground(False)
         self.results_button.setStyleSheet("color: rgb(255, 255, 255);\n"
 "background-color: rgb(255, 125, 102);\n"
@@ -249,10 +253,10 @@ import pyqt.resource_rc
 
 
 if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
+	import sys
+	app = QtWidgets.QApplication(sys.argv)
+	MainWindow = QtWidgets.QMainWindow()
+	ui = Ui_MainWindow()
+	ui.setupUi(MainWindow)
+	MainWindow.show()
+	sys.exit(app.exec_())

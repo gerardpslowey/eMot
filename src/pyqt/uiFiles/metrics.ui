@@ -136,11 +136,11 @@ border-radius: 10px;</string>
       <widget class="QWidget" name="wordCloudPage">
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_3" stretch="6,1">
+         <layout class="QVBoxLayout" name="verticalLayout_3" stretch="5,1">
           <item>
            <layout class="QHBoxLayout" name="cloudTextLayout" stretch="4,1">
             <item>
-             <layout class="QVBoxLayout" name="cloudLayout" stretch="1,4">
+             <layout class="QVBoxLayout" name="cloudLayout" stretch="2,4">
               <property name="bottomMargin">
                <number>50</number>
               </property>

@@ -14,8 +14,8 @@
    <string>Preferences</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>:/newPrefix/resources/icon.png</normaloff>:/newPrefix/resources/icon.png</iconset>
+   <iconset resource="../resources/resource.qrc">
+    <normaloff>:/newPrefix/icon.png</normaloff>:/newPrefix/icon.png</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(255, 255, 255);</string>

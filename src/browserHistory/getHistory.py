@@ -6,7 +6,12 @@ from .browsers import Chrome, Firefox, Safari, Edge, Opera, Brave  # noqa
 class GetHistory():
     def getHistory(self, filtr, browser):
         # if blank, then use all dates
+        self.urlDict = {}
+
         df = '' if not filtr else self.dateFilter(filtr)
+        if df is None:
+            return self.urlDict
+
         browser = browser.capitalize()
 
         try:
@@ -14,16 +19,15 @@ class GetHistory():
             f = globals()[browser]()
             outputs = f.fetchHistory()
             his = outputs.histories
-            urlDict = {}
 
             for date, url in his:
                 if date > df:
-                    urlDict[date] = url
-            return urlDict
-        except Exception as e:
-            raise SystemExit(
-                f"{e} : Make sure your BROWSER choice is valid and spelled correctly."  # noqa
-            )
+                    self.urlDict[date] = url
+        except KeyError:
+            print(f"Browser spelling error: is {browser} valid?")
+        except AttributeError:
+            print(f"Platform error: is {browser} compatible with this machine?")
+        return self.urlDict
 
     def dateFilter(self, times):
         # history items from the past hour
@@ -50,9 +54,8 @@ class GetHistory():
             return ''
 
         else:
-            raise ValueError(
-                "Make sure your FILTER choice is valid and spelled correctly."
-            )
+            print(f"Filter spelling error: is {times} valid?")
+            return None
 
     def strFormat(self, time):
         # format the date as a string

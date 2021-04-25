@@ -26,8 +26,8 @@
    <string>About</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>:/newPrefix/resources/icon.png</normaloff>:/newPrefix/resources/icon.png</iconset>
+   <iconset resource="../resources/resource.qrc">
+    <normaloff>:/newPrefix/icon.png</normaloff>:/newPrefix/icon.png</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -37,7 +37,7 @@
     <rect>
      <x>130</x>
      <y>20</y>
-     <width>231</width>
+     <width>241</width>
      <height>100</height>
     </rect>
    </property>
@@ -74,9 +74,9 @@
   <widget class="QSplitter" name="splitter">
    <property name="geometry">
     <rect>
-     <x>40</x>
+     <x>50</x>
      <y>120</y>
-     <width>412</width>
+     <width>411</width>
      <height>291</height>
     </rect>
    </property>
@@ -96,10 +96,10 @@
      </font>
     </property>
     <property name="text">
-     <string>eMot is a sentiment analyis application that takes your browsing history and extracts the negativity and positivity of the different sites you have visited.  </string>
+     <string>eMot is a sentiment analysis application that takes your browsing history and extracts the emotions of the different sites you have visited.  </string>
     </property>
     <property name="alignment">
-     <set>Qt::AlignHCenter|Qt::AlignTop</set>
+     <set>Qt::AlignJustify|Qt::AlignTop</set>
     </property>
     <property name="wordWrap">
      <bool>true</bool>
@@ -121,7 +121,10 @@
      </font>
     </property>
     <property name="text">
-     <string>Your browsing history is never stored anywhere. We scrape the text from these websites and give you an indication of what sort of material you are reading. It is beneficial to know whether you are consuming media that has hateful emotions, sad emotions, or happy emotions. </string>
+     <string>The text from these websites are scraped and processed to give you an indication of what sort of material you are reading. It is beneficial to know whether you are consuming media that has hateful emotions, sad emotions, or happy emotions. Your browsing history is never stored at any point.  </string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignJustify|Qt::AlignVCenter</set>
     </property>
     <property name="wordWrap">
      <bool>true</bool>
@@ -153,7 +156,7 @@
      <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
-     <string>&lt;a href =&quot;https://gitlab.computing.dcu.ie/sloweyg2/2021-ca400-gslowey-msavage&quot;&gt;https://gitlab.computing.dcu.ie/sloweyg2/2021-ca400-gslowey-msavage&lt;/a&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;&lt;a href=&quot;https://gitlab.computing.dcu.ie/sloweyg2/2021-ca400-gslowey-msavage&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://gitlab.computing.dcu.ie/sloweyg2/2021-ca400-gslowey-msavage&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>

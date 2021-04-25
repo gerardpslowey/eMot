@@ -7,16 +7,20 @@ from PyQt5.QtGui import QPen, QColor, QPixmap
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5 import QtCore
 
-colours = [QColor("#83677B"), QColor("#379683"), QColor("salmon"),
-           QColor("#7395AE"), QColor("#D79922"), QColor("#99738E")]
+colours = [
+    QColor("#83677B"), QColor("#379683"), QColor("salmon"),
+    QColor("#7395AE"), QColor("#D79922"), QColor("#99738E")
+]
 
 
 class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
-    def __init__(self, *args, obj=None, **kwargs):
+    def __init__(self, browser, filtr, *args, obj=None, **kwargs):
         super(MetricsDashboard, self).__init__(*args, **kwargs)
         self.setupUi(self)
         self.setWindowTitle("Metrics Dashboard")
+        self.browserUsedEdit.setText(browser)
+        self.dateUsedEdit.setText(filtr)
 
         self.stackedWidget.setCurrentWidget(self.chartPage)
         self.nextPageButton.clicked.connect(self.changePage)
