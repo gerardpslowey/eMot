@@ -25,17 +25,17 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
         # file menu
         self.actionAbout.triggered.connect(
-            lambda checked: self.toggle_item(self.AboutWindow))
+            lambda checked: self.toggleItem(self.AboutWindow))
 
         self.actionPreferences.triggered.connect(
-            lambda checked: self.toggle_item(self.PreferenceWindow))
-        self.actionNew.triggered.connect(self.restart_window)
+            lambda checked: self.toggleItem(self.PreferenceWindow))
+        self.actionNew.triggered.connect(self.restartWindow)
 
         self.button.clicked.connect(self.goButton)
         self.results_button.setEnabled(False)
         self.results_button.clicked.connect(self.showMetrics)
 
-    def toggle_item(self, item):
+    def toggleItem(self, item):
         if item.isVisible():
             item.hide()
         else:
@@ -46,12 +46,12 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.filtr = str(self.dateComboBox.currentText()).capitalize()
 
         if self.browser == "Select browser":
-            self.toggle_item(self.DialogWindow)
+            self.toggleItem(self.DialogWindow)
             self.DialogWindow.label.setText("Choose a browser from \nthe dropdown menu")
             self.DialogWindow.label_2.setText("You Must Choose A Browser")
 
         elif not dockerRunner.is_running("splash"):
-            self.toggle_item(self.DialogWindow)
+            self.toggleItem(self.DialogWindow)
             self.DialogWindow.label.setText("The splash docker \nmust to be turned on")
             self.DialogWindow.label_2.setText("Docker Container")
 
@@ -78,7 +78,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         else:
             self.results_button.setEnabled(True)
             self.results_button.setText("Start again?")
-            self.results_button.clicked.connect(self.restart_window)
+            self.results_button.clicked.connect(self.restartWindow)
 
     def enableResultsButton(self):
         print("\nClick the 'Show Results' button to view the results!")
@@ -102,7 +102,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         worker = Worker(self.createWordCloud)
         self.threadpool.start(worker)
 
-    def draw_WordCloud(self):
+    def createWordCloud(self):
         data = self.emotClassify.getWordCloudBag()
         words = ' '.join(data)
         wordcloud = WordCloud(
@@ -121,7 +121,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.textEdit.setTextCursor(cursor)
         self.textEdit.ensureCursorVisible()
 
-    def restart_window(self):
+    def restartWindow(self):
         sys.stdout = sys.__stdout__
         QtCore.QCoreApplication.quit()
         QtCore.QProcess.startDetached(sys.executable, sys.argv)
