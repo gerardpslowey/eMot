@@ -52,7 +52,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
         elif not dockerRunner.is_running("splash"):
             self.toggleItem(self.DialogWindow)
-            self.DialogWindow.label.setText("The splash docker \nmust to be turned on")
+            self.DialogWindow.label.setText("The splash container \nmust be turned on")
             self.DialogWindow.label_2.setText("Docker Container")
 
         else:
