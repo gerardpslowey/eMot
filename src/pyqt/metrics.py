@@ -163,7 +163,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
             series.append(i, self.emotionIntensities[key])
 
         yAxis = QValueAxis()
-        yAxis.setRange(0, 1)
+        yAxis.setRange(0, 100)
         yAxis.setLabelFormat("%.1f")
         yAxis.setTickCount(5)
         yAxis.setTitleText("Intensity (%)")
