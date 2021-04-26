@@ -122,6 +122,12 @@
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="minimumSize">
+               <size>
+                <width>200</width>
+                <height>75</height>
+               </size>
+              </property>
               <property name="font">
                <font>
                 <pointsize>20</pointsize>
@@ -152,11 +158,11 @@ border-radius: 10px;</string>
       <widget class="QWidget" name="wordCloudPage">
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_3" stretch="4,2">
+         <layout class="QVBoxLayout" name="verticalLayout_3" stretch="8,1">
           <item>
            <layout class="QHBoxLayout" name="cloudTextLayout" stretch="4,1">
             <item>
-             <layout class="QVBoxLayout" name="cloudLayout" stretch="2,4">
+             <layout class="QVBoxLayout" name="cloudLayout" stretch="1,5">
               <property name="bottomMargin">
                <number>50</number>
               </property>
@@ -164,6 +170,12 @@ border-radius: 10px;</string>
                <layout class="QVBoxLayout" name="verticalLayout_5">
                 <item>
                  <widget class="QLabel" name="label">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>30</height>
+                   </size>
+                  </property>
                   <property name="font">
                    <font>
                     <pointsize>16</pointsize>
@@ -194,8 +206,8 @@ border-radius: 10px;</string>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>1050</width>
-                    <height>750</height>
+                    <width>960</width>
+                    <height>720</height>
                    </size>
                   </property>
                   <property name="baseSize">
@@ -456,6 +468,12 @@ border-radius: 10px;</string>
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>200</width>
+                <height>75</height>
+               </size>
               </property>
               <property name="font">
                <font>
