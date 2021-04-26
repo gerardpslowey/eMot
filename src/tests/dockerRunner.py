@@ -19,6 +19,7 @@ def is_running(container_name):
         print("Make sure the Splash Docker container is turned on!")
         return False
 
+
 def main():
     client = docker.from_env()
     print(client.containers.list())
