@@ -12,10 +12,8 @@ from browserHistory.getHistory import GetHistory
 from utils.scraper import Scraper
 from utils.urlFilter import filterBlacklistedUrl
 from utils.blacklists import Blacklists
-# from utils.textMod import cleanScrapedText, preProcess
 
 import multiprocessing
-
 cpu_cores = multiprocessing.cpu_count()
 MAX_WORKERS = cpu_cores * 2
 
@@ -31,20 +29,37 @@ class Emot:
 
     def getUrls(self):
         urls = GetHistory().getHistory(self.filtr, self.browser)
+        if self.isEmpty(urls):
+            return ""
+
         print("Starting URL scraping..")
         print(f"History Retrieved: {len(urls)}")
 
         filtered_urls = set(filterBlacklistedUrl(urls.values(), self.blacklist))
         print(f"URLS remaining after filtering: {len(filtered_urls)}")
-        return filtered_urls
+
+        if self.isEmpty(filtered_urls):
+            return ""
+        else:
+            return filtered_urls
+
+    def isEmpty(self, urls):
+        if len(urls) == 0:
+            return True
+        else:
+            return False
 
     def startTasks(self):
         self.overwriteCSV()
 
+        if self.isEmpty(self.urls):
+            print("Nothing to Scrape!")
+            return ""
+
         queue = Queue()
         for url in self.urls:
             queue.put(url)
-        print("URLs added to queue! \nScraping Sites: ")
+        print("URLs added to queue! \n\nScraping Sites: ")
 
         """
         asynchronous execution of tasks using threads
@@ -70,10 +85,8 @@ class Emot:
                     # store scraped data
                     self.writeToCSV(url, originalText)
 
-        if len(self.urls) > 0:
-            print("Finished Scraping!\n")
-        else:
-            print("Nothing to scrape!\n")
+        print("Finished Scraping!\n")
+        return "scraped"
 
     def overwriteCSV(self):
         with open(self.scraped_csv, mode='w', encoding="utf-8", newline='') as scraped_text:
@@ -92,15 +105,6 @@ class Emot:
                     data.append(sentence)
 
             writer.writerow([url, "|".join(data)])
-
-    def getFilter(self):
-        return self.filtr
-
-    def getBrowser(self):
-        return self.browser
-
-    def getNumSites(self):
-        return self.urls
 
 
 def main():

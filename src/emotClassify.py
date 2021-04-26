@@ -3,7 +3,6 @@ import pickle
 import threading
 from utils.urlFilter import base
 import copy
-from collections import OrderedDict
 
 scrapedFile = 'sentimentAnalysis/scraped.csv'
 
@@ -11,37 +10,28 @@ scrapedFile = 'sentimentAnalysis/scraped.csv'
 class EmotClassify:
     def __init__(self):
         self.emotions = ['anger', 'fear', 'joy', 'surprise', 'happiness', 'sadness']
-        # make a nested dictionary setting the emotion count values to zero
-        self.emotions_dict = dict.fromkeys(self.emotions, 0)
+        # make a nested dictionary setting the emotion_1 count values to zero
+        self.emotionsDict = dict.fromkeys(self.emotions, 0)
 
-        self.emotion_count = {
-            "anger": 0,
-            "fear": 0,
-            "joy": 0,
-            "surprise": 0,
-            "happiness": 0,
-            "sadness": 0
-        }
+        self.emotionCounts = copy.deepcopy(self.emotionsDict)
+        self.emotionIntensities = copy.deepcopy(self.emotionsDict)
 
-        self.emotion_intensity = {
-            "anger": 0,
-            "fear": 0,
-            "joy": 0,
-            "surprise": 0,
-            "happiness": 0,
-            "sadness": 0
-        }
+        self.emotionsPerSite = {}
 
-        self.emotionsPerSiteDict = {}
-        # self.emotionsPerSiteDict = OrderedDict()
+        self.sentenceExamples = set()
 
-        self.site_visit_counts = None
-        self.total_sites = 0
+        self.siteVisitCounts = None
+        self.totalSiteCount = 0
 
-        self.svc_model = "models/svc.pkl"
-        self.svc_tfidf_file = "models/svc_tfidf.pkl"
-        self.model = self.loadFiles(self.svc_model)
-        self.tfidf = self.loadFiles(self.svc_tfidf_file)
+        self.svcModel = "models/svc.pkl"
+        self.svcTfidfModel = "models/svc_tfidf.pkl"
+        self.sgdModel = "models/sgd.pkl"
+        self.sgd_cv_file = "models/sgd_cv.pkl"
+
+        self.model_1 = self.loadFiles(self.svcModel)
+        self.tfidf = self.loadFiles(self.svcTfidfModel)
+        self.model_2 = self.loadFiles(self.sgdModel)
+        self.cv = self.loadFiles(self.sgd_cv_file)
 
         # an empty array for line chart array values
         self.splitChartValues = []
@@ -52,20 +42,22 @@ class EmotClassify:
         # only load the urls column from the file
         urls_df = pd.read_csv(scrapedFile, usecols=["url"]).astype('U')
         urls_df['base'] = urls_df['url'].apply(base)
-        self.site_visit_counts = urls_df['base'].value_counts().to_dict()
+        self.siteVisitCounts = urls_df['base'].value_counts().to_dict()
 
         print("Articles read per site: ")
-        self.prettyPrint(self.site_visit_counts.items())
+        self.prettyPrint(self.siteVisitCounts.items())
 
     def sentenceClassify(self):
+        # read scraped file
         scraped_df = pd.read_csv(scrapedFile).astype('U')
-
+        # create a new column with the base url as its value
         scraped_df['base'] = scraped_df['url'].apply(base)
         # create a list of unique base sites
         sitesList = scraped_df['base'].unique().tolist()
         # create a nested dictionary for each site
         for site in sitesList:
-            self.emotionsPerSiteDict[site] = copy.deepcopy(self.emotions_dict)
+            # dictionary key maps to a nested dictionary
+            self.emotionsPerSite[site] = copy.deepcopy(self.emotionsDict)
 
         try:
             for row in scraped_df.itertuples(index=False):
@@ -74,60 +66,61 @@ class EmotClassify:
 
                 # score each sentence
                 for sentence in text.split("|"):
-                    sentiment_score = self.model.predict_proba(self.tfidf.transform([sentence]))
-                    sentiment_name = self.model.predict(self.tfidf.transform([sentence]))
+                    sentiment_score_1 = self.model_1.predict_proba(self.tfidf.transform([sentence]))
+                    sentiment_score_2 = self.model_2.predict_proba(self.cv.transform([sentence]))
 
-                    emotion = sentiment_name[0]
-                    intensity = sentiment_score.max()
+                    # use 2 models to score the data for comparison
+                    intensity_1 = sentiment_score_1.max()
+                    intensity_2 = sentiment_score_2.max()
+                    intensity = (intensity_1 + intensity_2) / 2
 
-                    # count total emotion count
-                    self.emotion_count[emotion] += 1
-                    # count of distribution of emotions per site
-                    self.emotionsPerSiteDict[url][emotion] += 1
+                    sentiment_name_1 = self.model_1.predict(self.tfidf.transform([sentence]))
+                    sentiment_name_2 = self.model_2.predict(self.cv.transform([sentence]))
+                    emotion_1 = sentiment_name_1[0]
+                    emotion_2 = sentiment_name_2[0]
 
-                    if intensity > self.emotion_intensity.get(emotion):
+                    # for a sentiment to be accepted both models have to have a score greater than 0.6
+                    if intensity_1 >= 0.6 and intensity_2 >= 0.6 and emotion_1 == emotion_2:
+                        # count total emotion count
+                        self.emotionCounts[emotion_1] += 1
+                        # count of distribution of emotions per site
+                        self.emotionsPerSite[url][emotion_1] += 1
+
+                    if intensity > self.emotionIntensities.get(emotion_1):
                         # round the intensity float to 2 decimal place
-                        self.emotion_intensity[emotion] = round(intensity, 2)
+                        self.emotionIntensities[emotion_1] = round(intensity, 2)
+                        self.wordCloudBag.append(sentence)
+                        self.sentenceExamples.update([tuple((round(intensity, 2), emotion_1, sentence))])
 
-            # total site visits = the number of sites visited
-            self.total_sites = len(self.emotionsPerSiteDict)
-
-            for _ in range(self.total_sites):
-                for siteEmotionDict in self.emotionsPerSiteDict.values():
-                    self.splitChartValues.append(list(siteEmotionDict.values()))
+            # process split chart values
+            self.processSplitChartValues()
 
         except pd.errors.EmptyDataError:
             print("Nothing to classify, the file is empty")
         finally:
             print("\nThe Intensity level of each Emotion:")
-            self.prettyPrint(self.emotion_intensity.items(), "percent")
+            self.prettyPrint(self.emotionIntensities.items(), "percent")
 
             print("\nThe Amount of each Emotion:")
-            self.prettyPrint(self.emotion_count.items())
+            self.prettyPrint(self.emotionCounts.items())
 
-            print("\nSites and associated article primary emotion: ")
+            print("\nSites and associated article primary emotion_1: ")
             print(f"website: {*self.emotions,}")
-            self.prettyPrint(self.emotionsPerSiteDict.items(), "lst")
+            self.prettyPrint(self.emotionsPerSite.items(), "lst")
 
-    def negAndPos(self):
-        coef_avg = 0
-        for i in self.model.calibrated_classifiers_:
-            coef_avg = coef_avg + i.base_estimator.coef_
-        coef_avg = coef_avg / len(self.model.calibrated_classifiers_)
-        # print(coef_avg)
+            print("\nExamples of emotion_1 based sentences: ")
+            sentenceExampleList = list(self.sentenceExamples)
+            sentenceExampleList.sort(key=lambda tup: tup[0], reverse=True)
+            for item in sentenceExampleList[0:int(len(sentenceExampleList) / 2)]:
+                print(f"{item[0]:.1%} {item[1]} = {item[2]}")
 
-        feature_to_coef = {
-            word: coef for word, coef in zip(self.tfidf.get_feature_names(), coef_avg[0])}
+    def processSplitChartValues(self):
+        # total site visits = the number of sites visited
+        self.totalSiteCount = len(self.emotionsPerSite)
 
-        # print('Angry Words')
-        for most_angry in sorted(feature_to_coef.items(), key=lambda x: x[1], reverse=True)[:25]:
-            # print(most_angry)
-            self.wordCloudBag.append(most_angry[0])
-
-        # print('Sad Words')
-        for most_sad in sorted(feature_to_coef.items(), key=lambda x: x[1])[:10]:
-            # print(most_sad)
-            self.wordCloudBag.append(most_sad[0])
+        for _ in range(self.totalSiteCount):
+            for emotionsPerSite in self.emotionsPerSite.values():
+                self.splitChartValues.append(list(emotionsPerSite.values()))
 
     def prettyPrint(self, items, format=None):
         for key, value in items:
@@ -145,35 +138,29 @@ class EmotClassify:
         with open(filename, 'rb') as file:
             return pickle.load(file)
 
-    def get_emotions(self):
+    def getEmotions(self):
         return self.emotions
 
-    def get_emotion_count(self):
-        return self.emotion_count
+    def getEmotionCount(self):
+        return self.emotionCounts
 
-    def get_emotion_intensity(self):
-        return self.emotion_intensity
+    def getEmotionIntensities(self):
+        return self.emotionIntensities
 
-    def get_emotions_per_site(self):
-        return self.emotionsPerSiteDict
+    def getSiteVisitCounts(self):
+        return self.siteVisitCounts
 
-    def get_site_count(self):
-        return self.site_visit_counts
+    def getUniqueSiteCount(self):
+        return self.totalSiteCount
 
-    def get_total_sites(self):
-        return self.total_sites
-
-    def get_total_site_visit(self):
-        return f"{len(self.site_visit_counts)} Sites"
-
-    def get_total_sites(self):
-        return self.total_sites
-    
-    def get_split_chart_values(self):
+    def getSplitChartValues(self):
         return self.splitChartValues
 
-    def get_wordcloud_bag(self):
+    def getWordCloudBag(self):
         return self.wordCloudBag
+
+    def getEmotionsPerSite(self):
+        return self.emotionsPerSite
 
     def startAll(self):
         threads = []
@@ -184,10 +171,6 @@ class EmotClassify:
         process2 = threading.Thread(target=self.siteCount)
         process2.start()
         threads.append(process2)
-
-        process3 = threading.Thread(target=self.negAndPos)
-        process3.start()
-        threads.append(process3)
 
         for process in threads:
             process.join()

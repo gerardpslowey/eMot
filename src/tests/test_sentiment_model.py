@@ -29,7 +29,6 @@ def test_sentiment2():
 
     message = "this is horrible"
     sentiment_value = model.predict(cv.transform([message]))
-    # print(sentiment_value)
 
     assert sentiment_value != 'joy'
 
@@ -38,16 +37,10 @@ def test_happiness_sentiment():
     model = loadFiles(SVC_Model)
     tfidf = loadFiles(SVC_TFIDF_File)
 
-    reviews = ["it was a lovely sunny day today",
-               "this film is very good",
-               "he's the nicest guy I know"
-               ]
+    reviews = ["it was a lovely sunny day today", "this film is very good", "he's the nicest guy I know"]
 
     for review in reviews:
-        sentiment_score = model.predict_proba(tfidf.transform([review]))
         sentiment_name = model.predict(tfidf.transform([review]))
-
-        print(sentiment_score, sentiment_name)
         assert sentiment_name == 'happiness'
 
 
@@ -62,9 +55,3 @@ def test_sadness_sentiment():
 def loadFiles(filename):
     with open(filename, 'rb') as file:
         return pickle.load(file)
-
-
-# if __name__ == "__main__":
-#     test_sentiment()
-#     test_sentiment2()
-#     test_sentiment3()

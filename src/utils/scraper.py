@@ -1,5 +1,5 @@
 import requests, re
-# import cProfile, io, pstats
+import cProfile, io, pstats
 from bs4 import BeautifulSoup, Comment, Doctype
 
 from .textMod import preProcess
@@ -59,15 +59,15 @@ def main():
 
 if __name__ == "__main__":
     main()
-    # pr = cProfile.Profile()
-    # pr.enable()
+    pr = cProfile.Profile()
+    pr.enable()
 
-    # my_result = main()
+    my_result = main()
 
-    # pr.disable()
-    # s = io.StringIO()
-    # ps = pstats.Stats(pr, stream=s).sort_stats('tottime')
-    # ps.print_stats()
+    pr.disable()
+    s = io.StringIO()
+    ps = pstats.Stats(pr, stream=s).sort_stats('tottime')
+    ps.print_stats()
 
-    # with open('scraper_cprofile.txt', 'w+') as f:
-    #     f.write(s.getvalue())
+    with open('scraper_cprofile.txt', 'w+') as f:
+        f.write(s.getvalue())

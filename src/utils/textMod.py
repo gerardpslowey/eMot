@@ -1,12 +1,12 @@
-import spacy, re, os, pickle
-
-from spacy.tokenizer import _get_regex_pattern
-nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner'])
-
-from pathlib import Path
+import spacy, re
 
 from spellchecker import SpellChecker
 spell = SpellChecker(distance=1)
+
+from spacy.tokenizer import _get_regex_pattern
+
+# load spacy data file
+nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner'])
 
 # get default pattern for tokens that don't get split
 re_token_match = _get_regex_pattern(nlp.Defaults.token_match)
@@ -16,51 +16,41 @@ re_token_match = fr'({re_token_match}|#\w+|\w+-\w+)'
 nlp.tokenizer.token_match = re.compile(re_token_match).match
 
 
-# Used for datasets
+# Used for training models on datasets
 def preprocessAndTokenise(data):
     data = removehtmlMarkup(data)
     data = removeURLs(data)
     data = removeHashandSymbols(data)
     data = removeAscii(data)
+    data = removeEmojis(data)
     data = data.strip()
 
     mytokens = nlp(data)
 
-    stem_data = [word.lemma_.strip() for word in mytokens
-                 if not word.is_punct and not word.is_stop and not word.is_space]
+    stem_data = [
+        word.lemma_.strip() for word in mytokens
+        if not word.is_punct and not word.is_stop and not word.is_space
+    ]
 
     return stem_data
 
 
+# cleaned scraped text
 def preProcess(data):
     data = removehtmlMarkup(data)
     data = removeURLs(data)
     data = removeHashandSymbols(data)
     data = removeAscii(data)
-    data = removeNums(data)
     data = data.strip()
     # tokenise
     mytokens = nlp(data)
 
-    stem_data = [word.lemma_.strip() for word in mytokens
-                 if word.lemma_ != '-PRON-' and not word.is_punct and not word.is_stop and not word.is_space]
+    stem_data = [
+        word.lemma_.strip() for word in mytokens
+        if word.lemma_ != '-PRON-' and not word.is_punct and not word.is_stop and not word.is_space
+    ]
 
     return " ".join(stem_data)
-
-
-# remove floats and ints
-def removeNums(sentence):
-    return re.sub("/(\d+(?:\.\d+)?)/", "", sentence) # noqa
-
-
-def cleanScrapedText(document):
-    cleaned = []
-
-    mytokens = nlp(document)
-    cleaned = [word.lemma_ for word in mytokens
-               if (word.lemma_ != '-PRON-' and not word.is_punct and not word.is_stop)]
-
-    return " ".join(cleaned)
 
 
 # remove html markup
@@ -86,23 +76,20 @@ def removeAscii(sentence):
     return re.sub("(\\W|\\d)", " ", sentence)
 
 
-# Trials with this seem to indicate it worsens accuracy
-def removeRepetitions(sentence):
-    pattern = re.compile(r"(.)\1{2,}")
-    return pattern.sub(r"\1\1", sentence)
-
-
 # Keeping this works great
 def spellCheck(sentence):
     words = spell.split_words(sentence)
     return " ".join([spell.correction(word) for word in words])
 
 
-def saveFiles(data, filename):
-    directory = "../models"
-    if not os.path.exists(directory):
-        Path(directory).mkdir(parents=True, exist_ok=True)
-
-    model_location = os.path.join(directory, filename)
-    with open(model_location, 'wb') as file:
-        pickle.dump(data, file)
+def removeEmojis(text):
+    regrex_pattern = re.compile(
+        pattern="["
+        u"\U0001F600-\U0001F64F"  # emoticons
+        u"\U0001F300-\U0001F5FF"  # symbols & pictographs
+        u"\U0001F680-\U0001F6FF"  # transport & map symbols
+        u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
+        "]+",
+        flags=re.UNICODE
+    )
+    return regrex_pattern.sub(r'', text)

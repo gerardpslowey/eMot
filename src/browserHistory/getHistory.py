@@ -4,10 +4,14 @@ from .browsers import Chrome, Firefox, Safari, Edge, Opera, Brave  # noqa
 
 
 class GetHistory():
-
     def getHistory(self, filtr, browser):
         # if blank, then use all dates
+        self.urlDict = {}
+
         df = '' if not filtr else self.dateFilter(filtr)
+        if df is None:
+            return self.urlDict
+
         browser = browser.capitalize()
 
         try:
@@ -15,34 +19,34 @@ class GetHistory():
             f = globals()[browser]()
             outputs = f.fetchHistory()
             his = outputs.histories
-            urlDict = {}
 
             for date, url in his:
                 if date > df:
-                    urlDict[date] = url
-            return urlDict
-        except Exception as e:
-            raise SystemExit(f"{e} : Make sure your BROWSER choice is valid and spelled correctly.")
+                    self.urlDict[date] = url
+        except KeyError:
+            print(f"Browser spelling error: is {browser} valid?")
+        except AttributeError:
+            print(f"Platform error: is {browser} compatible with this machine?")
+        return self.urlDict
 
     def dateFilter(self, times):
-
-        # def hour()
+        # history items from the past hour
         if times == 'Hour':
             return self.strFormat(datetime.now() - timedelta(hours=1))
 
-        # def day()
+        # history items from the past day
         elif times == 'Day':
             return self.strFormat(datetime.now() - timedelta(1))
 
-        # def week()
+        # history items from the past hour
         elif times == 'Week':
             return self.strFormat(datetime.now() - timedelta(days=7))
 
-        # def month()
+        # history items from the past month
         elif times == 'Month':
             return self.strFormat(datetime.now() + relativedelta(months=-1))
 
-        # def year()
+        # history items from the past year
         elif times == 'Year':
             return self.strFormat(datetime.now() + relativedelta(years=-1))
 
@@ -50,9 +54,9 @@ class GetHistory():
             return ''
 
         else:
-            raise ValueError("Make sure your FILTER choice is valid and spelled correctly.")
+            print(f"Filter error: is {times} valid?")
+            return None
 
     def strFormat(self, time):
-
-        # makes the date a string
+        # format the date as a string
         return time.strftime("%Y-%m-%d %H:%M:%S")

@@ -25,76 +25,67 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
         # file menu
         self.actionAbout.triggered.connect(
-            lambda checked: self.toggle_item(self.AboutWindow))
+            lambda checked: self.toggleItem(self.AboutWindow))
 
         self.actionPreferences.triggered.connect(
-            lambda checked: self.toggle_item(self.PreferenceWindow))
-        self.actionNew.triggered.connect(self.restart_window)
+            lambda checked: self.toggleItem(self.PreferenceWindow))
+        self.actionNew.triggered.connect(self.restartWindow)
 
-        self.button.clicked.connect(self.go_button)
+        self.button.clicked.connect(self.goButton)
         self.results_button.setEnabled(False)
-        self.results_button.clicked.connect(self.createMetrics)
+        self.results_button.clicked.connect(self.showMetrics)
 
-    def restart_window(self):
-        QtCore.QCoreApplication.quit()
-        QtCore.QProcess.startDetached(sys.executable, sys.argv)
-        # print(status)
-
-    def toggle_item(self, item):
+    def toggleItem(self, item):
         if item.isVisible():
             item.hide()
         else:
             item.show()
 
-    def go_button(self):
+    def goButton(self):
         self.browser = str(self.browserComboBox.currentText()).capitalize()
         self.filtr = str(self.dateComboBox.currentText()).capitalize()
 
         if self.browser == "Select browser":
-            self.toggle_item(self.DialogWindow)
+            self.toggleItem(self.DialogWindow)
             self.DialogWindow.label.setText("Choose a browser from \nthe dropdown menu")
             self.DialogWindow.label_2.setText("You Must Choose A Browser")
 
         elif not dockerRunner.is_running("splash"):
-            self.toggle_item(self.DialogWindow)
+            self.toggleItem(self.DialogWindow)
             self.DialogWindow.label.setText("The splash docker \nmust to be turned on")
             self.DialogWindow.label_2.setText("Docker Container")
 
         else:
             self.setupPrintPage()
-            self.MetricsDashboard = metrics.MetricsDashboard()
-            self.MetricsDashboard.browserUsedEdit.setText(self.browser)
-            self.MetricsDashboard.dateUsedEdit.setText(self.filtr)
+            self.MetricsDashboard = metrics.MetricsDashboard(self.browser, self.filtr)
 
     def setupPrintPage(self):
         self.stackedWidget.setCurrentWidget(self.printPage)
-        sys.stdout = windows.Stream(newText=self.onUpdateText)
+        sys.stdout = windows.Stream(newText=self.redirectText)
 
         emot = Emot(self.filtr, self.browser)
         worker = Worker(emot.startTasks)
         self.threadpool.start(worker)
-        worker.signals.finished.connect(self.startClassify)
 
-    def onUpdateText(self, text):
-        # Write console output to textEdit widget.
-        cursor = self.textEdit.textCursor()
-        cursor.movePosition(QtGui.QTextCursor.End)
-        cursor.insertText(text)
-        self.textEdit.setTextCursor(cursor)
-        self.textEdit.ensureCursorVisible()
+        worker.signals.result.connect(lambda result: self.startClassify(result))
 
-    def startClassify(self):
-        self.emotClassify = EmotClassify()
-        worker = Worker(self.emotClassify.startAll)
-        self.threadpool.start(worker)
-        worker.signals.finished.connect(self.enableResultsButton)
+    def startClassify(self, result):
+        if result:
+            self.emotClassify = EmotClassify()
+            worker = Worker(self.emotClassify.startAll)
+            self.threadpool.start(worker)
+            worker.signals.finished.connect(self.enableResultsButton)
+        else:
+            self.results_button.setEnabled(True)
+            self.results_button.setText("Start again?")
+            self.results_button.clicked.connect(self.restartWindow)
 
     def enableResultsButton(self):
         print("\nClick the 'Show Results' button to view the results!")
-
-        self.MetricsDashboard.makeCharts(self.emotClassify)
-        self.MetricsDashboard.sitesVisitedEdit.setText(self.emotClassify.get_total_site_visit())
         self.startDrawing()
+        self.MetricsDashboard.makeCharts(self.emotClassify)
+        sites = f"{len(self.emotClassify.getSiteVisitCounts())} Sites"
+        self.MetricsDashboard.sitesVisitedEdit.setText(sites)
         self.results_button.setEnabled(True)
         self.results_button.setText("Show Results!")
         self.results_button.setStyleSheet(
@@ -102,17 +93,17 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
             "background-color: rgb(103, 171, 159);\n"
             "border: 1px solid black;\n"
             "border-radius: 10px;"
-            )
+        )
 
-    def createMetrics(self):
+    def showMetrics(self):
         self.MetricsDashboard.show()
 
     def startDrawing(self):
-        worker = Worker(self.draw_WordCloud)
+        worker = Worker(self.createWordCloud)
         self.threadpool.start(worker)
 
-    def draw_WordCloud(self):
-        data = self.emotClassify.get_wordcloud_bag()
+    def createWordCloud(self):
+        data = self.emotClassify.getWordCloudBag()
         words = ' '.join(data)
         wordcloud = WordCloud(
             background_color="white",
@@ -121,6 +112,20 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         wordCloudImage = "pyqt/wordCloud.png"
         wordcloud.to_file(wordCloudImage)
         self.MetricsDashboard.showImage(wordCloudImage)
+
+    def redirectText(self, text):
+        # Write console output to textEdit widget.
+        cursor = self.textEdit.textCursor()
+        cursor.movePosition(QtGui.QTextCursor.End)
+        cursor.insertText(text)
+        self.textEdit.setTextCursor(cursor)
+        self.textEdit.ensureCursorVisible()
+
+    def restartWindow(self):
+        sys.stdout = sys.__stdout__
+        QtCore.QCoreApplication.quit()
+        QtCore.QProcess.startDetached(sys.executable, sys.argv)
+        # print(status)
 
     def closeEvent(self, event):
         """Shuts down application on close."""

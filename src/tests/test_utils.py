@@ -1,4 +1,3 @@
-# from dateutil import tz
 from os import path
 import platform
 from pathlib import Path

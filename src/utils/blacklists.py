@@ -2,7 +2,6 @@ import json
 
 
 class Blacklists:
-
     def __init__(self):
         self.filename = "utils/blacklists.json"
 
@@ -25,8 +24,6 @@ class Blacklists:
         if item not in data[blacklist]:
             data[blacklist].append(item)
             self.dumpItems(data)
-        # else:
-        #     print(f"{item} already in {blacklist}")
 
     def removeItem(self, item, blacklist):
         data = self.getItems()

@@ -1,6 +1,20 @@
 image: gerardpslowey/emot:dependencies
 
-pytest:
+stages:
+  - lint
+  - test
+
+flake8:
+  stage: lint
   script:
     - cd src
-    - pytest
+    - pip install flake8
+    - flake8 --version
+    - flake8 --max-line-length=120 --ignore E401,E402 --exclude .env
+
+pytest:
+  stage: test
+  script:
+    - cd src
+    - python --version
+    - pytest -v

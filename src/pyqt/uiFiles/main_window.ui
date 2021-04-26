@@ -26,8 +26,8 @@
    <string>eMot</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>:/newPrefix/resources/icon.png</normaloff>:/newPrefix/resources/icon.png</iconset>
+   <iconset resource="../resources/resource.qrc">
+    <normaloff>:/newPrefix/icon.png</normaloff>:/newPrefix/icon.png</iconset>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>

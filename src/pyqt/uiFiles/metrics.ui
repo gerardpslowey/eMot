@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1036</width>
-    <height>782</height>
+    <width>1144</width>
+    <height>849</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -55,10 +55,18 @@
              <number>50</number>
             </property>
             <item>
-             <widget class="QChartView" name="splitChart"/>
+             <widget class="QChartView" name="splitChart">
+              <property name="statusTip">
+               <string>Split Chart</string>
+              </property>
+             </widget>
             </item>
             <item>
-             <widget class="QChartView" name="pieChart"/>
+             <widget class="QChartView" name="pieChart">
+              <property name="statusTip">
+               <string>Pie Chart</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -74,10 +82,18 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="QChartView" name="lineChart"/>
+             <widget class="QChartView" name="lineChart">
+              <property name="statusTip">
+               <string>Line Chart</string>
+              </property>
+             </widget>
             </item>
             <item>
-             <widget class="QChartView" name="barChart"/>
+             <widget class="QChartView" name="barChart">
+              <property name="statusTip">
+               <string>Bar Chart</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -136,11 +152,14 @@ border-radius: 10px;</string>
       <widget class="QWidget" name="wordCloudPage">
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_3" stretch="6,1">
+         <layout class="QVBoxLayout" name="verticalLayout_3" stretch="4,2">
           <item>
            <layout class="QHBoxLayout" name="cloudTextLayout" stretch="4,1">
             <item>
-             <layout class="QVBoxLayout" name="cloudLayout" stretch="1,5">
+             <layout class="QVBoxLayout" name="cloudLayout" stretch="2,4">
+              <property name="bottomMargin">
+               <number>50</number>
+              </property>
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_5">
                 <item>
@@ -151,7 +170,7 @@ border-radius: 10px;</string>
                    </font>
                   </property>
                   <property name="text">
-                   <string>WordCloud of Negative Emotions Found</string>
+                   <string>Strongest Emotions WordCloud</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
@@ -161,50 +180,66 @@ border-radius: 10px;</string>
                </layout>
               </item>
               <item>
-               <widget class="QLabel" name="wordCloud">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
+               <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="6">
+                <property name="sizeConstraint">
+                 <enum>QLayout::SetDefaultConstraint</enum>
                 </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>750</width>
-                  <height>600</height>
-                 </size>
-                </property>
-                <property name="font">
-                 <font>
-                  <pointsize>15</pointsize>
-                  <weight>75</weight>
-                  <bold>true</bold>
-                 </font>
-                </property>
-                <property name="layoutDirection">
-                 <enum>Qt::LeftToRight</enum>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(103, 171, 159,255));
+                <item>
+                 <widget class="QLabel" name="wordCloud">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>1050</width>
+                    <height>750</height>
+                   </size>
+                  </property>
+                  <property name="baseSize">
+                   <size>
+                    <width>850</width>
+                    <height>700</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>15</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="layoutDirection">
+                   <enum>Qt::LeftToRight</enum>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(103, 171, 159,255));
 color: rgb(255, 255, 255);
 border-radius: 10px;</string>
-                </property>
-                <property name="frameShape">
-                 <enum>QFrame::StyledPanel</enum>
-                </property>
-                <property name="text">
-                 <string>Loading WordCloud...</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-                <property name="margin">
-                 <number>0</number>
-                </property>
-                <property name="indent">
-                 <number>4</number>
-                </property>
-               </widget>
+                  </property>
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="text">
+                   <string>Loading WordCloud...</string>
+                  </property>
+                  <property name="scaledContents">
+                   <bool>true</bool>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                  <property name="margin">
+                   <number>0</number>
+                  </property>
+                  <property name="indent">
+                   <number>4</number>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </item>
              </layout>
             </item>
@@ -458,7 +493,7 @@ border-radius: 10px;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1036</width>
+     <width>1144</width>
      <height>26</height>
     </rect>
    </property>

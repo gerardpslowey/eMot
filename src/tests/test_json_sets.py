@@ -26,6 +26,3 @@ def test_remove_tag():
     test.addItem(tag, 'tagSet')
     test.removeItem(tag, 'tagSet')
     assert test.getItems()['tagSet'][-1] != "div"
-
-# if __name__ == '__main__':
-#     test_remove_tag()
