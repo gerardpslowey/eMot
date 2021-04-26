@@ -48,10 +48,10 @@ class Preference(QMainWindow, PrefWindow):
         self.urlEdit.clear()
 
     def removeURL(self):
-        url = self.PreferenceWindow.urlEdit.toPlainText()
+        url = self.urlEdit.toPlainText()
         self.blacklists.removeItem(url, "urlSet")
         self.showPopUp("URL removed!")
-        self.PreferenceWindow.urlEdit.clear()
+        self.urlEdit.clear()
 
     def showPopUp(self, message):
         msg = QMessageBox()

@@ -53,7 +53,7 @@ class Emot:
         self.overwriteCSV()
 
         if self.isEmpty(self.urls):
-            print("Nothing to Scrape!")
+            print("Nothing to scrape!")
             return ""
 
         queue = Queue()

@@ -104,11 +104,11 @@ class EmotClassify:
             print("\nThe Amount of each Emotion:")
             self.prettyPrint(self.emotionCounts.items())
 
-            print("\nSites and associated article primary emotion_1: ")
+            print("\nSites and associated primary emotions: ")
             print(f"website: {*self.emotions,}")
             self.prettyPrint(self.emotionsPerSite.items(), "lst")
 
-            print("\nExamples of emotion_1 based sentences: ")
+            print("\nExamples of emotion based sentences: ")
             sentenceExampleList = list(self.sentenceExamples)
             sentenceExampleList.sort(key=lambda tup: tup[0], reverse=True)
             for item in sentenceExampleList[0:int(len(sentenceExampleList) / 2)]:
