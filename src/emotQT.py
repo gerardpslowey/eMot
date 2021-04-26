@@ -131,6 +131,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         """Shuts down application on close."""
         # Return stdout to defaults.
         sys.stdout = sys.__stdout__
+        dockerRunner.stop("splash")
         super().closeEvent(event)
 
 

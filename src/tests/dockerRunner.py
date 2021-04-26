@@ -16,16 +16,21 @@ def is_running(container_name):
         container_is_running = container_state['Status'] == RUNNING
         return container_is_running
     except Exception:
+        print("Splash container must be running to use eMot.")
+        return False
+
+
+def stop(container_name):
+    try:
+        DOCKER_CLIENT = docker.from_env()
+
+        DOCKER_CLIENT.containers.stop(container_name)
+    except Exception:
         print("Make sure the Splash Docker container is turned on!")
         return False
 
 
-def main():
-    client = docker.from_env()
-    print(client.containers.list())
-
-
 if __name__ == '__main__':
-    main()
-    # my_container_name = "splash"
-    # print(is_running(my_container_name))
+    my_container_name = "splash"
+    print(is_running(my_container_name))
+
