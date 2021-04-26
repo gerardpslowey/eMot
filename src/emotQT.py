@@ -31,14 +31,9 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
             lambda checked: self.toggle_item(self.PreferenceWindow))
         self.actionNew.triggered.connect(self.restart_window)
 
-        self.button.clicked.connect(self.go_button)
+        self.button.clicked.connect(self.goButton)
         self.results_button.setEnabled(False)
-        self.results_button.clicked.connect(self.createMetrics)
-
-    def restart_window(self):
-        QtCore.QCoreApplication.quit()
-        QtCore.QProcess.startDetached(sys.executable, sys.argv)
-        # print(status)
+        self.results_button.clicked.connect(self.showMetrics)
 
     def toggle_item(self, item):
         if item.isVisible():
@@ -46,7 +41,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         else:
             item.show()
 
-    def go_button(self):
+    def goButton(self):
         self.browser = str(self.browserComboBox.currentText()).capitalize()
         self.filtr = str(self.dateComboBox.currentText()).capitalize()
 
@@ -62,40 +57,35 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
         else:
             self.setupPrintPage()
-            self.MetricsDashboard = metrics.MetricsDashboard()
-            self.MetricsDashboard.browserUsedEdit.setText(self.browser)
-            self.MetricsDashboard.dateUsedEdit.setText(self.filtr)
+            self.MetricsDashboard = metrics.MetricsDashboard(self.browser, self.filtr)
 
     def setupPrintPage(self):
         self.stackedWidget.setCurrentWidget(self.printPage)
-        sys.stdout = windows.Stream(newText=self.onUpdateText)
+        sys.stdout = windows.Stream(newText=self.redirectText)
 
         emot = Emot(self.filtr, self.browser)
         worker = Worker(emot.startTasks)
         self.threadpool.start(worker)
-        worker.signals.finished.connect(self.startClassify)
 
-    def onUpdateText(self, text):
-        # Write console output to textEdit widget.
-        cursor = self.textEdit.textCursor()
-        cursor.movePosition(QtGui.QTextCursor.End)
-        cursor.insertText(text)
-        self.textEdit.setTextCursor(cursor)
-        self.textEdit.ensureCursorVisible()
+        worker.signals.result.connect(lambda result: self.startClassify(result))
 
-    def startClassify(self):
-        self.emotClassify = EmotClassify()
-        worker = Worker(self.emotClassify.startAll)
-        self.threadpool.start(worker)
-        worker.signals.finished.connect(self.enableResultsButton)
+    def startClassify(self, result):
+        if result:
+            self.emotClassify = EmotClassify()
+            worker = Worker(self.emotClassify.startAll)
+            self.threadpool.start(worker)
+            worker.signals.finished.connect(self.enableResultsButton)
+        else:
+            self.results_button.setEnabled(True)
+            self.results_button.setText("Start again?")
+            self.results_button.clicked.connect(self.restart_window)
 
     def enableResultsButton(self):
         print("\nClick the 'Show Results' button to view the results!")
-
+        self.startDrawing()
         self.MetricsDashboard.makeCharts(self.emotClassify)
         sites = f"{len(self.emotClassify.getSiteVisitCounts())} Sites"
         self.MetricsDashboard.sitesVisitedEdit.setText(sites)
-        self.startDrawing()
         self.results_button.setEnabled(True)
         self.results_button.setText("Show Results!")
         self.results_button.setStyleSheet(
@@ -105,11 +95,11 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
             "border-radius: 10px;"
         )
 
-    def createMetrics(self):
+    def showMetrics(self):
         self.MetricsDashboard.show()
 
     def startDrawing(self):
-        worker = Worker(self.draw_WordCloud)
+        worker = Worker(self.createWordCloud)
         self.threadpool.start(worker)
 
     def draw_WordCloud(self):
@@ -122,6 +112,20 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         wordCloudImage = "pyqt/wordCloud.png"
         wordcloud.to_file(wordCloudImage)
         self.MetricsDashboard.showImage(wordCloudImage)
+
+    def redirectText(self, text):
+        # Write console output to textEdit widget.
+        cursor = self.textEdit.textCursor()
+        cursor.movePosition(QtGui.QTextCursor.End)
+        cursor.insertText(text)
+        self.textEdit.setTextCursor(cursor)
+        self.textEdit.ensureCursorVisible()
+
+    def restart_window(self):
+        sys.stdout = sys.__stdout__
+        QtCore.QCoreApplication.quit()
+        QtCore.QProcess.startDetached(sys.executable, sys.argv)
+        # print(status)
 
     def closeEvent(self, event):
         """Shuts down application on close."""

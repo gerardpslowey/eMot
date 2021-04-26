@@ -55,10 +55,18 @@
              <number>50</number>
             </property>
             <item>
-             <widget class="QChartView" name="splitChart"/>
+             <widget class="QChartView" name="splitChart">
+              <property name="statusTip">
+               <string>Split Chart</string>
+              </property>
+             </widget>
             </item>
             <item>
-             <widget class="QChartView" name="pieChart"/>
+             <widget class="QChartView" name="pieChart">
+              <property name="statusTip">
+               <string>Pie Chart</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -74,10 +82,18 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="QChartView" name="lineChart"/>
+             <widget class="QChartView" name="lineChart">
+              <property name="statusTip">
+               <string>Line Chart</string>
+              </property>
+             </widget>
             </item>
             <item>
-             <widget class="QChartView" name="barChart"/>
+             <widget class="QChartView" name="barChart">
+              <property name="statusTip">
+               <string>Bar Chart</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -136,11 +152,11 @@ border-radius: 10px;</string>
       <widget class="QWidget" name="wordCloudPage">
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_3" stretch="6,1">
+         <layout class="QVBoxLayout" name="verticalLayout_3" stretch="4,2">
           <item>
            <layout class="QHBoxLayout" name="cloudTextLayout" stretch="4,1">
             <item>
-             <layout class="QVBoxLayout" name="cloudLayout" stretch="1,4">
+             <layout class="QVBoxLayout" name="cloudLayout" stretch="2,4">
               <property name="bottomMargin">
                <number>50</number>
               </property>
@@ -180,6 +196,12 @@ border-radius: 10px;</string>
                    <size>
                     <width>1050</width>
                     <height>750</height>
+                   </size>
+                  </property>
+                  <property name="baseSize">
+                   <size>
+                    <width>850</width>
+                    <height>700</height>
                    </size>
                   </property>
                   <property name="font">

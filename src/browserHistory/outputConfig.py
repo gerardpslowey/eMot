@@ -66,7 +66,7 @@ class Browser(ABC):
         return type list(str)
         """
         if not os.path.exists(self.history_dir):
-            platform.logger.info("%s browser is not installed", self.name)
+            print(f"{self.name} browser is not installed")
             return []
 
         if not self.profile_support:

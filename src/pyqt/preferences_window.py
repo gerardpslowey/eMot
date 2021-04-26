@@ -16,7 +16,7 @@ class Ui_Form(object):
         Form.setObjectName("Form")
         Form.resize(554, 446)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/newPrefix/resources/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/newPrefix/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Form.setWindowIcon(icon)
         Form.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.tagLabel = QtWidgets.QLabel(Form)
@@ -113,6 +113,7 @@ class Ui_Form(object):
         self.deleteUrlButton.setText(_translate("Form", "Delete"))
 import pyqt.resource_rc
 # flake8: noqa
+
 
 if __name__ == "__main__":
     import sys
