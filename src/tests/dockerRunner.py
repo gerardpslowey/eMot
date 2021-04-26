@@ -33,4 +33,3 @@ def stop(container_name):
 if __name__ == '__main__':
     my_container_name = "splash"
     print(is_running(my_container_name))
-
