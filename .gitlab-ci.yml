@@ -6,7 +6,9 @@ stages:
   - test
 
 test:
-  - df –h
+  stage: test
+  script:
+    - df –h
 
 
 
