@@ -29,7 +29,7 @@ def preprocessAndTokenise(data):
 
     stem_data = [
         word.lemma_.strip() for word in mytokens
-        if not word.is_punct and not word.is_stop and not word.is_space
+        if not word.is_punct and not word.is_stop and not word.is_space and not word.is_digit
     ]
 
     return stem_data
@@ -47,33 +47,33 @@ def preProcess(data):
 
     stem_data = [
         word.lemma_.strip() for word in mytokens
-        if word.lemma_ != '-PRON-' and not word.is_punct and not word.is_stop and not word.is_space
+        if word.lemma_ != '-PRON-'
+        and not word.is_punct and not word.is_stop and not word.is_space and not word.is_digit  # noqa: W503
     ]
-
     return " ".join(stem_data)
 
 
-# remove html markup
+# remove html markup tags
 def removehtmlMarkup(sentence):
     return re.sub("(<.*?>)", "", sentence)
 
 
 # remove urls
 def removeURLs(sentence):
-    return re.sub(r'https?://\S+|www\.\S+', '', sentence)
+    return re.sub(r'https?://\S+|www\.\S+', "", sentence)
 
 
 # remove hashtags and @ symbols
 def removeHashandSymbols(sentence):
     # hash symbols
-    data = re.sub(r"(#[\d\w\.]+)", '', sentence)
+    data = re.sub(r"(#[\d\w\.]+)", "", sentence)
     # @ symbols
-    return re.sub(r"(@[\d\w\.]+)", '', data)
+    return re.sub(r"(@[\d\w\.]+)", "", data)
 
 
-# remove punctuation and non-ascii digits
+# remove non-ascii digits
 def removeAscii(sentence):
-    return re.sub("(\\W|\\d)", " ", sentence)
+    return re.sub("(\\d)", "", sentence)
 
 
 # Keeping this works great
@@ -92,4 +92,4 @@ def removeEmojis(text):
         "]+",
         flags=re.UNICODE
     )
-    return regrex_pattern.sub(r'', text)
+    return regrex_pattern.sub(r"", text)

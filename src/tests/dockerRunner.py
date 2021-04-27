@@ -26,7 +26,7 @@ def stop(container_name):
 
         DOCKER_CLIENT.containers.stop(container_name)
     except Exception:
-        print("Make sure the Splash Docker container is turned on!")
+        print("Splash Docker container is not turned on!")
         return False
 
 

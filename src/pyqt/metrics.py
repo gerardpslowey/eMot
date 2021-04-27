@@ -43,13 +43,14 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         self.emotions = emotClassify.getEmotions()
         # split chart data
         self.splitChartValues = emotClassify.getSplitChartValues()
+        self.emotionsPerSite = emotClassify.getEmotionsPerSite()
         self.uniqueSiteCount = emotClassify.getUniqueSiteCount()
         # line chart data
         self.emotionIntensities = emotClassify.getEmotionIntensities()
         # pie chart data
-        self.emotionCounts = emotClassify.getEmotionCount()
+        self.emotionCounts = emotClassify.getEmotionCounts()
+        # bar chart data
         self.siteVisitCounts = emotClassify.getSiteVisitCounts()
-        self.emotionsPerSite = emotClassify.getEmotionsPerSite()
 
         self.makePieChart()
         self.makeLineChart()
@@ -64,19 +65,20 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
             barSets[i].append(value)
             # add number of visits to set
             series.append(barSets[i])
-            barSets[i].setColor(colours[i % 6])
+            numEmotions = len(self.emotions)
+            barSets[i].setColor(colours[i % numEmotions])
 
         chart = QChart()
 
         chart.addSeries(series)
         chart.setTitle('Site Visit Counts Chart')
 
-        largestSiteCount = max(self.siteVisitCounts.values())
         yAxis = QValueAxis()
-        yAxis.setRange(0, largestSiteCount)
-        yAxis.setLabelFormat("%.1f")
-        yAxis.setTickCount(largestSiteCount)
-        yAxis.setTitleText("No. Sites")
+        largestSiteVisitCount = max(self.siteVisitCounts.values())
+        yAxis.setRange(0, largestSiteVisitCount)
+        yAxis.setLabelFormat("%d")
+        yAxis.setTickCount(largestSiteVisitCount + 1)
+        yAxis.setTitleText("Number of Site Visits")
         yAxis.setGridLineVisible(True)
 
         chart.setAnimationOptions(QChart.SeriesAnimations)
@@ -88,8 +90,8 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         self.barChart.setChart(chart)
 
     def makeSplitChart(self):
-        # create a new QBarSet for each emotion in emotions
-        barSets = [QBarSet(emotion) for emotion in self.emotions]  # 6 emotions
+        # create a new QBarSet for each emotion
+        barSets = [QBarSet(emotion) for emotion in self.emotions]
         series = QPercentBarSeries()
 
         # for each website
@@ -103,6 +105,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         # append the completed barSet to the series
         for i in range(len(barSets)):
             series.append(barSets[i])
+            # set the custom colours
             barSets[i].setColor(colours[i])
 
         chart = QChart()
@@ -112,15 +115,16 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
         # categories are the website names
         categories = list(self.emotionsPerSite.keys())
+        # custom x axis
         axisX = QBarCategoryAxis()
         axisX.append(categories)
 
+        # custom y axis
         axisY = QValueAxis()
         axisY.setTickCount(11)
         axisY.setRange(0, 100)
         axisY.setTitleText("% Emotion Per Site")
 
-        chart.createDefaultAxes()
         chart.setAxisX(axisX, series)
         chart.setAxisY(axisY)
 
