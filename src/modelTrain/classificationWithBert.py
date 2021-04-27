@@ -105,9 +105,10 @@ def main():
 def test():
     predictor = ktrain.load_predictor("../models/bert_model")
 
-    message = 'I just broke up with my boyfriend'
+    message = 'I just broke up with my girlfriend'
 
-    start_time = time.time()
+    startTime = time.time()
     prediction = predictor.predict(message)
+    endTime = time.time()
 
-    print('predicted: {} ({:.2f})'.format(prediction, (time.time() - start_time)))
+    print('prediction: {} ({:.2f})'.format(prediction, (endTime - startTime)))

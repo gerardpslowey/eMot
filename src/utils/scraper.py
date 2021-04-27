@@ -17,9 +17,9 @@ class Scraper:
             text = self.getText(soup, tagSet)
             print(f'Task {task} Finished')
             return (url, text)
-
-        print(f"{task}. {url} returned null, skipped")
-        return None
+        else:
+            print(f"{task}. unreachable, skipped")
+            return None
 
     def getSoup(self, url):
         r = requests.get('http://localhost:8050/render.html', params={'url': url, 'wait': 3})
