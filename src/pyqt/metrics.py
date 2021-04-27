@@ -58,7 +58,6 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
     def makeBarChart(self):
         barSets = [QBarSet(site) for site in self.siteVisitCounts.keys()]
-
         series = QBarSeries()
 
         for i, value in enumerate(self.siteVisitCounts.values()):
@@ -72,10 +71,11 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         chart.addSeries(series)
         chart.setTitle('Site Visit Counts Chart')
 
+        largestSiteCount = max(self.siteVisitCounts.values())
         yAxis = QValueAxis()
-        yAxis.setRange(0, len(self.siteVisitCounts))
+        yAxis.setRange(0, largestSiteCount)
         yAxis.setLabelFormat("%.1f")
-        yAxis.setTickCount(len(self.siteVisitCounts))
+        yAxis.setTickCount(largestSiteCount)
         yAxis.setTitleText("No. Sites")
         yAxis.setGridLineVisible(True)
 
