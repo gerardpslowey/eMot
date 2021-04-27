@@ -130,7 +130,7 @@ class EmotClassify:
                 print(f"{key}: {*list(value.values()),}")
 
             elif format == "percent":
-                print(f"{key}: {value:.1%}")
+                print(f"{key}: {value}%")
 
             else:
                 print(f"{key}: {value}")
