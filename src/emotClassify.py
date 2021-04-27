@@ -70,16 +70,16 @@ class EmotClassify:
                     sentimentScore2 = self.classifierModel2.predict_proba(self.cv.transform([sentence]))
 
                     # use 2 models to score the data for comparison
-                    emotionIntensity1 = sentimentScore1.max()
-                    emotionIntensity2 = sentimentScore2.max()
+                    emotionIntensity1 = int(sentimentScore1.max() * 100)
+                    emotionIntensity2 = int(sentimentScore2.max() * 100)
                     averageEmotionIntensity = (emotionIntensity1 + emotionIntensity2) / 2
-                    emotionIntensity = int(averageEmotionIntensity * 100)
+                    emotionIntensity = averageEmotionIntensity
 
                     emotionLabel1 = self.classifierModel1.predict(self.tfidf.transform([sentence]))[0]
                     emotionLabel2 = self.classifierModel2.predict(self.cv.transform([sentence]))[0]
 
                     # for a sentiment to be accepted both models have to have a score greater than 0.6
-                    if emotionIntensity1 >= 0.6 and emotionIntensity2 >= 0.6 and emotionLabel1 == emotionLabel2:
+                    if emotionIntensity1 >= 60 and emotionIntensity2 >= 60 and emotionLabel1 == emotionLabel2:
                         # count total emotion count
                         self.emotionCounts[emotionLabel1] += 1
                         # count of distribution of emotions per site

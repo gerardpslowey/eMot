@@ -107,8 +107,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         words = ' '.join(data)
         wordcloud = WordCloud(
             background_color="white",
-            width=2500, height=2000
-        ).generate(words)
+            width=2500, height=2000).generate(words)
 
         wordCloudImage = "pyqt/wordCloud.png"
         wordcloud.to_file(wordCloudImage)
