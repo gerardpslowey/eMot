@@ -24,7 +24,7 @@ def test_clean_text():
     text = preProcess(text)
     text = removeURLs(text)
     text = spellCheck(text)
-    assert text.lower() == "python great challenge"
+    assert text.lower() == "python great challenging"
 
 
 def test_wrong():
