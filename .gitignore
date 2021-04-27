@@ -6,6 +6,7 @@ __pycache__/*
 
 # Text Files
 *.txt
+!requirements.txt
 
 # Word cloud images
 src/pyqt/*.png

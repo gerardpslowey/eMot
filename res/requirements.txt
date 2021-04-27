@@ -1,0 +1,18 @@
+wheel
+beautifulsoup4
+python-dateutil
+requests
+spacy
+pyqt5==5.15.2
+pyqtchart==5.15.2
+scikit-learn
+pandas
+wordcloud
+pyspellchecker
+pytest
+docker
+tqdm
+numpy
+matplotlib
+flake8
+en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.0.0/en_core_web_sm-3.0.0-py3-none-any.whl
