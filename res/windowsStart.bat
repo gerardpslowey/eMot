@@ -1,6 +1,6 @@
 echo OFF
 echo Starting Python Virtual Environment
-cd ..
+cd ../src
 call env\Scripts\activate.bat
 
 echo Starting Docker Container
