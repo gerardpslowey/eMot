@@ -2,7 +2,7 @@ import platform
 import subprocess
 import os
 
-script = f"{os.getcwd()}\src\scripts"
+script = f"{os.getcwd()}\src\scripts" # noqa
 os.chdir(script)
 
 system = platform.system()
