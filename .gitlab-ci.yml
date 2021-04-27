@@ -1,12 +1,15 @@
 # image: python:latest
 
+
+stages:
+  # - lint
+  - test
+
 test:
   - df –h
 
 
-# stages:
-#   - lint
-#   - test
+
 
 # flake8:
 #   stage: lint
