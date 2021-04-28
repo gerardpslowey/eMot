@@ -9,7 +9,7 @@ scrapedFile = 'sentimentAnalysis/scraped.csv'
 
 class EmotClassify:
     def __init__(self):
-        self.emotions = ['anger', 'fear', 'joy', 'surprise', 'happiness', 'sadness']
+        self.emotions = ['anger', 'fear', 'sadness', 'happiness', 'joy', 'surprise']
         # make a nested dictionary setting the emotion count values to zero
         self.emotionsDict = dict.fromkeys(self.emotions, 0)
 
@@ -23,31 +23,34 @@ class EmotClassify:
         self.siteVisitCounts = None
         self.totalSiteCount = 0
 
-        self.svcModel = "models/svc.pkl"
-        self.svcTfidfModel = "models/svc_tfidf.pkl"
-        self.sgdModel = "models/sgd.pkl"
-        self.sgd_cv_file = "models/sgd_cv.pkl"
-
-        self.classifierModel1 = self.loadFiles(self.svcModel)
-        self.tfidf = self.loadFiles(self.svcTfidfModel)
-        self.classifierModel2 = self.loadFiles(self.sgdModel)
-        self.cv = self.loadFiles(self.sgd_cv_file)
+        self.classifierModel1 = self.loadFiles("models/svc.pkl")    # svcModel
+        self.tfidf = self.loadFiles("models/svc_tfidf.pkl")         # svcTfidfModel
+        self.classifierModel2 = self.loadFiles("models/sgd.pkl")    # sgdModel
+        self.cv = self.loadFiles("models/sgd_cv.pkl")               # sgd_cv_file
 
         # an empty array for line chart array values
         self.splitChartValues = []
-        self.wordcloudBag = []
+        self.negativeWordcloud = []
+        self.positiveWordcloud = []
 
-    # number of times a site is visited
-    def siteCount(self):
-        # only load the urls column from the file
-        urls_df = pd.read_csv(scrapedFile, usecols=["url"]).astype('U')
-        urls_df['base'] = urls_df['url'].apply(base)
-        self.siteVisitCounts = urls_df['base'].value_counts().to_dict()
+    def startAll(self):
 
-        print("Articles read per site: ")
-        self.prettyPrint(self.siteVisitCounts.items())
+        scraped_df = self.readScrapedFile()
 
-    def sentenceClassify(self):
+        threads = []
+        process1 = threading.Thread(target=self.sentenceClassify, args=(scraped_df,))
+        threads.append(process1)
+
+        process2 = threading.Thread(target=self.siteCount)
+        threads.append(process2)
+
+        for process in threads:
+            process.start()
+
+        for process in threads:
+            process.join()
+
+    def readScrapedFile(self):
         # read scraped file
         scraped_df = pd.read_csv(scrapedFile).astype('U')
         # create a new column with the base url as its value
@@ -58,7 +61,17 @@ class EmotClassify:
         for site in sitesList:
             # dictionary key maps to a nested dictionary
             self.emotionsPerSite[site] = copy.deepcopy(self.emotionsDict)
+        return scraped_df
 
+    # number of times a site is visited
+    def siteCount(self):
+        # only load the urls column from the file
+        urls_df = pd.read_csv(scrapedFile, usecols=["url"]).astype('U')
+        urls_df['base'] = urls_df['url'].apply(base)
+        self.siteVisitCounts = urls_df['base'].value_counts().to_dict()
+        self.prettyPrint(self.siteVisitCounts.items())
+
+    def sentenceClassify(self, scraped_df):
         try:
             for row in scraped_df.itertuples(index=False):
                 text = row[1]
@@ -80,40 +93,43 @@ class EmotClassify:
 
                     # for a sentiment to be accepted both models have to have a score greater than 0.6
                     if emotionIntensity1 >= 60 and emotionIntensity2 >= 60 and emotionLabel1 == emotionLabel2:
-                        # count total emotion count
-                        self.emotionCounts[emotionLabel1] += 1
-                        # count of distribution of emotions per site
-                        self.emotionsPerSite[url][emotionLabel1] += 1
+
+                        self.emotionCounts[emotionLabel1] += 1          # count total emotion count
+                        self.emotionsPerSite[url][emotionLabel1] += 1   # count of distribution of emotions per site
 
                     if emotionIntensity > self.emotionIntensities.get(emotionLabel1):
                         self.emotionIntensities[emotionLabel1] = emotionIntensity
                         self.sentenceExamples.update([tuple((emotionIntensity, emotionLabel1, sentence))])
 
-            # prepare some sentence examples for the wordcloud
-            sentenceExampleList = list(self.sentenceExamples)
-            sentenceExampleList.sort(key=lambda tup: tup[0], reverse=True)
-            for sentence in sentenceExampleList[0:int(len(sentenceExampleList) / 2)]:
-                self.wordcloudBag.append(sentence[2])
-
-            # process split chart values
+            self.processWordClouds(list(self.sentenceExamples))
             self.processSplitChartValues()
 
         except pd.errors.EmptyDataError:
             print("Nothing to classify, the file is empty")
         finally:
-            print("\nThe Intensity level of each Emotion:")
             self.prettyPrint(self.emotionIntensities.items(), "percent")
-
-            print("\nThe Amount of each Emotion:")
-            self.prettyPrint(self.emotionCounts.items())
-
-            print("\nSites and associated primary emotions: ")
-            print(f"website: {*self.emotions,}")
+            self.prettyPrint(self.emotionCounts.items(), "amount")
             self.prettyPrint(self.emotionsPerSite.items(), "lst")
 
-            print("\nExamples of emotion based sentences: ")
-            for item in sentenceExampleList[0:int(len(sentenceExampleList) / 2)]:
-                print(f"{item[0]}% {item[1]} = {item[2]}")
+    def processWordClouds(self, sentences):
+
+        sentenceExampleList = sentences     # prepare some sentence examples for the wordcloud
+        sentenceExampleList.sort(key=lambda tup: tup[0], reverse=True)
+        halfListRange = int(len(sentenceExampleList) / 2)
+
+        negative = self.emotions[:len(self.emotions) // 2]
+        positive = self.emotions[len(self.emotions) // 2:]
+        print("\nExamples of emotion based sentences: ")
+
+        for item in sentenceExampleList[:halfListRange]:
+
+            if item[1] in negative:
+                self.negativeWordcloud.append(item[2])
+
+            if item[1] in positive:
+                self.positiveWordcloud.append(item[2])
+
+            print(f"{item[0]}% {item[1]} = {item[2]}")            
 
     def processSplitChartValues(self):
         # total site visits = the number of sites visited
@@ -124,15 +140,26 @@ class EmotClassify:
                 self.splitChartValues.append(list(emotionsPerSite.values()))
 
     def prettyPrint(self, items, format=None):
-        for key, value in items:
 
-            if format == "lst":
+        if format == "lst":
+            print("\nSites and associated primary emotions: ")
+            print(f"website: {*self.emotions,}")
+            for key, value in items:
                 print(f"{key}: {*list(value.values()),}")
 
-            elif format == "percent":
+        elif format == "percent":
+            print("\nThe Intensity level of each Emotion:")
+            for key, value in items:
                 print(f"{key}: {value}%")
 
-            else:
+        elif format == "amount":
+            print("\nThe Amount of each Emotion:")
+            for key, value in items:
+                print(f"{key}: {value}")
+
+        else:
+            print("Articles read per site: ")
+            for key, value in items:
                 print(f"{key}: {value}")
 
     def loadFiles(self, filename):
@@ -158,23 +185,10 @@ class EmotClassify:
         return self.splitChartValues
 
     def getWordCloudBag(self):
-        return self.wordcloudBag
+        return self.negativeWordcloud, self.positiveWordcloud
 
     def getEmotionsPerSite(self):
         return self.emotionsPerSite
-
-    def startAll(self):
-        threads = []
-        process1 = threading.Thread(target=self.sentenceClassify)
-        process1.start()
-        threads.append(process1)
-
-        process2 = threading.Thread(target=self.siteCount)
-        process2.start()
-        threads.append(process2)
-
-        for process in threads:
-            process.join()
 
 
 if __name__ == '__main__':

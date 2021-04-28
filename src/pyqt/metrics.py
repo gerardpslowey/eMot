@@ -3,7 +3,7 @@ from PyQt5.QtChart import QChart, QLineSeries, QValueAxis, QCategoryAxis
 from PyQt5.QtChart import QBarSet, QPercentBarSeries, QBarCategoryAxis
 from PyQt5.QtChart import QPieSeries, QBarSeries
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPen, QColor, QPixmap
+from PyQt5.QtGui import QPen, QColor, QPixmap, QPainter
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5 import QtCore
 import sys
@@ -27,11 +27,16 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         self.nextPageButton.clicked.connect(self.changePage)
         self.previousPageButton.clicked.connect(self.changePage)
 
-    def showImage(self, image):
+    def showImage(self, image, prefix):
         self.image = QPixmap(image)
-        self.image.scaled(self.wordCloud.size(), Qt.KeepAspectRatio)
-        self.wordCloud.setPixmap(self.image)
-        self.wordCloud.setScaledContents(True)
+        if prefix == "neg":
+            self.image.scaled(self.negativeWordcloud.size(), Qt.KeepAspectRatio)
+            self.negativeWordcloud.setPixmap(self.image)
+            self.negativeWordcloud.setScaledContents(True)
+        else:
+            self.image.scaled(self.positiveWordcloud.size(), Qt.KeepAspectRatio)
+            self.positiveWordcloud.setPixmap(self.image)
+            self.positiveWordcloud.setScaledContents(True)
 
     def changePage(self):
         if self.stackedWidget.currentWidget() == self.chartPage:
@@ -52,12 +57,14 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         # bar chart data
         self.siteVisitCounts = emotClassify.getSiteVisitCounts()
 
+        numEmotions = len(self.emotions)
+
         self.makePieChart()
         self.makeLineChart()
-        self.makeSplitChart()
-        self.makeBarChart()
+        self.makeSplitChart(numEmotions)
+        self.makeBarChart(numEmotions)
 
-    def makeBarChart(self):
+    def makeBarChart(self, numEmotions):
         barSets = [QBarSet(site) for site in self.siteVisitCounts.keys()]
         series = QBarSeries()
 
@@ -65,20 +72,18 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
             barSets[i].append(value)
             # add number of visits to set
             series.append(barSets[i])
-            numEmotions = len(self.emotions)
             barSets[i].setColor(colours[i % numEmotions])
 
         chart = QChart()
-
         chart.addSeries(series)
-        chart.setTitle('Site Visit Counts Chart')
+        chart.setTitle('Most Visited Sites')
 
         yAxis = QValueAxis()
         largestSiteVisitCount = max(self.siteVisitCounts.values())
         yAxis.setRange(0, largestSiteVisitCount)
         yAxis.setLabelFormat("%d")
         yAxis.setTickCount(largestSiteVisitCount + 1)
-        yAxis.setTitleText("Number of Site Visits")
+        yAxis.setTitleText("Number of visits")
         yAxis.setGridLineVisible(True)
 
         chart.setAnimationOptions(QChart.SeriesAnimations)
@@ -89,7 +94,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
         self.barChart.setChart(chart)
 
-    def makeSplitChart(self):
+    def makeSplitChart(self, numEmotions):
         # create a new QBarSet for each emotion
         barSets = [QBarSet(emotion) for emotion in self.emotions]
         series = QPercentBarSeries()
@@ -106,11 +111,11 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         for i in range(len(barSets)):
             series.append(barSets[i])
             # set the custom colours
-            barSets[i].setColor(colours[i])
+            barSets[i].setColor(colours[i % numEmotions])
 
         chart = QChart()
         chart.addSeries(series)
-        chart.setTitle('Split Chart of Emotions per Site')
+        chart.setTitle('Emotions Seen Per Site')
         chart.setAnimationOptions(QChart.SeriesAnimations)
 
         # categories are the website names
@@ -135,26 +140,30 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
     def makePieChart(self):
         # get the data
-        emotions = dict(sorted(self.emotionCounts.items(), key=lambda item: item[1], reverse=True))
 
         series = QPieSeries()
-        for i, (emotion, value) in enumerate(emotions.items()):
+        for i, (emotion, value) in enumerate(self.emotionCounts.items()):
             slices = series.append(emotion, value)
             slices.setBrush(colours[i])
 
+        largest = max(self.emotionCounts, key=self.emotionCounts.get)
+        index = list(self.emotionCounts.keys()).index(largest)
         # largest emotion
-        pieSlice = series.slices()[0]
+        pieSlice = series.slices()[index]
         pieSlice.setExploded(True)
         pieSlice.setLabelVisible(True)
-        pieSlice.setPen(QPen(QtCore.Qt.lightGray, 2))
-        pieSlice.setBrush(QtCore.Qt.lightGray)
+        pieSlice.setPen(QPen(QtCore.Qt.darkGray, 2))        # the border colour
 
         chart = QChart()
         chart.addSeries(series)
         chart.setTitle('Overall Emotion Counts Of Sentences')
         chart.createDefaultAxes()
+
+        chart.legend().setVisible(True)
+        chart.legend().setAlignment(Qt.AlignBottom)
         chart.setAnimationOptions(QChart.SeriesAnimations)
         self.pieChart.setChart(chart)
+        self.pieChart.setRenderHint(QPainter.Antialiasing)
 
     def makeLineChart(self):
         series = QLineSeries()
@@ -191,7 +200,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         series.attachAxis(yAxis)
         series.attachAxis(xAxis)
 
-        chart.setTitle("Emotion Intensity Line Chart")
+        chart.setTitle("Largest Confidence Level Per Emotion")
 
         chart.legend().setVisible(False)
         self.lineChart.setChart(chart)

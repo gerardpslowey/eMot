@@ -99,19 +99,26 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.MetricsDashboard.show()
 
     def startDrawing(self):
-        worker = Worker(self.createWordCloud)
+        negative, positive = self.emotClassify.getWordCloudBag()
+        worker = Worker(self.createWordCloud(negative, "neg", "#f9f1f0"))   # light orange
+        worker2 = Worker(self.createWordCloud(positive, "pos", "#ebf2f2"))  # light blue
         self.threadpool.start(worker)
+        self.threadpool.start(worker2)
 
-    def createWordCloud(self):
-        data = self.emotClassify.getWordCloudBag()
+    def createWordCloud(self, data, prefix, colour):
         words = ' '.join(data)
         wordcloud = WordCloud(
-            background_color="white",
-            width=960, height=720).generate(words)
+            background_color=colour,
+            width=600, height=520).generate(words)
 
-        wordCloudImage = "pyqt/wordCloud.png"
-        wordcloud.to_file(wordCloudImage)
-        self.MetricsDashboard.showImage(wordCloudImage)
+        if prefix == "neg":
+            negWordCloudImage = "pyqt/negWordCloud.png"
+            wordcloud.to_file(negWordCloudImage)
+            self.MetricsDashboard.showImage(negWordCloudImage, prefix)
+        else:
+            posWordCloudImage = "pyqt/posWordCloud.png"
+            wordcloud.to_file(posWordCloudImage)
+            self.MetricsDashboard.showImage(posWordCloudImage, prefix)
 
     def redirectText(self, text):
         # Write console output to textEdit widget.

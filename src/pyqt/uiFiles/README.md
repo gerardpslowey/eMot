@@ -5,3 +5,16 @@ Generated Python files from .ui are never edited but instead imported into super
 QT designer is strange in that you must fix the import resource_rc of each generated .py file so that it now reads 
 
 > **import pyqt.resource_rc**
+
+
+## Converting metrics_windows
+
+The metrics_windows uses a QWidget promoted to a QChartview so a view imports need to be changed.
+
+```python
+import sys
+import pyqt.resource_rc
+# flake8: noqa
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtChart import QChartView
+```
