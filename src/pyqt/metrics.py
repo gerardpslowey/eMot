@@ -10,7 +10,8 @@ import sys
 
 colours = [
     QColor("#83677B"), QColor("#379683"), QColor("salmon"),
-    QColor("#7395AE"), QColor("#D79922"), QColor("#99738E")
+    QColor("#7395AE"), QColor("#D79922"), QColor("#99738E"),
+    QColor("#c0c0c0")
 ]
 
 

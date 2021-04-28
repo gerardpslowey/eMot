@@ -9,8 +9,8 @@ scrapedFile = 'sentimentAnalysis/scraped.csv'
 
 class EmotClassify:
     def __init__(self):
-        self.emotions = ['anger', 'fear', 'sadness', 'happiness', 'joy', 'surprise']
-        # make a nested dictionary setting the emotion count values to zero
+        self.emotions = ['anger', 'fear', 'sadness', 'happiness', 'joy', 'surprise', 'unclassified']
+        # make a template dictionary setting the emotion count values to zero
         self.emotionsDict = dict.fromkeys(self.emotions, 0)
 
         self.emotionCounts = copy.deepcopy(self.emotionsDict)
@@ -34,14 +34,13 @@ class EmotClassify:
         self.positiveWordcloud = []
 
     def startAll(self):
-
         scraped_df = self.readScrapedFile()
 
         threads = []
         process1 = threading.Thread(target=self.sentenceClassify, args=(scraped_df,))
         threads.append(process1)
 
-        process2 = threading.Thread(target=self.siteCount)
+        process2 = threading.Thread(target=self.siteVisitCount, args=(scraped_df,))
         threads.append(process2)
 
         for process in threads:
@@ -53,7 +52,7 @@ class EmotClassify:
     def readScrapedFile(self):
         # read scraped file
         scraped_df = pd.read_csv(scrapedFile).astype('U')
-        # create a new column with the base url as its value
+        # create a new column with the base baseUrl as its value
         scraped_df['base'] = scraped_df['url'].apply(base)
         # create a list of unique base sites
         sitesList = scraped_df['base'].unique().tolist()
@@ -64,18 +63,15 @@ class EmotClassify:
         return scraped_df
 
     # number of times a site is visited
-    def siteCount(self):
-        # only load the urls column from the file
-        urls_df = pd.read_csv(scrapedFile, usecols=["url"]).astype('U')
-        urls_df['base'] = urls_df['url'].apply(base)
-        self.siteVisitCounts = urls_df['base'].value_counts().to_dict()
+    def siteVisitCount(self, scraped_df):
+        self.siteVisitCounts = scraped_df['base'].value_counts().to_dict()
         self.prettyPrint(self.siteVisitCounts.items())
 
     def sentenceClassify(self, scraped_df):
         try:
             for row in scraped_df.itertuples(index=False):
                 text = row[1]
-                url = row[2]
+                baseUrl = row[2]
 
                 # score each sentence
                 for sentence in text.split("|"):
@@ -92,10 +88,14 @@ class EmotClassify:
                     emotionLabel2 = self.classifierModel2.predict(self.cv.transform([sentence]))[0]
 
                     # for a sentiment to be accepted both models have to have a score greater than 0.6
-                    if emotionIntensity1 >= 60 and emotionIntensity2 >= 60 and emotionLabel1 == emotionLabel2:
-
-                        self.emotionCounts[emotionLabel1] += 1          # count total emotion count
-                        self.emotionsPerSite[url][emotionLabel1] += 1   # count of distribution of emotions per site
+                    if emotionLabel1 == emotionLabel2:
+                        self.emotionCounts[emotionLabel1] += 1              # count total emotion count
+                        self.emotionsPerSite[baseUrl][emotionLabel1] += 1   # count of distribution of emotions per site
+                    else:
+                        # count total emotion count
+                        self.emotionCounts['unclassified'] += 1
+                        # count of distribution of emotions per site
+                        self.emotionsPerSite[baseUrl]['unclassified'] += 1
 
                     if emotionIntensity > self.emotionIntensities.get(emotionLabel1):
                         self.emotionIntensities[emotionLabel1] = emotionIntensity
@@ -112,13 +112,13 @@ class EmotClassify:
             self.prettyPrint(self.emotionsPerSite.items(), "lst")
 
     def processWordClouds(self, sentences):
-
         sentenceExampleList = sentences     # prepare some sentence examples for the wordcloud
         sentenceExampleList.sort(key=lambda tup: tup[0], reverse=True)
         halfListRange = int(len(sentenceExampleList) / 2)
 
         negative = self.emotions[:len(self.emotions) // 2]
-        positive = self.emotions[len(self.emotions) // 2:]
+        # dont include unclassified words
+        positive = self.emotions[len(self.emotions) // 2:-1]
         print("\nExamples of emotion based sentences: ")
 
         for item in sentenceExampleList[:halfListRange]:
