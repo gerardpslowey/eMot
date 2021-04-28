@@ -7,10 +7,11 @@ from PyQt5.QtGui import QPen, QColor, QPixmap, QPainter
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5 import QtCore
 import sys
+import funcy
 
 colours = [
-    QColor("#83677B"), QColor("#379683"), QColor("salmon"),
-    QColor("#7395AE"), QColor("#D79922"), QColor("#99738E"),
+    QColor("#ED5314"), QColor("#FFB92A"), QColor("#FEEB51"),
+    QColor("#9BCA3E"), QColor("#3ABBC9"), QColor("#666DCB"),
     QColor("#c0c0c0")
 ]
 
@@ -59,7 +60,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         self.siteVisitCounts = emotClassify.getSiteVisitCounts()
 
         numEmotions = len(self.emotions)
-
+        self.keys = ['neutral']
         self.makePieChart()
         self.makeLineChart()
         self.makeSplitChart(numEmotions)
@@ -140,15 +141,15 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         self.splitChart.setChart(chart)
 
     def makePieChart(self):
+        pieEmotions = funcy.omit(self.emotionCounts, 'neutral')
         # get the data
-
         series = QPieSeries()
-        for i, (emotion, value) in enumerate(self.emotionCounts.items()):
+        for i, (emotion, value) in enumerate(pieEmotions.items()):
             slices = series.append(emotion, value)
             slices.setBrush(colours[i])
 
-        largest = max(self.emotionCounts, key=self.emotionCounts.get)
-        index = list(self.emotionCounts.keys()).index(largest)
+        largest = max(pieEmotions, key=pieEmotions.get)
+        index = list(pieEmotions.keys()).index(largest)
         # largest emotion
         pieSlice = series.slices()[index]
         pieSlice.setExploded(True)
@@ -172,9 +173,11 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         series.setPointLabelsColor(Qt.black)
         series.setPointLabelsFormat("@yPoint" + "%")
 
-        for i, (key, value) in enumerate(self.emotionIntensities.items()):
+        lineEmotions = funcy.omit(self.emotionIntensities, 'neutral')
+
+        for i, (key, value) in enumerate(lineEmotions.items()):
             i += 0.5
-            series.append(i, self.emotionIntensities[key])
+            series.append(i, lineEmotions[key])
 
         yAxis = QValueAxis()
         yAxis.setRange(0, 100)
@@ -184,11 +187,11 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         yAxis.setGridLineVisible(False)
 
         xAxis = QCategoryAxis()
-        for i, emotion in enumerate(self.emotionIntensities.keys(), start=1):
+        for i, emotion in enumerate(lineEmotions.keys(), start=1):
             xAxis.append(emotion, i)
 
-        xAxis.setRange(0, len(self.emotionIntensities))
-        xAxis.setTickCount(len(self.emotionIntensities) + 1)
+        xAxis.setRange(0, len(lineEmotions))
+        xAxis.setTickCount(len(lineEmotions) + 1)
         xAxis.setTitleText("Emotions")
         xAxis.setGridLineVisible(False)
 

@@ -9,7 +9,7 @@ scrapedFile = 'sentimentAnalysis/scraped.csv'
 
 class EmotClassify:
     def __init__(self):
-        self.emotions = ['anger', 'fear', 'sadness', 'happiness', 'joy', 'surprise', 'unclassified']
+        self.emotions = ['anger', 'fear', 'sadness', 'happiness', 'joy', 'surprise', 'neutral']
         # make a template dictionary setting the emotion count values to zero
         self.emotionsDict = dict.fromkeys(self.emotions, 0)
 
@@ -93,9 +93,9 @@ class EmotClassify:
                         self.emotionsPerSite[baseUrl][emotionLabel1] += 1   # count of distribution of emotions per site
                     else:
                         # count total emotion count
-                        self.emotionCounts['unclassified'] += 1
+                        self.emotionCounts['neutral'] += 1
                         # count of distribution of emotions per site
-                        self.emotionsPerSite[baseUrl]['unclassified'] += 1
+                        self.emotionsPerSite[baseUrl]['neutral'] += 1
 
                     if emotionIntensity > self.emotionIntensities.get(emotionLabel1):
                         self.emotionIntensities[emotionLabel1] = emotionIntensity
@@ -117,7 +117,7 @@ class EmotClassify:
         halfListRange = int(len(sentenceExampleList) / 2)
 
         negative = self.emotions[:len(self.emotions) // 2]
-        # dont include unclassified words
+        # dont include neutral words
         positive = self.emotions[len(self.emotions) // 2:-1]
         print("\nExamples of emotion based sentences: ")
 
