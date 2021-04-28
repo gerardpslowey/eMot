@@ -129,7 +129,7 @@ class EmotClassify:
             if item[1] in positive:
                 self.positiveWordcloud.append(item[2])
 
-            print(f"{item[0]}% {item[1]} = {item[2]}")            
+            print(f"{item[0]}% {item[1]} = {item[2]}")
 
     def processSplitChartValues(self):
         # total site visits = the number of sites visited
