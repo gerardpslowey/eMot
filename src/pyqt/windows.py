@@ -1,27 +1,37 @@
+from PyQt5 import QtCore
+from PyQt5.QtCore import QObject
+from PyQt5.QtWidgets import QMainWindow, QMessageBox
+
 from pyqt.about_window import Ui_Form
 from pyqt.browser_dialog import Ui_browserDialog
 from pyqt.preferences_window import Ui_Form as PrefWindow
 from utils.blacklists import Blacklists
-from PyQt5 import QtCore
-from PyQt5.QtCore import QObject
-from PyQt5.QtWidgets import QMessageBox, QMainWindow
 
 
 class About(QMainWindow, Ui_Form):
-    def __init__(self, *args, obj=None, **kwargs):
-        super(About, self).__init__(*args, **kwargs)
+    """Super class of about_windows since it can be changed at any time from ui files."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.setupUi(self)
 
 
 class Dialog(QMainWindow, Ui_browserDialog):
-    def __init__(self, *args, obj=None, **kwargs):
-        super(Dialog, self).__init__(*args, **kwargs)
+    """Super class of browser_dialog since it can be changed at any time from ui files."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.setupUi(self)
 
 
 class Preference(QMainWindow, PrefWindow):
-    def __init__(self, *args, obj=None, **kwargs):
-        super(Preference, self).__init__(*args, **kwargs)
+    """
+    Super class of preferences_windows since it can be changed at any time from ui files.
+    This class is extended to add functionality to the tag and url buttons.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.setupUi(self)
         self.blacklists = Blacklists()
         self.addTagButton.clicked.connect(self.addTag)
@@ -64,6 +74,7 @@ class Preference(QMainWindow, PrefWindow):
 
 class Stream(QObject):
     """Redirects console output to text widget."""
+
     newText = QtCore.pyqtSignal(str)
 
     def write(self, text):

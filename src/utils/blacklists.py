@@ -2,18 +2,20 @@ import json
 
 
 class Blacklists:
+    """Deleter/ Adder class for JSON blacklist."""
+
     def __init__(self):
         self.filename = "utils/blacklists.json"
 
     def getItems(self, blacklist=None):
         try:
-            with open(self.filename, "r") as json_file:
+            with open(self.filename) as json_file:
                 data = json.load(json_file)
                 if blacklist is not None:
                     return data[blacklist]
                 else:
                     return data
-        except IOError:
+        except OSError:
             print(f"Could not read file {self.filename}")
             return None
 

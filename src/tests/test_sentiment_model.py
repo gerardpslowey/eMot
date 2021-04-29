@@ -1,6 +1,7 @@
 import pickle
 import sys
 from pathlib import Path
+
 sys.path.append(str(Path(__file__).parent.parent.absolute()))
 
 LR_Model = "models/lr.pkl"
@@ -20,7 +21,7 @@ def test_sentiment():
     message = "The weather is to remain dull with rain to come"
     sentiment_value = model.predict(cv.transform([message]))[0]
 
-    assert sentiment_value != 'sadness'
+    assert sentiment_value != "sadness"
 
 
 def test_sentiment2():
@@ -30,18 +31,22 @@ def test_sentiment2():
     message = "this is horrible"
     sentiment_value = model.predict(cv.transform([message]))
 
-    assert sentiment_value != 'joy'
+    assert sentiment_value != "joy"
 
 
 def test_happiness_sentiment():
     model = loadFiles(SVC_Model)
     tfidf = loadFiles(SVC_TFIDF_File)
 
-    reviews = ["it was a lovely sunny day today", "this film is very good", "he's the nicest guy I know"]
+    reviews = [
+        "it was a lovely sunny day today",
+        "this film is very good",
+        "he's the nicest guy I know",
+    ]
 
     for review in reviews:
         sentiment_name = model.predict(tfidf.transform([review]))
-        assert sentiment_name == 'happiness'
+        assert sentiment_name == "happiness"
 
 
 def test_sadness_sentiment():
@@ -49,9 +54,9 @@ def test_sadness_sentiment():
     tfidf = loadFiles(SVC_TFIDF_File)
     sentence = "my dog died"
     sentiment_name = model.predict(tfidf.transform([sentence]))
-    assert sentiment_name == 'sadness'
+    assert sentiment_name == "sadness"
 
 
 def loadFiles(filename):
-    with open(filename, 'rb') as file:
+    with open(filename, "rb") as file:
         return pickle.load(file)

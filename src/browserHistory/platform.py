@@ -1,4 +1,6 @@
-import enum, platform, logging
+import enum
+import logging
+import platform
 
 logger = logging.getLogger(__name__)
 handler = logging.StreamHandler()
@@ -8,9 +10,12 @@ logger.addHandler(handler)
 logger.setLevel(logging.INFO)
 
 
-# An enum used to indicate the system's platform
 class Platform(enum.Enum):
-    # A value of 0 is reserved for unknown platforms.
+    """
+    An enum used to indicate the system's platform.
+    A value of 0 is reserved for unknown platforms.
+    """
+
     OTHER = 0
     LINUX = 1
     MAC = 2

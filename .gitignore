@@ -7,6 +7,7 @@ __pycache__/*
 # Text Files
 *.txt
 !requirements.txt
+!pre-commit-conf.txt
 
 # Word cloud images
 src/pyqt/*.png
@@ -72,7 +73,7 @@ venv/
 
 # Datasets
 src/datasets/*
-!src/datasets/README.md 
+!src/datasets/README.md
 
 # Models
 src/models/*

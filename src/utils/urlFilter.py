@@ -5,12 +5,12 @@ import re
 
 
 def base(url):
-    regex = 'https?://([A-Za-z_0-9.-]+).*'
+    regex = "https?://([A-Za-z_0-9.-]+).*"
     url = re.search(regex, url)
     if url:
         return url.group(1)
     else:
-        return ''
+        return ""
 
 
 def filterBlacklistedUrl(history_list, blacklisted_sites):

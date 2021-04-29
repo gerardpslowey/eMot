@@ -18,23 +18,23 @@
 
 ### Introduction
 
-- Our project covers the general areas of data extraction, natural language processing, sentiment analysis and machine learning. 
+- Our project covers the general areas of data extraction, natural language processing, sentiment analysis and machine learning.
 
 - The resulting project will use a combination of the aforementioned technologies to analyse the web browsing activity of a user to extract sentiment from the sites that they have visited.
 
 ### Outline
 
-- Our project is a locally hosted application that will use natural language processing with sentiment analysis and machine learning. 
+- Our project is a locally hosted application that will use natural language processing with sentiment analysis and machine learning.
 
 - The aim of the application will be to help us learn and understand sentiment analysis while incorporating aspects of machine learning. The resulting project should also highlight to the user the sentiment of the material that they are viewing online.
 
-- The application will run in the background on the users machine (windows or linux). By recording the sites visited by the user, we aim to gauge the sentiment of the material they are reading or focusing on. 
+- The application will run in the background on the users machine (windows or linux). By recording the sites visited by the user, we aim to gauge the sentiment of the material they are reading or focusing on.
 
 - This will be carried out by scraping text from websites using the recorded URLs.
 
-- Based on the browsing habits of the user a material sentiment graphical bar will indicate to the user the sentiment of the material they have been reading using colours. 
+- Based on the browsing habits of the user a material sentiment graphical bar will indicate to the user the sentiment of the material they have been reading using colours.
 
-- If the user focuses primarily on negative material the progress bar will fill up quicker and eventually the user will be prompted to take a break from reading online material. 
+- If the user focuses primarily on negative material the progress bar will fill up quicker and eventually the user will be prompted to take a break from reading online material.
 
 ### Background
 
@@ -44,7 +44,7 @@
 
 ### Achievements
 
-- There are several main functions that our project will offer: 
+- There are several main functions that our project will offer:
 
 1. A local application on the users machine responsible for:
     - Recording the links clicked by the user / accessing the user's browser history with their consent.
@@ -53,14 +53,14 @@
 2. A web link scraper / crawler:
     - It will be provided with relevant links from the database.
 
-3. A Natural language processor of the scraped data. 
+3. A Natural language processor of the scraped data.
     - It will analyse and score the data.
 
 4. An interface to view, use and be notified of reading sentiment via graphical representation.
 
 
 - This project could arguably be used by any person browsing the web. Once the application is running on the local machine and an internet connection exists, the user can let the application do all the work.
-- This project will allow a user to regulate their browsing of online articles and pages. The project tracks the sentiment of the material being viewed and the user should be able to balance the sentiment of the material they read. 
+- This project will allow a user to regulate their browsing of online articles and pages. The project tracks the sentiment of the material being viewed and the user should be able to balance the sentiment of the material they read.
 
 ### Justification
 
@@ -72,8 +72,8 @@
 ### Programming language(s)
 
 - Python will be the main langauge being used, due to its diversity and applications in the following areas:
-    - web scraping, 
-    - sentiment analysis, 
+    - web scraping,
+    - sentiment analysis,
     - graphical user interface design
     - and database management.
 
@@ -84,7 +84,7 @@ Our project will consist of the following tools:
 
 - Parsing - Scrapy is a Python scraping framework that will be used to access website URLs supplied from the URL's database.
 
-- Machine Learning - scikit-learn is the Python machine learning library that we will use to help us analyse data. 
+- Machine Learning - scikit-learn is the Python machine learning library that we will use to help us analyse data.
 
 - Testing - For testing, Python’s testing library PyUnit will be used for testing. Additional testing datasets will be used for testing the sentiment analyses aspects of the project also.
 

@@ -1,12 +1,14 @@
 import sys
 from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent.absolute()))
+
 from utils.textMod import preProcess, removeURLs, spellCheck
+
+sys.path.append(str(Path(__file__).parent.parent.absolute()))
 
 
 def test_pre_process():
     sentence = "Screw you @davidbrussee! I only have 3 weeks..."
-    assert preProcess(sentence).lower() == 'screw week'
+    assert preProcess(sentence).lower() == "screw week"
 
 
 def test_remove_url():
@@ -28,7 +30,9 @@ def test_clean_text():
 
 
 def test_wrong():
-    sentence = "very nice very cool, king of the castle, king of the castle, I have a chair"
+    sentence = (
+        "very nice very cool, king of the castle, king of the castle, I have a chair"
+    )
     text = preProcess(sentence)
     text = removeURLs(text)
     text = spellCheck(text)

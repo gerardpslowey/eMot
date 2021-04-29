@@ -1,15 +1,28 @@
-import pandas as pd
+import copy
 import pickle
 import threading
-from utils.urlFilter import base
-import copy
 
-scrapedFile = 'sentimentAnalysis/scraped.csv'
+import pandas as pd
+
+from utils.urlFilter import base
 
 
 class EmotClassify:
+    """
+    emotClassify produces metrics about the different emotions below seen in sites.
+    It can be run on its own and information will print to the terminal.
+    """
+
     def __init__(self):
-        self.emotions = ['anger', 'fear', 'sadness', 'happiness', 'joy', 'surprise', 'neutral']
+        self.emotions = [
+            "anger",
+            "fear",
+            "sadness",
+            "happiness",
+            "joy",
+            "surprise",
+            "neutral",
+        ]
         # make a template dictionary setting the emotion count values to zero
         self.emotionsDict = dict.fromkeys(self.emotions, 0)
 
@@ -20,27 +33,33 @@ class EmotClassify:
 
         self.sentenceExamples = set()
 
-        self.siteVisitCounts = None
+        self.siteVisitCounts = 0
         self.totalSiteCount = 0
 
-        self.classifierModel1 = self.loadFiles("models/svc.pkl")    # svcModel
-        self.tfidf = self.loadFiles("models/svc_tfidf.pkl")         # svcTfidfModel
-        self.classifierModel2 = self.loadFiles("models/sgd.pkl")    # sgdModel
-        self.cv = self.loadFiles("models/sgd_cv.pkl")               # sgd_cv_file
+        self.classifierModel1 = self.loadFiles("models/svc.pkl")  # svcModel
+        self.tfidf = self.loadFiles("models/svc_tfidf.pkl")  # svcTfidfModel
+        self.classifierModel2 = self.loadFiles("models/sgd.pkl")  # sgdModel
+        self.cv = self.loadFiles("models/sgd_cv.pkl")  # sgd_cv_file
 
         # an empty array for line chart array values
         self.splitChartValues = []
         self.negativeWordcloud = []
         self.positiveWordcloud = []
 
+        self.scrapedFile = "sentimentAnalysis/scraped.csv"
+
     def startAll(self):
         scraped_df = self.readScrapedFile()
 
         threads = []
-        process1 = threading.Thread(target=self.sentenceClassify, args=(scraped_df,))
+        process1 = threading.Thread(
+            target=self.sentenceClassify, args=(
+                scraped_df,))
         threads.append(process1)
 
-        process2 = threading.Thread(target=self.siteVisitCount, args=(scraped_df,))
+        process2 = threading.Thread(
+            target=self.siteVisitCount, args=(
+                scraped_df,))
         threads.append(process2)
 
         for process in threads:
@@ -50,12 +69,13 @@ class EmotClassify:
             process.join()
 
     def readScrapedFile(self):
-        # read scraped file
-        scraped_df = pd.read_csv(scrapedFile).astype('U')
+
+        scraped_df = pd.read_csv(
+            self.scrapedFile).astype("U")  # read scraped file
         # create a new column with the base baseUrl as its value
-        scraped_df['base'] = scraped_df['url'].apply(base)
+        scraped_df["base"] = scraped_df["url"].apply(base)
         # create a list of unique base sites
-        sitesList = scraped_df['base'].unique().tolist()
+        sitesList = scraped_df["base"].unique().tolist()
         # create a nested dictionary for each site
         for site in sitesList:
             # dictionary key maps to a nested dictionary
@@ -64,7 +84,7 @@ class EmotClassify:
 
     # number of times a site is visited
     def siteVisitCount(self, scraped_df):
-        self.siteVisitCounts = scraped_df['base'].value_counts().to_dict()
+        self.siteVisitCounts = scraped_df["base"].value_counts().to_dict()
         self.prettyPrint(self.siteVisitCounts.items())
 
     def sentenceClassify(self, scraped_df):
@@ -75,31 +95,46 @@ class EmotClassify:
 
                 # score each sentence
                 for sentence in text.split("|"):
-                    sentimentScore1 = self.classifierModel1.predict_proba(self.tfidf.transform([sentence]))
-                    sentimentScore2 = self.classifierModel2.predict_proba(self.cv.transform([sentence]))
+                    sentimentScore1 = self.classifierModel1.predict_proba(
+                        self.tfidf.transform([sentence])
+                    )
+                    sentimentScore2 = self.classifierModel2.predict_proba(
+                        self.cv.transform([sentence])
+                    )
 
                     # use 2 models to score the data for comparison
                     emotionIntensity1 = int(sentimentScore1.max() * 100)
                     emotionIntensity2 = int(sentimentScore2.max() * 100)
-                    averageEmotionIntensity = (emotionIntensity1 + emotionIntensity2) / 2
+                    averageEmotionIntensity = (
+                        emotionIntensity1 + emotionIntensity2) / 2
                     emotionIntensity = averageEmotionIntensity
 
-                    emotionLabel1 = self.classifierModel1.predict(self.tfidf.transform([sentence]))[0]
-                    emotionLabel2 = self.classifierModel2.predict(self.cv.transform([sentence]))[0]
+                    emotionLabel1 = self.classifierModel1.predict(
+                        self.tfidf.transform([sentence])
+                    )[0]
+                    emotionLabel2 = self.classifierModel2.predict(
+                        self.cv.transform([sentence])
+                    )[0]
 
-                    # for a sentiment to be accepted both models have to have a score greater than 0.6
+                    # for a sentiment to be accepted both models have to have a
+                    # score greater than 0.6
                     if emotionLabel1 == emotionLabel2:
-                        self.emotionCounts[emotionLabel1] += 1              # count total emotion count
-                        self.emotionsPerSite[baseUrl][emotionLabel1] += 1   # count of distribution of emotions per site
+                        # count total emotion count
+                        self.emotionCounts[emotionLabel1] += 1
+                        # count of distribution of emotions per site
+                        self.emotionsPerSite[baseUrl][emotionLabel1] += 1
                     else:
                         # count total emotion count
-                        self.emotionCounts['neutral'] += 1
+                        self.emotionCounts["neutral"] += 1
                         # count of distribution of emotions per site
-                        self.emotionsPerSite[baseUrl]['neutral'] += 1
+                        self.emotionsPerSite[baseUrl]["neutral"] += 1
 
-                    if emotionIntensity > self.emotionIntensities.get(emotionLabel1):
+                    if emotionIntensity > self.emotionIntensities.get(
+                            emotionLabel1):
                         self.emotionIntensities[emotionLabel1] = emotionIntensity
-                        self.sentenceExamples.update([tuple((emotionIntensity, emotionLabel1, sentence))])
+                        self.sentenceExamples.update(
+                            [(emotionIntensity, emotionLabel1, sentence)]
+                        )
 
             self.processWordClouds(list(self.sentenceExamples))
             self.processSplitChartValues()
@@ -112,13 +147,15 @@ class EmotClassify:
             self.prettyPrint(self.emotionsPerSite.items(), "lst")
 
     def processWordClouds(self, sentences):
-        sentenceExampleList = sentences     # prepare some sentence examples for the wordcloud
+        # prepare some sentence examples for the wordcloud
+        sentenceExampleList = sentences
         sentenceExampleList.sort(key=lambda tup: tup[0], reverse=True)
         halfListRange = int(len(sentenceExampleList) / 2)
 
-        negative = self.emotions[:len(self.emotions) // 2]
+        negative = self.emotions[: len(self.emotions) // 2]
+
         # dont include neutral words
-        positive = self.emotions[len(self.emotions) // 2:-1]
+        positive = self.emotions[len(self.emotions) // 2: -1]
         print("\nExamples of emotion based sentences: ")
 
         for item in sentenceExampleList[:halfListRange]:
@@ -139,20 +176,20 @@ class EmotClassify:
             for emotionsPerSite in self.emotionsPerSite.values():
                 self.splitChartValues.append(list(emotionsPerSite.values()))
 
-    def prettyPrint(self, items, format=None):
+    def prettyPrint(self, items, formatting=None):
 
-        if format == "lst":
+        if formatting == "lst":
             print("\nSites and associated primary emotions: ")
             print(f"website: {*self.emotions,}")
             for key, value in items:
                 print(f"{key}: {*list(value.values()),}")
 
-        elif format == "percent":
+        elif formatting == "percent":
             print("\nThe Intensity level of each Emotion:")
             for key, value in items:
                 print(f"{key}: {value}%")
 
-        elif format == "amount":
+        elif formatting == "amount":
             print("\nThe Amount of each Emotion:")
             for key, value in items:
                 print(f"{key}: {value}")
@@ -163,8 +200,8 @@ class EmotClassify:
                 print(f"{key}: {value}")
 
     def loadFiles(self, filename):
-        with open(filename, 'rb') as file:
-            return pickle.load(file)
+        with open(filename, "rb") as file:
+            return pickle.load(file)  # noqa
 
     def getEmotions(self):
         return self.emotions
@@ -191,6 +228,6 @@ class EmotClassify:
         return self.emotionsPerSite
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test = EmotClassify()
     test.startAll()

@@ -1,18 +1,22 @@
 import sys
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from pyqt import main_window, windows, metrics  # reportsInfo
-from qtWorker import Worker
+from wordcloud import STOPWORDS, WordCloud
 
 from eMot import Emot
 from emotClassify import EmotClassify
+from pyqt import main_window, metrics, windows  # reportsInfo
+from qtWorker import Worker
 from tests import dockerRunner
-from wordcloud import WordCloud
+
+stop_words = ["s", "m", "na", "co"] + list(STOPWORDS)
 
 
 class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
-    def __init__(self, *args, obj=None, **kwargs):
-        super(Main, self).__init__(*args, **kwargs)
+    """Main GUI application. Uses eMot for scraping and emotClassify for metrics."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.setupUi(self)
         self.stackedWidget.setCurrentWidget(self.homePage)
 
@@ -25,10 +29,12 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
         # file menu
         self.actionAbout.triggered.connect(
-            lambda checked: self.toggleItem(self.AboutWindow))
+            lambda checked: self.toggleItem(self.AboutWindow)
+        )
 
         self.actionPreferences.triggered.connect(
-            lambda checked: self.toggleItem(self.PreferenceWindow))
+            lambda checked: self.toggleItem(self.PreferenceWindow)
+        )
         self.actionNew.triggered.connect(self.restartWindow)
 
         self.button.clicked.connect(self.goButton)
@@ -47,17 +53,20 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
         if self.browser == "Select browser":
             self.toggleItem(self.DialogWindow)
-            self.DialogWindow.label.setText("Choose a browser from \nthe dropdown menu")
+            self.DialogWindow.label.setText(
+                "Choose a browser from \nthe dropdown menu")
             self.DialogWindow.label_2.setText("You Must Choose A Browser")
 
         elif not dockerRunner.is_running("splash"):
             self.toggleItem(self.DialogWindow)
-            self.DialogWindow.label.setText("The splash container \nmust be turned on")
+            self.DialogWindow.label.setText(
+                "The splash container \nmust be turned on")
             self.DialogWindow.label_2.setText("Docker Container")
 
         else:
             self.setupPrintPage()
-            self.MetricsDashboard = metrics.MetricsDashboard(self.browser, self.filtr)
+            self.MetricsDashboard = metrics.MetricsDashboard(
+                self.browser, self.filtr)
 
     def setupPrintPage(self):
         self.stackedWidget.setCurrentWidget(self.printPage)
@@ -67,7 +76,8 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         worker = Worker(emot.startTasks)
         self.threadpool.start(worker)
 
-        worker.signals.result.connect(lambda result: self.startClassify(result))
+        worker.signals.result.connect(
+            lambda result: self.startClassify(result))
 
     def startClassify(self, result):
         if result:
@@ -99,26 +109,29 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.MetricsDashboard.show()
 
     def startDrawing(self):
-        negative, positive = self.emotClassify.getWordCloudBag()
-        worker = Worker(self.createWordCloud(negative, "neg", "#f9f1f0"))   # light orange
-        worker2 = Worker(self.createWordCloud(positive, "pos", "#ebf2f2"))  # light blue
+        negativeList, positiveList = self.emotClassify.getWordCloudBag()
+        worker = Worker(
+            self.createWordcloud(negativeList, "negative", "#f9f1f0")
+        )  # light orange
         self.threadpool.start(worker)
+        worker2 = Worker(
+            self.createWordcloud(positiveList, "positive", "#ebf2f2")
+        )  # light blue
         self.threadpool.start(worker2)
 
-    def createWordCloud(self, data, prefix, colour):
-        words = ' '.join(data)
-        wordcloud = WordCloud(
-            background_color=colour,
-            width=600, height=520).generate(words)
+    def createWordcloud(self, data, prefix, colour):
+        if data:
+            words = " ".join(data)
+            wordcloud = WordCloud(
+                background_color=colour, stopwords=stop_words, width=600, height=520
+            ).generate(words)
 
-        if prefix == "neg":
-            negWordCloudImage = "pyqt/negWordCloud.png"
-            wordcloud.to_file(negWordCloudImage)
-            self.MetricsDashboard.showImage(negWordCloudImage, prefix)
+            wordCloudImage = f"pyqt/{prefix}Wordcloud.png"
+            wordcloud.to_file(wordCloudImage)
+            self.MetricsDashboard.showImage(wordCloudImage, prefix)
         else:
-            posWordCloudImage = "pyqt/posWordCloud.png"
-            wordcloud.to_file(posWordCloudImage)
-            self.MetricsDashboard.showImage(posWordCloudImage, prefix)
+            errorImage = "pyqt/error.png"
+            self.MetricsDashboard.showImage(errorImage, prefix)
 
     def redirectText(self, text):
         # Write console output to textEdit widget.
@@ -142,7 +155,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         super().closeEvent(event)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     main = Main()
     main.show()

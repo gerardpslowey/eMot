@@ -1,23 +1,24 @@
-from PyQt5.QtCore import QRunnable, pyqtSlot, pyqtSignal, QObject
 import sys
 import traceback
 
+from PyQt5.QtCore import QObject, QRunnable, pyqtSignal, pyqtSlot
+
 
 class Worker(QRunnable):
-    '''
-    Worker thread
+    """
+    Worker thread.
 
     Inherits from QRunnable to handler worker thread setup, signals and wrap-up.
 
     :param callback: The function callback to run on this worker thread. Supplied args and
                     kwargs will be passed through to the runner.
-    :type callback: function
-    :param args: Arguments to pass to the callback function
-    :param kwargs: Keywords to pass to the callback function
-    '''
+    :type callback: function.
+    :param args: Arguments to pass to the callback function.
+    :param kwargs: Keywords to pass to the callback function.
+    """
 
     def __init__(self, fn, *args, **kwargs):
-        super(Worker, self).__init__()
+        super().__init__()
         # Store constructor arguments (re-used for processing)
         self.fn = fn
         self.args = args
@@ -35,13 +36,14 @@ class Worker(QRunnable):
             exctype, value = sys.exc_info()[:2]
             self.signals.error.emit((exctype, value, traceback.format_exc()))
         else:
-            self.signals.result.emit(result)  # Return the result of the processing
+            # Return the result of the processing
+            self.signals.result.emit(result)
         finally:
             self.signals.finished.emit()  # Done
 
 
 class WorkerSignals(QObject):
-    '''
+    """
     Defines the signals available from a running worker thread.
     Supported signals are:
 
@@ -49,12 +51,13 @@ class WorkerSignals(QObject):
         No data
 
     error
-        tuple (exctype, value, traceback.format_exc() )
+        tuple (exctype, value, traceback.format_exc() ).
 
     result
-        object data returned from processing, anything
+        object data returned from processing, anything.
 
-    '''
+    """
+
     finished = pyqtSignal()
     error = pyqtSignal(tuple)
     result = pyqtSignal(object)

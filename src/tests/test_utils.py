@@ -1,6 +1,7 @@
-from os import path
 import platform
+from os import path
 from pathlib import Path
+
 import pytest
 
 
@@ -11,7 +12,10 @@ def change_homedir(monkeypatch):
 
     # Safe approach to locating 'tests/' dir (always the dir of this module)
     test_dir = path.dirname(path.abspath(__file__))
-    monkeypatch.setattr(Path, "home", lambda: Path(f"{test_dir}/test_homedirs/{platform.system()}"))
+    monkeypatch.setattr(
+        Path, "home", lambda: Path(
+            f"{test_dir}/test_homedirs/{platform.system()}")
+    )
     return platform.system()
 
 

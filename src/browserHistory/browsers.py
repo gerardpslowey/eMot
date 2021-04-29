@@ -1,10 +1,12 @@
 # Functions to define all supported browsers and their functionality.
 import datetime  # noqa
+
 from .outputConfig import Browser, ChromiumBasedBrowser
 
 
-# Google Chrome on Windows, Linux and Mac
 class Chrome(ChromiumBasedBrowser):
+    """Google Chrome on Windows, Linux and Mac."""
+
     name = "Chrome"
 
     windows_path = "AppData/Local/Google/Chrome/User Data"
@@ -14,8 +16,9 @@ class Chrome(ChromiumBasedBrowser):
     profile_support = True
 
 
-# Firefox on Windows, Linux and Mac
 class Firefox(Browser):
+    """Firefox on Windows, Linux and Mac."""
+
     name = "Firefox"
 
     windows_path = "AppData/Roaming/Mozilla/Firefox/Profiles"
@@ -45,8 +48,9 @@ class Firefox(Browser):
     """
 
 
-# Safari on MAC
 class Safari(Browser):
+    """Safari on MAC."""
+
     name = "Safari"
 
     mac_path = "Library/Safari"
@@ -72,8 +76,9 @@ class Safari(Browser):
     """
 
 
-# Edge on Windows and Mac
 class Edge(ChromiumBasedBrowser):
+    """Edge on Windows and Mac."""
+
     name = "Edge"
 
     windows_path = "AppData/Local/Microsoft/Edge/User Data"
@@ -82,8 +87,9 @@ class Edge(ChromiumBasedBrowser):
     profile_support = True
 
 
-# Opera on Linux, Windows and Mac
 class Opera(ChromiumBasedBrowser):
+    """Opera on Linux, Windows and Mac."""
+
     name = "Opera"
 
     linux_path = ".config/opera"
@@ -93,8 +99,9 @@ class Opera(ChromiumBasedBrowser):
     profile_support = False
 
 
-# Brave on Linux, Windows and Mac
 class Brave(ChromiumBasedBrowser):
+    """Brave on Linux, Windows and Mac."""
+
     name = "Brave"
 
     linux_path = ".config/BraveSoftware/Brave-Browser"

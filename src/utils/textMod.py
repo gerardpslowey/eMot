@@ -1,16 +1,18 @@
-import spacy, re
+import re
 
+import spacy
+from spacy.tokenizer import _get_regex_pattern
 from spellchecker import SpellChecker
+
 spell = SpellChecker(distance=1)
 
-from spacy.tokenizer import _get_regex_pattern
 
 # load spacy data file
-nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner'])
+nlp = spacy.load("en_core_web_sm", disable=["parser", "ner"])
 
 # get default pattern for tokens that don't get split
 re_token_match = _get_regex_pattern(nlp.Defaults.token_match)
-re_token_match = fr'({re_token_match}|#\w+|\w+-\w+)'
+re_token_match = fr"({re_token_match}|#\w+|\w+-\w+)"
 
 # overwrite token_match function of the tokenizer
 nlp.tokenizer.token_match = re.compile(re_token_match).match
@@ -28,8 +30,12 @@ def preprocessAndTokenise(data):
     mytokens = nlp(data)
 
     stem_data = [
-        word.lemma_.strip() for word in mytokens
-        if not word.is_punct and not word.is_stop and not word.is_space and not word.is_digit
+        word.lemma_.strip()
+        for word in mytokens
+        if not word.is_punct
+        and not word.is_stop
+        and not word.is_space
+        and not word.is_digit
     ]
 
     return stem_data
@@ -46,9 +52,13 @@ def preProcess(data):
     mytokens = nlp(data)
 
     stem_data = [
-        word.lemma_.strip() for word in mytokens
-        if word.lemma_ != '-PRON-'
-        and not word.is_punct and not word.is_stop and not word.is_space and not word.is_digit  # noqa: W503
+        word.lemma_.strip()
+        for word in mytokens
+        if word.lemma_ != "-PRON-"
+        and not word.is_punct
+        and not word.is_stop
+        and not word.is_space
+        and not word.is_digit  # noqa: W503
     ]
     return " ".join(stem_data)
 
@@ -60,7 +70,7 @@ def removehtmlMarkup(sentence):
 
 # remove urls
 def removeURLs(sentence):
-    return re.sub(r'https?://\S+|www\.\S+', "", sentence)
+    return re.sub(r"https?://\S+|www\.\S+", "", sentence)
 
 
 # remove hashtags and @ symbols
@@ -85,11 +95,11 @@ def spellCheck(sentence):
 def removeEmojis(text):
     regrex_pattern = re.compile(
         pattern="["
-        u"\U0001F600-\U0001F64F"  # emoticons
-        u"\U0001F300-\U0001F5FF"  # symbols & pictographs
-        u"\U0001F680-\U0001F6FF"  # transport & map symbols
-        u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
+        "\U0001F600-\U0001F64F"  # emoticons
+        "\U0001F300-\U0001F5FF"  # symbols & pictographs
+        "\U0001F680-\U0001F6FF"  # transport & map symbols
+        "\U0001F1E0-\U0001F1FF"  # flags (iOS)
         "]+",
-        flags=re.UNICODE
+        flags=re.UNICODE,
     )
     return regrex_pattern.sub(r"", text)

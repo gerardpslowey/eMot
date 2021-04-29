@@ -75,7 +75,7 @@ eMot is designed to be deployable on any relatively modern computer running a Wi
 | NLTK | A natural language toolkit for Python, allows for natural language to be processed and analysed. |
 | SciKit Learn | A machine learning library for Python, consisting of classification, regression and clustering algorithms. |
 | Scrapy | A web crawler and web scraper for Python, mainly used for data extraction.|
---- 
+---
 
 ## 2. General Description
 ### 2.1 - Product / System Functions
@@ -84,7 +84,7 @@ The main system functions include:
 - Scraping links
 - Processing text
 - Scoring the text
-- Notifying the user 
+- Notifying the user
 - Creating visual data
 
 Input will be requested from the user of the system, to select the web browser that they use. Their selection will subsequently affect the browsing history database accessed by eMot. eMot will support chromium based browsers (e.g. Google Chrome, Brave, Edge) and Firefox. This will enable the sentiment analysis component of the system to function by scraping text from URLs contained within the browsing history SQL database.
@@ -95,7 +95,7 @@ A classifier model will be trained on the cloud, using relevant and adequately l
 
 Individual pages will be scored based on their textual content, with each individual web page contributing to a collective sentiment score. Certain filtering rules will be applied when accessing the user’s URLs database to ensure that eMot doesn’t waste resources on repeated processing of duplicate sites and sites that were only briefly accessed.
 The user will have the option to blacklist certain websites also. These sites will not be considered when analysing browsing sentiment. The user may want to exclude certain sites such as email, etc.
-Based on the browsing habits of the user, the application will show a graphical user interface summarising and indicating to the user the sentiment of the material they have been focusing on. 
+Based on the browsing habits of the user, the application will show a graphical user interface summarising and indicating to the user the sentiment of the material they have been focusing on.
 
 ### 2.2 - User Characteristics and Objectives
 The users of this program will not need extra technical training. A functional front end graphical interface will be presented to the user which allows them to start and stop the sentiment system. This will help to abstract from the underlying technology, preventing confusion. The user interface will also be used to present graphical feedback to the user about the sentiment of the text they are reading, which they can interact with to learn more.
@@ -108,7 +108,7 @@ Objectives of the system will include providing an intuitive and easy to underst
 - Real time user prompting and graphical representation.
 
 **More Feasible:**
-- Processing of text on pages read after leaving the web page, depending on the 
+- Processing of text on pages read after leaving the web page, depending on the
 - efficiency of text scraping, parsing and scoring.
 - 70 to 80% emotion detection accuracy
 - Accurate depiction of main emotions within text focused on by the user.
@@ -185,7 +185,7 @@ The following are a list of possible constraints that can cause some limitations
 
 - *Graphical Representation*: scaling the application graphical representation to fit different sizes of displays, e.g. 13” screen and 15” screen. The use of the PYQT framework will be necessary to achieve this.
 
-- *Scoring Accuracy*: Classifying the emotions needs to be  as accurate as possible and straightforward to understand. This accuracy could be reduced due to strange sentence structures being interpreted wrong. If training sets are not appropriately relevant, scoring will be skewed. 
+- *Scoring Accuracy*: Classifying the emotions needs to be  as accurate as possible and straightforward to understand. This accuracy could be reduced due to strange sentence structures being interpreted wrong. If training sets are not appropriately relevant, scoring will be skewed.
   - Examples using tweets and hashtags: [4]
 
         1. You are really mature. #lying #sarcasm
@@ -260,7 +260,7 @@ This is a third party component implemented using a Python library. Any third pa
 
 **User Interface**
 
-The user of the system indicates using options presented on the application user interface, the internet browser they are using and the option to start and stop the sentiment system. These parameters determine the directory used by the pre-processing engine when accessing the users browser history database. 
+The user of the system indicates using options presented on the application user interface, the internet browser they are using and the option to start and stop the sentiment system. These parameters determine the directory used by the pre-processing engine when accessing the users browser history database.
 
 **Pre-processing Engine**
 
@@ -268,7 +268,7 @@ The pre-processing function will be responsible for accepting parameters from th
 
 **Text Scraping**
 
-The sole responsibility of the text scraper is to access supplied URLs, scrap text from these sites while removing HTML content. The scraping queue formed by the pre-processing function feeds URLs to the text scraper. The resulting text scraped is forwarded to a text processing function which formats the text for the classification engine. 
+The sole responsibility of the text scraper is to access supplied URLs, scrap text from these sites while removing HTML content. The scraping queue formed by the pre-processing function feeds URLs to the text scraper. The resulting text scraped is forwarded to a text processing function which formats the text for the classification engine.
 
 **Text Processing**
 
@@ -276,7 +276,7 @@ The text processing of the system involves segmentation and parsing of scraped t
 
 **Emotion Classification**
 
-Emotion classification and sentiment analysis is then completed on the processed text which then produces a sentiment result which is fed to a report generation function. 
+Emotion classification and sentiment analysis is then completed on the processed text which then produces a sentiment result which is fed to a report generation function.
 
 **Report Generation**
 
@@ -293,7 +293,7 @@ The report generation function takes the result from a scraping and classificati
 This diagram shows the relationship between the eMot system, in red, and the external entities, in blue.
 
 **1. User**
-- The user will pass parameters to the system when initiating a search. These parameters will include the specified time period among other things. 
+- The user will pass parameters to the system when initiating a search. These parameters will include the specified time period among other things.
 - The system will return the graphical results after processing and scoring the links.
 
 **2. Browser History**
@@ -301,7 +301,7 @@ This diagram shows the relationship between the eMot system, in red, and the ext
 - The system will get this information in the time period provided and will return the URL to the system.
 
 **3. Emotion Classification Text**
-- After the eMot system scrapes the URLs in the queue, it will use the trained datasets from the cloud to score the data. 
+- After the eMot system scrapes the URLs in the queue, it will use the trained datasets from the cloud to score the data.
 - The emotion classification will score the data and return it to the system. This will return a better score over time with the machine learning element.
 
 **4. Report**
@@ -318,11 +318,11 @@ Using the context diagram, we can represent the flow of data between the differe
 
 **Function 1:**
 
-The User entity starts the program by inputting parameters that will get certain URLs from the browser history (D1). 
+The User entity starts the program by inputting parameters that will get certain URLs from the browser history (D1).
 
 **Function 2:**
 
-The browser history URLs will point to the websites that need to be scraped. These URLs will be processed. 
+The browser history URLs will point to the websites that need to be scraped. These URLs will be processed.
 
 **Datastore 2:**
 

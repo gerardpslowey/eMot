@@ -1,25 +1,36 @@
-from pyqt.metrics_window import Ui_MetricsDashboard
-from PyQt5.QtChart import QChart, QLineSeries, QValueAxis, QCategoryAxis
-from PyQt5.QtChart import QBarSet, QPercentBarSeries, QBarCategoryAxis
-from PyQt5.QtChart import QPieSeries, QBarSeries
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPen, QColor, QPixmap, QPainter
-from PyQt5.QtWidgets import QMainWindow
-from PyQt5 import QtCore
 import sys
+
 import funcy
+from PyQt5 import QtCore
+from PyQt5.QtChart import (QBarCategoryAxis, QBarSeries, QBarSet,
+                           QCategoryAxis, QChart, QLineSeries,
+                           QPercentBarSeries, QPieSeries, QValueAxis)
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QColor, QPainter, QPen, QPixmap
+from PyQt5.QtWidgets import QMainWindow
+
+from pyqt.metrics_window import Ui_MetricsDashboard
 
 colours = [
-    QColor("#ED5314"), QColor("#FFB92A"), QColor("#FEEB51"),
-    QColor("#9BCA3E"), QColor("#3ABBC9"), QColor("#666DCB"),
-    QColor("#c0c0c0")
+    QColor("#D8345F"),
+    QColor("#26474E"),  # cerise, Dark slate gray
+    # middle blue green, forest green crayola
+    QColor("#A3DDCB"),
+    QColor("#5AA469"),
+    QColor("#F9968B"),
+    QColor("#8B5E83"),  # congo pink, antique fuchsia
+    QColor("#c0c0c0"),  # default grey for neutral
 ]
 
 
 class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
+    """
+    Super class of metrics_windows since it can be changed at any time from ui files.
+    This class is extended to add functionality to the charts and wordclouds.
+    """
 
-    def __init__(self, browser, filtr, *args, obj=None, **kwargs):
-        super(MetricsDashboard, self).__init__(*args, **kwargs)
+    def __init__(self, browser, filtr, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.setupUi(self)
         self.setWindowTitle("Metrics Dashboard")
         self.browserUsedEdit.setText(browser)
@@ -31,14 +42,11 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
     def showImage(self, image, prefix):
         self.image = QPixmap(image)
-        if prefix == "neg":
-            self.image.scaled(self.negativeWordcloud.size(), Qt.KeepAspectRatio)
-            self.negativeWordcloud.setPixmap(self.image)
-            self.negativeWordcloud.setScaledContents(True)
-        else:
-            self.image.scaled(self.positiveWordcloud.size(), Qt.KeepAspectRatio)
-            self.positiveWordcloud.setPixmap(self.image)
-            self.positiveWordcloud.setScaledContents(True)
+        posNeg = prefix + "Wordcloud"
+        wordcloud = getattr(self, posNeg)
+        self.image.scaled(wordcloud.size(), Qt.KeepAspectRatio)
+        wordcloud.setPixmap(self.image)
+        wordcloud.setScaledContents(True)
 
     def changePage(self):
         if self.stackedWidget.currentWidget() == self.chartPage:
@@ -48,19 +56,17 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
     def makeCharts(self, emotClassify):
         self.emotions = emotClassify.getEmotions()
-        # split chart data
-        self.splitChartValues = emotClassify.getSplitChartValues()
+
         self.emotionsPerSite = emotClassify.getEmotionsPerSite()
         self.uniqueSiteCount = emotClassify.getUniqueSiteCount()
-        # line chart data
-        self.emotionIntensities = emotClassify.getEmotionIntensities()
-        # pie chart data
-        self.emotionCounts = emotClassify.getEmotionCounts()
-        # bar chart data
-        self.siteVisitCounts = emotClassify.getSiteVisitCounts()
+
+        self.splitChartValues = emotClassify.getSplitChartValues()  # split chart data
+        self.emotionIntensities = emotClassify.getEmotionIntensities()  # line chart data
+        self.emotionCounts = emotClassify.getEmotionCounts()  # pie chart data
+        self.siteVisitCounts = emotClassify.getSiteVisitCounts()  # bar chart data
 
         numEmotions = len(self.emotions)
-        self.keys = ['neutral']
+        self.keys = ["neutral"]
         self.makePieChart()
         self.makeLineChart()
         self.makeSplitChart(numEmotions)
@@ -78,10 +84,14 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
         chart = QChart()
         chart.addSeries(series)
-        chart.setTitle('Most Visited Sites')
+        chart.setTitle("Most Visited Sites")
 
         yAxis = QValueAxis()
-        largestSiteVisitCount = max(self.siteVisitCounts.values())
+        largestSiteVisitCount = 1
+        try:
+            largestSiteVisitCount = max(self.siteVisitCounts.values())
+        except ValueError:
+            print("No sites")
         yAxis.setRange(0, largestSiteVisitCount)
         yAxis.setLabelFormat("%d")
         yAxis.setTickCount(largestSiteVisitCount + 1)
@@ -105,9 +115,9 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         for i in range(self.uniqueSiteCount):
             # iterate through the array of emotions associated with that site
             barStatArray = self.splitChartValues[i]
-            for j in range(len(barStatArray)):
+            for emotion in range(len(barStatArray)):
                 # add that emotion to the barset
-                barSets[j].append(barStatArray[j])
+                barSets[emotion].append(barStatArray[emotion])
 
         # append the completed barSet to the series
         for i in range(len(barSets)):
@@ -117,7 +127,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
         chart = QChart()
         chart.addSeries(series)
-        chart.setTitle('Emotions Seen Per Site')
+        chart.setTitle("Emotions Seen Per Site")
         chart.setAnimationOptions(QChart.SeriesAnimations)
 
         # categories are the website names
@@ -141,7 +151,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         self.splitChart.setChart(chart)
 
     def makePieChart(self):
-        pieEmotions = funcy.omit(self.emotionCounts, 'neutral')
+        pieEmotions = funcy.omit(self.emotionCounts, "neutral")
         # get the data
         series = QPieSeries()
         for i, (emotion, value) in enumerate(pieEmotions.items()):
@@ -154,11 +164,11 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         pieSlice = series.slices()[index]
         pieSlice.setExploded(True)
         pieSlice.setLabelVisible(True)
-        pieSlice.setPen(QPen(QtCore.Qt.darkGray, 2))        # the border colour
+        pieSlice.setPen(QPen(QtCore.Qt.black, 2))  # the border colour
 
         chart = QChart()
         chart.addSeries(series)
-        chart.setTitle('Overall Emotion Counts Of Sentences')
+        chart.setTitle("Overall Emotion Counts Of Sentences")
         chart.createDefaultAxes()
 
         chart.legend().setVisible(True)
@@ -173,11 +183,11 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         series.setPointLabelsColor(Qt.black)
         series.setPointLabelsFormat("@yPoint" + "%")
 
-        lineEmotions = funcy.omit(self.emotionIntensities, 'neutral')
+        lineEmotions = funcy.omit(self.emotionIntensities, "neutral")
 
-        for i, (key, value) in enumerate(lineEmotions.items()):
+        for i, emotion in enumerate(lineEmotions.keys()):
             i += 0.5
-            series.append(i, lineEmotions[key])
+            series.append(i, lineEmotions[emotion])
 
         yAxis = QValueAxis()
         yAxis.setRange(0, 100)
@@ -210,7 +220,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         self.lineChart.setChart(chart)
 
     def closeEvent(self, event):
-        """Shuts down application on close."""
+        # Shuts down application on close.
         # Return stdout to defaults.
         sys.stdout = sys.__stdout__
         super().closeEvent(event)

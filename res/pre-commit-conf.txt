@@ -1,0 +1,21 @@
+flake8-2020 # flake8 plugin which checks for misuse of `sys.version` or `sys.version_info`
+flake8-blind-except # A flake8 extension that checks for blind except: statements
+flake8-bugbear # A plugin for flake8 finding likely bugs and design problems in your program.
+                # Contains warnings that don't belong in pyflakes and pycodestyle.
+flake8-builtins # Check for python builtins being used as variables or parameters.
+flake8-comprehensions # It helps you write a better list/set/dict comprehensions.
+flake8-copyright # Adds copyright checks to flake8
+flake8-deprecated # Warns about deprecated method calls.
+dlint # Dlint is a tool for encouraging best coding practices and helping ensure we're writing secure Python code.
+pandas-vet # A Flake8 plugin that provides opinionated linting for pandas code
+flake8-pytest # pytest assert checker plugin for flake8
+flake8-variables-names # flake8 extension that helps to make more readable variables names
+flake8-tabs # Tab (or Spaces) indentation style checker for flake8
+pep8-naming # Check PEP-8 naming conventions, plugin for flake8
+proselint
+pyupgrade
+vulture
+MyPy
+yamllint
+isort
+autopep8
