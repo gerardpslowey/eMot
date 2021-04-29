@@ -13,7 +13,8 @@ def test_pre_process():
 
 def test_remove_url():
     sentence = "feels strong contractions but wants to go out.  http://plurk.com/p/wxidk"
-    assert removeURLs(sentence) == "feels strong contractions but wants to go out.  "
+    assert removeURLs(
+        sentence) == "feels strong contractions but wants to go out.  "
 
 
 def test_spell_check():

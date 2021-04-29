@@ -413,12 +413,16 @@ class Ui_MetricsDashboard:
                 "MetricsDashboard",
                 "Date Filter Used"))
         self.dateUsedEdit.setText(_translate("MetricsDashboard", "All"))
-        self.negSiteLabel.setText(_translate("MetricsDashboard", "Most Negative Site"))
+        self.negSiteLabel.setText(_translate(
+            "MetricsDashboard", "Most Negative Site"))
         self.negSiteEdit.setText(_translate("MetricsDashboard", "Here"))
-        self.posSiteLabel.setText(_translate("MetricsDashboard", "Most Positive Site"))
+        self.posSiteLabel.setText(_translate(
+            "MetricsDashboard", "Most Positive Site"))
         self.posSiteEdit.setText(_translate("MetricsDashboard", "Here"))
-        self.previousPageButton.setStatusTip(_translate("MetricsDashboard", "Go to the previous page"))
-        self.previousPageButton.setText(_translate("MetricsDashboard", "Previous Page"))
+        self.previousPageButton.setStatusTip(_translate(
+            "MetricsDashboard", "Go to the previous page"))
+        self.previousPageButton.setText(
+            _translate("MetricsDashboard", "Previous Page"))
 
 
 if __name__ == "__main__":

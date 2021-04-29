@@ -12,7 +12,8 @@ class Ui_Form:
         Form.resize(554, 446)
         icon = QtGui.QIcon()
         icon.addPixmap(
-            QtGui.QPixmap(":/newPrefix/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off
+            QtGui.QPixmap(
+                ":/newPrefix/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
         Form.setWindowIcon(icon)
         Form.setStyleSheet("background-color: rgb(255, 255, 255);")
@@ -46,7 +47,8 @@ class Ui_Form:
         self.blacklistHeader.setObjectName("blacklistHeader")
         self.emptyBox_3 = QtWidgets.QLabel(Form)
         self.emptyBox_3.setGeometry(QtCore.QRect(30, 60, 491, 351))
-        self.emptyBox_3.setStyleSheet("border: 1px solid rgb(165, 165, 165);\n" "")
+        self.emptyBox_3.setStyleSheet(
+            "border: 1px solid rgb(165, 165, 165);\n" "")
         self.emptyBox_3.setText("")
         self.emptyBox_3.setObjectName("emptyBox_3")
         self.tagEdit = QtWidgets.QPlainTextEdit(Form)
@@ -103,8 +105,10 @@ class Ui_Form:
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Preferences"))
-        self.tagLabel.setText(_translate("Form", "Add a HTML Tag to the blacklist "))
-        self.urlLabel.setText(_translate("Form", "Add a URL to the blacklist "))
+        self.tagLabel.setText(_translate(
+            "Form", "Add a HTML Tag to the blacklist "))
+        self.urlLabel.setText(_translate(
+            "Form", "Add a URL to the blacklist "))
         self.blacklistInfo.setText(
             _translate(
                 "Form",

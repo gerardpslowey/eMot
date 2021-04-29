@@ -1,6 +1,4 @@
 # Dataset handling
-from utils.textMod import preprocessAndTokenise, spellCheck
-from tqdm import tqdm
 import sys
 from pathlib import Path
 
@@ -14,6 +12,9 @@ from sklearn.metrics import accuracy_score, f1_score
 from sklearn.model_selection import train_test_split
 # classifiers
 from sklearn.svm import LinearSVC
+from tqdm import tqdm
+
+from utils.textMod import preprocessAndTokenise, spellCheck
 
 sys.path.append(str(Path(__file__).parent.parent.absolute()))
 
@@ -85,8 +86,8 @@ def main():
             f1_score(
                 y_test,
                 ysvm_pred,
-                average="micro") *
-            100))
+                average="micro") * 100)
+    )
 
     class_names = ["anger", "fear", "joy", "surprise", "happiness", "sadness"]
     _, plt = plot_confusion_matrix(

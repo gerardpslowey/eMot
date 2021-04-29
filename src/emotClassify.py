@@ -108,31 +108,39 @@ class EmotClassify:
 
                 for sentence in text.split("|"):
                     # label each sentence
-                    emotionLabel1 = self.classifierModel1.predict(self.tfidf.transform([sentence]))[0]
-                    emotionLabel2 = self.classifierModel2.predict(self.cv.transform([sentence]))[0]
+                    emotionLabel1 = self.classifierModel1.predict(
+                        self.tfidf.transform([sentence]))[0]
+                    emotionLabel2 = self.classifierModel2.predict(
+                        self.cv.transform([sentence]))[0]
 
                     positiveSiteScore, negativeSiteScore = self.classifierModelAssertions(
                         baseUrl, emotionLabel1, emotionLabel2, positiveSiteScore, negativeSiteScore)
 
                     # score each sentence
-                    sentimentScore1 = self.classifierModel1.predict_proba(self.tfidf.transform([sentence]))
-                    sentimentScore2 = self.classifierModel2.predict_proba(self.cv.transform([sentence]))
+                    sentimentScore1 = self.classifierModel1.predict_proba(
+                        self.tfidf.transform([sentence]))
+                    sentimentScore2 = self.classifierModel2.predict_proba(
+                        self.cv.transform([sentence]))
 
                     # use 2 models to score the data for comparison
                     emotionIntensity1 = int(sentimentScore1.max() * 100)
                     emotionIntensity2 = int(sentimentScore2.max() * 100)
-                    averageEmotionIntensity = (emotionIntensity1 + emotionIntensity2) / 2
+                    averageEmotionIntensity = (
+                        emotionIntensity1 + emotionIntensity2) / 2
 
-                    if averageEmotionIntensity > self.emotionIntensities.get(emotionLabel1):
+                    if averageEmotionIntensity > self.emotionIntensities.get(
+                            emotionLabel1):
                         self.emotionIntensities[emotionLabel1] = averageEmotionIntensity
-                        self.sentenceExamples.update([(averageEmotionIntensity, emotionLabel1, sentence)])
+                        self.sentenceExamples.update(
+                            [(averageEmotionIntensity, emotionLabel1, sentence)])
 
                 # store site with associated positive and negative score
                 totalSiteSentimentCount = positiveSiteScore + negativeSiteScore
                 positivePercentage = positiveSiteScore / totalSiteSentimentCount
                 negativePercentage = negativeSiteScore / totalSiteSentimentCount
 
-                self.siteScores.append((url, positivePercentage, negativePercentage))
+                self.siteScores.append(
+                    (url, positivePercentage, negativePercentage))
 
             self.processWordClouds(self.sentenceExamples)
             self.processSplitChartValues()
@@ -145,11 +153,15 @@ class EmotClassify:
             self.prettyPrint(self.emotionCounts.items(), "amount")
             self.prettyPrint(self.emotionsPerSite.items(), "lst")
 
-    def classifierModelAssertions(self, baseUrl, emotionLabel1, emotionLabel2, positiveSiteScore, negativeSiteScore):
-        # for a sentiment to be accepted both models have to have a score greater than 0.6
+    def classifierModelAssertions(
+            self, baseUrl, emotionLabel1, emotionLabel2, positiveSiteScore, negativeSiteScore):
+        # for a sentiment to be accepted both models have to have a score
+        # greater than 0.6
         if emotionLabel1 == emotionLabel2:
-            self.emotionCounts[emotionLabel1] += 1              # count total emotion count
-            self.emotionsPerSite[baseUrl][emotionLabel1] += 1   # count of distribution of emotions per site
+            # count total emotion count
+            self.emotionCounts[emotionLabel1] += 1
+            # count of distribution of emotions per site
+            self.emotionsPerSite[baseUrl][emotionLabel1] += 1
             if emotionLabel1 in self.positive:
                 positiveSiteScore += 1
             else:
@@ -163,8 +175,10 @@ class EmotClassify:
         return positiveSiteScore, negativeSiteScore
 
     def mostPosandNeg(self, scores):
-        self.mostPositiveSite = sorted(scores, key=lambda tup: tup[1], reverse=True)[0]
-        self.mostNegativeSite = sorted(scores, key=lambda tup: tup[2], reverse=True)[0]
+        self.mostPositiveSite = sorted(
+            scores, key=lambda tup: tup[1], reverse=True)[0]
+        self.mostNegativeSite = sorted(
+            scores, key=lambda tup: tup[2], reverse=True)[0]
 
         print("\nMost Positive Site: " + self.mostPositiveSite[0])
         print("\nMost Negative Site: " + self.mostNegativeSite[0])

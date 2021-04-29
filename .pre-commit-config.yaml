@@ -156,24 +156,24 @@ repos:
             types: [python]
             additional_dependencies: [pyupgrade]
 
-    #     # Sort imports
-    #     # https://github.com/timothycrosley/isort
-    #     -   id: isort
-    #         name: isort
-    #         description: Library to sort imports.
-    #         entry: isort
-    #         language: python
-    #         types: [python]
+        # Sort imports
+        # https://github.com/timothycrosley/isort
+        -   id: isort
+            name: isort
+            description: Library to sort imports.
+            entry: isort
+            language: python
+            types: [python]
 
-    #     # pycodestyle code format
-    #     # https://pypi.python.org/pypi/autopep8/
-    #     -   id: autopep8
-    #         name: autopep8
-    #         description: A tool that automatically formats Python code to conform to the PEP 8 style guide.
-    #         entry: autopep8
-    #         args: [
-    #             '--in-place',
-    #             '--global-config'
-    #         ]
-    #         language: python
-    #         types: [python]
+        # pycodestyle code format
+        # https://pypi.python.org/pypi/autopep8/
+        -   id: autopep8
+            name: autopep8
+            description: A tool that automatically formats Python code to conform to the PEP 8 style guide.
+            entry: autopep8
+            args: [
+                '--in-place',
+                '--aggressive'
+            ]
+            language: python
+            types: [python]

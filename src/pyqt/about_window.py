@@ -14,7 +14,8 @@ class Ui_Form:
         Form.setMaximumSize(QtCore.QSize(510, 460))
         icon = QtGui.QIcon()
         icon.addPixmap(
-            QtGui.QPixmap(":/newPrefix/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off
+            QtGui.QPixmap(
+                ":/newPrefix/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
         Form.setWindowIcon(icon)
         Form.setStyleSheet("background-color: rgb(255, 255, 255);")
