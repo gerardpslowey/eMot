@@ -121,14 +121,14 @@ class EmotClassify:
 
                 # store site with associated positive and negative score
                 totalSiteSentimentCount = positiveSiteScore + negativeSiteScore
-                positivePercentage = totalSiteSentimentCount / positiveSiteScore
-                negativePercentage = totalSiteSentimentCount / negativeSiteScore
+                positivePercentage = positiveSiteScore / totalSiteSentimentCount
+                negativePercentage = negativeSiteScore / totalSiteSentimentCount
 
                 self.siteScores.append(tuple((url, positivePercentage, negativePercentage)))
 
             self.processWordClouds(self.sentenceExamples)
             self.processSplitChartValues()
-            self.getMostPosandNeg(self.siteScores)
+            self.mostPosandNeg(self.siteScores)
 
         except pd.errors.EmptyDataError:
             print("Nothing to classify, the file is empty")
@@ -137,11 +137,11 @@ class EmotClassify:
             self.prettyPrint(self.emotionCounts.items(), "amount")
             self.prettyPrint(self.emotionsPerSite.items(), "lst")
 
-    def getMostPosandNeg(self, scores):
-        mostPositiveSite = sorted(scores, key=lambda tup: tup[1], reverse=True)[0]
-        mostNegativeSite = sorted(scores, key=lambda tup: tup[2], reverse=True)[0]
+    def mostPosandNeg(self, scores):
+        self.mostPositiveSite = sorted(scores, key=lambda tup: tup[1], reverse=True)[0]
+        self.mostNegativeSite = sorted(scores, key=lambda tup: tup[2], reverse=True)[0]
 
-        print(scores)
+        print(self.siteScores)
         print("\nMost Positive Site: " + mostPositiveSite[0])
         print("\nMost Negative Site: " + mostNegativeSite[0])
 
@@ -221,6 +221,9 @@ class EmotClassify:
 
     def getEmotionsPerSite(self):
         return self.emotionsPerSite
+
+    def getMostPosandNeg(self):
+        return self.mostPositiveSite, self.mostNegativeSite
 
 
 if __name__ == '__main__':
