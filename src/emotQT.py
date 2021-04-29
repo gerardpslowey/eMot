@@ -130,11 +130,11 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
                 background_color=colour, stopwords=stop_words, width=600, height=520
             ).generate(words)
 
-            wordCloudImage = f"pyqt/{prefix}Wordcloud.png"
+            wordCloudImage = f"pyqt/resources/{prefix}Wordcloud.png"
             wordcloud.to_file(wordCloudImage)
             self.MetricsDashboard.showImage(wordCloudImage, prefix)
         else:
-            errorImage = "pyqt/error.png"
+            errorImage = "pyqt/resources/error.png"
             self.MetricsDashboard.showImage(errorImage, prefix)
 
     def redirectText(self, text):

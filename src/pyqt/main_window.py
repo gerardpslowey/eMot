@@ -200,10 +200,16 @@ class Ui_MainWindow:
         self.stackedWidget.addWidget(self.printPage)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1081, 26))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1081, 34))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.menubar.setFont(font)
         self.menubar.setStyleSheet("")
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.menuFile.setFont(font)
         self.menuFile.setStyleSheet("selection-background-color: rgb(103, 171, 159);\n"
                                     "selection-color: rgb(255, 255, 255);")
         self.menuFile.setObjectName("menuFile")
@@ -211,11 +217,6 @@ class Ui_MainWindow:
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
-        self.actionpreferences = QtWidgets.QAction(MainWindow)
-        self.actionpreferences.setVisible(True)
-        self.actionpreferences.setObjectName("actionpreferences")
-        self.actionabout = QtWidgets.QAction(MainWindow)
-        self.actionabout.setObjectName("actionabout")
         self.actionNew = QtWidgets.QAction(MainWindow)
         self.actionNew.setObjectName("actionNew")
         self.actionPreferences = QtWidgets.QAction(MainWindow)
@@ -282,8 +283,6 @@ class Ui_MainWindow:
                 "MainWindow",
                 "Choose from new, preferences, and about."))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
-        self.actionpreferences.setText(_translate("MainWindow", "Preferences"))
-        self.actionabout.setText(_translate("MainWindow", "about"))
         self.actionNew.setText(_translate("MainWindow", "New"))
         self.actionNew.setStatusTip(
             _translate(

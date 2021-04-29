@@ -356,7 +356,7 @@ class Ui_MetricsDashboard:
         MetricsDashboard.setStatusBar(self.statusbar)
 
         self.retranslateUi(MetricsDashboard)
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MetricsDashboard)
 
     def retranslateUi(self, MetricsDashboard):

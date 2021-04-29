@@ -13,8 +13,22 @@ The metrics_windows uses a QWidget promoted to a QChartview so a view imports ne
 
 ```python
 import sys
+
 import pyqt.resource_rc
-# flake8: noqa
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtChart import QChartView
+# flake8: noqa
+```
+
+## Converting other files
+
+```python
+import sys
+
+import pyqt.resource_rc
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+# flake8: noqa
 ```

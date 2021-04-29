@@ -1,9 +1,10 @@
 import sys
 
-# flake8: noqa
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 import pyqt.resource_rc
+
+# flake8: noqa
 
 
 class Ui_browserDialog:
@@ -14,9 +15,9 @@ class Ui_browserDialog:
         browserDialog.setMaximumSize(QtCore.QSize(417, 161))
         icon = QtGui.QIcon()
         icon.addPixmap(
-            QtGui.QPixmap(
-                ":/newPrefix/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off
-        )
+            QtGui.QPixmap(":/newPrefix/icon.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off)
         browserDialog.setWindowIcon(icon)
         browserDialog.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.label = QtWidgets.QLabel(browserDialog)
@@ -34,8 +35,8 @@ class Ui_browserDialog:
         self.label_2.setObjectName("label_2")
         self.emptyBox_3 = QtWidgets.QLabel(browserDialog)
         self.emptyBox_3.setGeometry(QtCore.QRect(20, 30, 371, 101))
-        self.emptyBox_3.setStyleSheet(
-            "border: 1px solid rgb(165, 165, 165);\n" "")
+        self.emptyBox_3.setStyleSheet("border: 1px solid rgb(165, 165, 165);\n"
+                                      "")
         self.emptyBox_3.setText("")
         self.emptyBox_3.setObjectName("emptyBox_3")
         self.emptyBox_3.raise_()
@@ -48,12 +49,8 @@ class Ui_browserDialog:
     def retranslateUi(self, browserDialog):
         _translate = QtCore.QCoreApplication.translate
         browserDialog.setWindowTitle(_translate("browserDialog", "Dialog"))
-        self.label.setText(
-            _translate(
-                "browserDialog",
-                "Choose a browser from \n"
-                " the dropdown menu")
-        )
+        self.label.setText(_translate("browserDialog", "Choose a browser from\n"
+                                      " the dropdown menu"))
         self.label_2.setText(
             _translate(
                 "browserDialog",
