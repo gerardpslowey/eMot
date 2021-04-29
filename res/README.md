@@ -38,4 +38,7 @@ Then activate the virtual environment and install the dependencies:
 pip install -r pre-commit-conf.txt
 ```
 
-This will run every time you go to commit and might change a few things. They don't all need to be adhered to but a lot of beneficial info can be returned.
+This will run every time you go to commit and might change a few things. They don't all need to be adhered to but a lot of beneficial info can be returned. You can run it manually in the project by using:
+```
+pre-commit run --all-files
+```

@@ -29,11 +29,11 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
         # file menu
         self.actionAbout.triggered.connect(
-            lambda checked: self.toggleItem(self.AboutWindow)
+            lambda: self.toggleItem(self.AboutWindow)
         )
 
         self.actionPreferences.triggered.connect(
-            lambda checked: self.toggleItem(self.PreferenceWindow)
+            lambda: self.toggleItem(self.PreferenceWindow)
         )
         self.actionNew.triggered.connect(self.restartWindow)
 

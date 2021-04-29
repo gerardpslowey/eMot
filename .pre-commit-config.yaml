@@ -102,8 +102,8 @@ repos:
             description: Find dead Python code
             entry: vulture
             args: [
-                "--min-confidence", "90",
-                "--exclude", "*env*", "docs/",
+                "--min-confidence", "100",
+                "--exclude", "env/", "src/pyqt",
                 ".",
             ]
             language: system
@@ -118,8 +118,8 @@ repos:
             name: flake8
             description: Python style guide enforcement
             entry: flake8
-            args: ["--max-line-length=120", "--ignore=E401,E402,D100,D102,D103,D205,D107,N802,N803,N806,N815,PD011"]
-            exclude: env
+            args: ["--max-line-length=120", "--ignore=E401,E402,D100,D102,D103,D205,D107,DUO103,D401,N802,N803,N806,N815,PD005,PD011,VNE001,W503,W504"]
+            exclude: env, models, modelTrain, textMod
             additional_dependencies: [
                 flake8-2020, # flake8 plugin which checks for misuse of `sys.version` or `sys.version_info`
                 flake8-blind-except, # A flake8 extension that checks for blind except: statements
@@ -142,49 +142,19 @@ repos:
             language: python
             types: [python]
 
-    #     # MyPy Linter
-    #     # https://mypy.readthedocs.io/en/latest/
-    #     -   id: mypy
-    #         name: mypy
-    #         description: Optional static typing for Python 3 and 2 (PEP 484)
-    #         entry: mypy
-    #         language: python
-    #         types: [python]
-
-    #     # YAML Linter
-    #     -   id: yamllint
-    #         name: yamllint
-    #         description: A linter for YAML files.
-    #         # https://yamllint.readthedocs.io/en/stable/configuration.html#custom-configuration-without-a-config-file
-    #         entry: yamllint
-    #         args: [
-    #             '--format', 'parsable',
-    #             '--strict',
-    #             '-d', "{
-    #                 extends: relaxed,
-    #                 rules: {
-    #                     hyphens: {max-spaces-after: 4},
-    #                     indentation: {spaces: consistent, indent-sequences: whatever,},
-    #                     key-duplicates: {},
-    #                     line-length: {max: 120}},
-    #                 }"
-    #         ]
-    #         language: system
-    #         types: [python]
-
     # ################################### Code Format ######################################
-    # -   repo: local
-    #     hooks:
-    #     # pyupgrade
-    #     # Upgrade Python syntax
-    #     -   id: pyupgrade
-    #         name: pyupgrade
-    #         description: Automatically upgrade syntax for newer versions of the language.
-    #         entry: pyupgrade
-    #         args: ['--py3-plus']
-    #         language: python
-    #         types: [python]
-    #         additional_dependencies: [pyupgrade]
+    -   repo: local
+        hooks:
+        # pyupgrade
+        # Upgrade Python syntax
+        -   id: pyupgrade
+            name: pyupgrade
+            description: Automatically upgrade syntax for newer versions of the language.
+            entry: pyupgrade
+            args: ['--py3-plus']
+            language: python
+            types: [python]
+            additional_dependencies: [pyupgrade]
 
     #     # Sort imports
     #     # https://github.com/timothycrosley/isort
