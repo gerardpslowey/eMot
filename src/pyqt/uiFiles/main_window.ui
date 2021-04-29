@@ -139,7 +139,7 @@
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
       <property name="statusTip">
-       <string>Choose a date filter</string>
+       <string>Choose a date filter from the dropdown.</string>
       </property>
       <property name="styleSheet">
        <string notr="true">border: 1px solid black</string>
@@ -263,7 +263,7 @@
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
       <property name="statusTip">
-       <string>Click to start the sentiment analysis</string>
+       <string>Click to start the emotion classification.</string>
       </property>
       <property name="autoFillBackground">
        <bool>false</bool>
@@ -304,7 +304,7 @@ border-radius: 10px;</string>
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
       <property name="statusTip">
-       <string>Choose the browser you want to use</string>
+       <string>Choose the browser you want to use. Make sure you have it installed.</string>
       </property>
       <property name="styleSheet">
        <string notr="true">border: 1px solid black</string>
@@ -312,7 +312,7 @@ border-radius: 10px;</string>
       <property name="currentText">
        <string>Select Browser</string>
       </property>
-      <property name="placeholderText">
+      <property name="placeholderText" stdset="0">
        <string/>
       </property>
       <item>
@@ -458,6 +458,9 @@ border-radius: 10px;</string>
     <string notr="true"/>
    </property>
    <widget class="QMenu" name="menuFile">
+    <property name="statusTip">
+     <string>Choose from new, preferences, and about.</string>
+    </property>
     <property name="styleSheet">
      <string notr="true">selection-background-color: rgb(103, 171, 159);
 selection-color: rgb(255, 255, 255);</string>
@@ -489,15 +492,24 @@ selection-color: rgb(255, 255, 255);</string>
    <property name="text">
     <string>New</string>
    </property>
+   <property name="statusTip">
+    <string>Create a new instance of eMot.</string>
+   </property>
   </action>
   <action name="actionPreferences">
    <property name="text">
     <string>Preferences</string>
    </property>
+   <property name="statusTip">
+    <string>Customize the blacklist preferences.</string>
+   </property>
   </action>
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
+   </property>
+   <property name="statusTip">
+    <string>Read about eMot and view the user manual.</string>
    </property>
   </action>
  </widget>

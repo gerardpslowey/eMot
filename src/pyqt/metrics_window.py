@@ -1,10 +1,11 @@
 import sys
 
-# flake8: noqa
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtChart import QChartView
 
 import pyqt.resource_rc
+
+# flake8: noqa
 
 
 class Ui_MetricsDashboard:
@@ -12,8 +13,8 @@ class Ui_MetricsDashboard:
         MetricsDashboard.setObjectName("MetricsDashboard")
         MetricsDashboard.resize(1144, 849)
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum
-        )
+            QtWidgets.QSizePolicy.Preferred,
+            QtWidgets.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(
@@ -21,9 +22,9 @@ class Ui_MetricsDashboard:
         MetricsDashboard.setSizePolicy(sizePolicy)
         icon = QtGui.QIcon()
         icon.addPixmap(
-            QtGui.QPixmap(
-                ":/newPrefix/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off
-        )
+            QtGui.QPixmap(":/newPrefix/icon.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off)
         MetricsDashboard.setWindowIcon(icon)
         self.centralwidget = QtWidgets.QWidget(MetricsDashboard)
         self.centralwidget.setObjectName("centralwidget")
@@ -31,8 +32,8 @@ class Ui_MetricsDashboard:
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.stackedWidget = QtWidgets.QStackedWidget(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
-        )
+            QtWidgets.QSizePolicy.Preferred,
+            QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(
@@ -75,8 +76,8 @@ class Ui_MetricsDashboard:
         self.verticalLayout_6.setObjectName("verticalLayout_6")
         self.nextPageButton = QtWidgets.QPushButton(self.chartPage)
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
-        )
+            QtWidgets.QSizePolicy.Preferred,
+            QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(
@@ -88,11 +89,9 @@ class Ui_MetricsDashboard:
         self.nextPageButton.setFont(font)
         self.nextPageButton.setCursor(
             QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.nextPageButton.setStyleSheet(
-            "background-color: rgb(103, 171, 159);\n"
-            "color: rgb(255, 255, 255);\n"
-            "border-radius: 10px;"
-        )
+        self.nextPageButton.setStyleSheet("background-color: rgb(103, 171, 159);\n"
+                                          "color: rgb(255, 255, 255);\n"
+                                          "border-radius: 10px;")
         self.nextPageButton.setObjectName("nextPageButton")
         self.verticalLayout_6.addWidget(self.nextPageButton)
         self.verticalLayout_7.addLayout(self.verticalLayout_6)
@@ -114,8 +113,7 @@ class Ui_MetricsDashboard:
         self.verticalLayout_5 = QtWidgets.QVBoxLayout()
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         spacerItem = QtWidgets.QSpacerItem(
-            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
-        )
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_5.addItem(spacerItem)
         self.positiveLabel = QtWidgets.QLabel(self.wordCloudPage)
         self.positiveLabel.setMinimumSize(QtCore.QSize(0, 30))
@@ -130,13 +128,12 @@ class Ui_MetricsDashboard:
         self.verticalLayout_10.setObjectName("verticalLayout_10")
         self.positiveWordcloud = QtWidgets.QLabel(self.wordCloudPage)
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
-        )
+            QtWidgets.QSizePolicy.Expanding,
+            QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(
-            self.positiveWordcloud.sizePolicy().hasHeightForWidth()
-        )
+            self.positiveWordcloud.sizePolicy().hasHeightForWidth())
         self.positiveWordcloud.setSizePolicy(sizePolicy)
         self.positiveWordcloud.setBaseSize(QtCore.QSize(0, 0))
         font = QtGui.QFont()
@@ -145,12 +142,10 @@ class Ui_MetricsDashboard:
         font.setWeight(75)
         self.positiveWordcloud.setFont(font)
         self.positiveWordcloud.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.positiveWordcloud.setStyleSheet(
-            "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(103, 171, 159,255));\n"
-            "color: rgb(255, 255, 255);\n"
-            "border: 1px solid black;\n"
-            "border-radius: 10px;"
-        )
+        self.positiveWordcloud.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(103, 171, 159,255));\n"
+                                             "color: rgb(255, 255, 255);\n"
+                                             "border: 1px solid black;\n"
+                                             "border-radius: 10px;")
         self.positiveWordcloud.setFrameShape(QtWidgets.QFrame.Panel)
         self.positiveWordcloud.setFrameShadow(QtWidgets.QFrame.Raised)
         self.positiveWordcloud.setLineWidth(1)
@@ -168,8 +163,7 @@ class Ui_MetricsDashboard:
         self.verticalLayout_12 = QtWidgets.QVBoxLayout()
         self.verticalLayout_12.setObjectName("verticalLayout_12")
         spacerItem1 = QtWidgets.QSpacerItem(
-            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
-        )
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_12.addItem(spacerItem1)
         self.negativeLabel = QtWidgets.QLabel(self.wordCloudPage)
         self.negativeLabel.setMinimumSize(QtCore.QSize(0, 30))
@@ -188,12 +182,10 @@ class Ui_MetricsDashboard:
         font.setBold(True)
         font.setWeight(75)
         self.negativeWordcloud.setFont(font)
-        self.negativeWordcloud.setStyleSheet(
-            "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(103, 171, 159,255));\n"
-            "color: rgb(255, 255, 255);\n"
-            "border: 1px solid black;\n"
-            "border-radius: 10px;"
-        )
+        self.negativeWordcloud.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(103, 171, 159,255));\n"
+                                             "color: rgb(255, 255, 255);\n"
+                                             "border: 1px solid black;\n"
+                                             "border-radius: 10px;")
         self.negativeWordcloud.setAlignment(QtCore.Qt.AlignCenter)
         self.negativeWordcloud.setObjectName("negativeWordcloud")
         self.verticalLayout_14.addWidget(self.negativeWordcloud)
@@ -205,8 +197,7 @@ class Ui_MetricsDashboard:
         self.wordcloudLayouts.setStretch(1, 1)
         self.verticalLayout_13.addLayout(self.wordcloudLayouts)
         spacerItem2 = QtWidgets.QSpacerItem(
-            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
-        )
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_13.addItem(spacerItem2)
         self.textButtonLayout = QtWidgets.QVBoxLayout()
         self.textButtonLayout.setObjectName("textButtonLayout")
@@ -288,6 +279,7 @@ class Ui_MetricsDashboard:
         font.setBold(True)
         font.setWeight(75)
         self.negSiteEdit.setFont(font)
+        self.negSiteEdit.setStyleSheet("color: rgb(0, 0, 0);")
         self.negSiteEdit.setAlignment(QtCore.Qt.AlignCenter)
         self.negSiteEdit.setOpenExternalLinks(True)
         self.negSiteEdit.setObjectName("negSiteEdit")
@@ -316,6 +308,7 @@ class Ui_MetricsDashboard:
         font.setBold(True)
         font.setWeight(75)
         self.posSiteEdit.setFont(font)
+        self.posSiteEdit.setStyleSheet("color: rgb(0, 0, 0);")
         self.posSiteEdit.setAlignment(QtCore.Qt.AlignCenter)
         self.posSiteEdit.setOpenExternalLinks(True)
         self.posSiteEdit.setObjectName("posSiteEdit")
@@ -328,13 +321,12 @@ class Ui_MetricsDashboard:
         self.buttonLayout.setObjectName("buttonLayout")
         self.previousPageButton = QtWidgets.QPushButton(self.wordCloudPage)
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
-        )
+            QtWidgets.QSizePolicy.Preferred,
+            QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(
-            self.previousPageButton.sizePolicy().hasHeightForWidth()
-        )
+            self.previousPageButton.sizePolicy().hasHeightForWidth())
         self.previousPageButton.setSizePolicy(sizePolicy)
         self.previousPageButton.setMinimumSize(QtCore.QSize(200, 75))
         font = QtGui.QFont()
@@ -342,11 +334,9 @@ class Ui_MetricsDashboard:
         self.previousPageButton.setFont(font)
         self.previousPageButton.setCursor(
             QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.previousPageButton.setStyleSheet(
-            "background-color: rgb(255, 125, 102);\n"
-            "color: rgb(255, 255, 255);\n"
-            "border-radius: 10px;"
-        )
+        self.previousPageButton.setStyleSheet("background-color: rgb(255, 125, 102);\n"
+                                              "color: rgb(255, 255, 255);\n"
+                                              "border-radius: 10px;")
         self.previousPageButton.setObjectName("previousPageButton")
         self.buttonLayout.addWidget(self.previousPageButton)
         self.textButtonLayout.addLayout(self.buttonLayout)
@@ -366,63 +356,105 @@ class Ui_MetricsDashboard:
         MetricsDashboard.setStatusBar(self.statusbar)
 
         self.retranslateUi(MetricsDashboard)
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MetricsDashboard)
 
     def retranslateUi(self, MetricsDashboard):
         _translate = QtCore.QCoreApplication.translate
         MetricsDashboard.setWindowTitle(
-            _translate("MetricsDashboard", "Metrics Dashboard")
-        )
+            _translate(
+                "MetricsDashboard",
+                "Metrics Dashboard"))
         self.splitChart.setStatusTip(
             _translate(
                 "MetricsDashboard",
-                "Split Chart"))
-        self.pieChart.setStatusTip(_translate("MetricsDashboard", "Pie Chart"))
+                "Split Chart showing the different emotions seen per site."))
+        self.pieChart.setStatusTip(
+            _translate(
+                "MetricsDashboard",
+                "Pie Chart showing the total amount of each emotion seen while scraping."))
         self.lineChart.setStatusTip(
             _translate(
                 "MetricsDashboard",
-                "Line Chart"))
-        self.barChart.setStatusTip(_translate("MetricsDashboard", "Bar Chart"))
+                "Line Chart showing the largest confidence level agreed on by the two classifiers."))
+        self.barChart.setStatusTip(
+            _translate(
+                "MetricsDashboard",
+                "Bar Chart showing the most visited sites."))
         self.nextPageButton.setStatusTip(
-            _translate("MetricsDashboard", "Go to the next page")
-        )
+            _translate(
+                "MetricsDashboard",
+                "Go to the next page"))
         self.nextPageButton.setText(
             _translate(
                 "MetricsDashboard",
                 "Next Page"))
         self.positiveLabel.setText(
-            _translate("MetricsDashboard", "Positive Sentences Wordcloud")
-        )
+            _translate(
+                "MetricsDashboard",
+                "Positive Sentences Wordcloud"))
+        self.positiveWordcloud.setStatusTip(
+            _translate(
+                "MetricsDashboard",
+                "Most positive words found in the scraped sentences."))
         self.positiveWordcloud.setText(
-            _translate("MetricsDashboard", "Loading WordCloud...")
-        )
+            _translate(
+                "MetricsDashboard",
+                "Loading Wordcloud"))
         self.negativeLabel.setText(
-            _translate("MetricsDashboard", "Negative Sentences Wordcloud")
-        )
+            _translate(
+                "MetricsDashboard",
+                "Negative Sentences Wordcloud"))
+        self.negativeWordcloud.setStatusTip(
+            _translate(
+                "MetricsDashboard",
+                "Most negative words found in the scraped sentences."))
         self.negativeWordcloud.setText(
-            _translate("MetricsDashboard", "Loading WordCloud...")
-        )
+            _translate(
+                "MetricsDashboard",
+                "Loading Wordcloud"))
         self.browserUsed.setText(
             _translate(
                 "MetricsDashboard",
                 "Browser Used"))
+        self.browserUsedEdit.setStatusTip(
+            _translate(
+                "MetricsDashboard",
+                "Chosen browser in the dropdown menu."))
         self.browserUsedEdit.setText(_translate("MetricsDashboard", "Opera"))
         self.dateUsed.setText(
             _translate(
                 "MetricsDashboard",
                 "Date Filter Used"))
+        self.dateUsedEdit.setStatusTip(
+            _translate(
+                "MetricsDashboard",
+                "Chosen filter in the dropdown menu."))
         self.dateUsedEdit.setText(_translate("MetricsDashboard", "All"))
-        self.negSiteLabel.setText(_translate(
-            "MetricsDashboard", "Most Negative Site"))
+        self.negSiteLabel.setText(
+            _translate(
+                "MetricsDashboard",
+                "Most Negative Site"))
+        self.negSiteEdit.setStatusTip(
+            _translate(
+                "MetricsDashboard",
+                "Click here to open the most negative website in your browser."))
         self.negSiteEdit.setText(_translate("MetricsDashboard", "Here"))
-        self.posSiteLabel.setText(_translate(
-            "MetricsDashboard", "Most Positive Site"))
+        self.posSiteLabel.setText(
+            _translate(
+                "MetricsDashboard",
+                "Most Positive Site"))
+        self.posSiteEdit.setStatusTip(
+            _translate(
+                "MetricsDashboard",
+                "Click here to open the most positive website in your browser."))
         self.posSiteEdit.setText(_translate("MetricsDashboard", "Here"))
         self.previousPageButton.setStatusTip(_translate(
             "MetricsDashboard", "Go to the previous page"))
         self.previousPageButton.setText(
-            _translate("MetricsDashboard", "Previous Page"))
+            _translate(
+                "MetricsDashboard",
+                "Previous Page"))
 
 
 if __name__ == "__main__":

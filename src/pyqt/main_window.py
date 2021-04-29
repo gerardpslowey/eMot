@@ -1,9 +1,10 @@
 import sys
 
-# flake8: noqa
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 import pyqt.resource_rc
+
+# flake8: noqa
 
 
 class Ui_MainWindow:
@@ -14,9 +15,9 @@ class Ui_MainWindow:
         MainWindow.setMaximumSize(QtCore.QSize(1081, 720))
         icon = QtGui.QIcon()
         icon.addPixmap(
-            QtGui.QPixmap(
-                ":/newPrefix/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off
-        )
+            QtGui.QPixmap(":/newPrefix/icon.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
         MainWindow.setAutoFillBackground(False)
         MainWindow.setStyleSheet("background-color: rgb(255, 255, 255);")
@@ -39,13 +40,12 @@ class Ui_MainWindow:
         self.browserTextLabel = QtWidgets.QLabel(self.homePage)
         self.browserTextLabel.setGeometry(QtCore.QRect(430, 170, 199, 21))
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
-        )
+            QtWidgets.QSizePolicy.Preferred,
+            QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(1)
         sizePolicy.setHeightForWidth(
-            self.browserTextLabel.sizePolicy().hasHeightForWidth()
-        )
+            self.browserTextLabel.sizePolicy().hasHeightForWidth())
         self.browserTextLabel.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setPointSize(12)
@@ -55,15 +55,15 @@ class Ui_MainWindow:
         self.browserTextLabel.setObjectName("browserTextLabel")
         self.emptyBox = QtWidgets.QLabel(self.homePage)
         self.emptyBox.setGeometry(QtCore.QRect(410, 180, 241, 101))
-        self.emptyBox.setStyleSheet(
-            "border: 1px solid rgb(165, 165, 165);\n" "")
+        self.emptyBox.setStyleSheet("border: 1px solid rgb(165, 165, 165);\n"
+                                    "")
         self.emptyBox.setText("")
         self.emptyBox.setObjectName("emptyBox")
         self.dateComboBox = QtWidgets.QComboBox(self.homePage)
         self.dateComboBox.setGeometry(QtCore.QRect(430, 331, 199, 58))
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
-        )
+            QtWidgets.QSizePolicy.Preferred,
+            QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(1)
         sizePolicy.setHeightForWidth(
@@ -102,15 +102,15 @@ class Ui_MainWindow:
         self.emotHeader.setObjectName("emotHeader")
         self.emptyBox_2 = QtWidgets.QLabel(self.homePage)
         self.emptyBox_2.setGeometry(QtCore.QRect(410, 310, 241, 101))
-        self.emptyBox_2.setStyleSheet(
-            "border: 1px solid rgb(165, 165, 165);\n" "")
+        self.emptyBox_2.setStyleSheet("border: 1px solid rgb(165, 165, 165);\n"
+                                      "")
         self.emptyBox_2.setText("")
         self.emptyBox_2.setObjectName("emptyBox_2")
         self.button = QtWidgets.QPushButton(self.homePage)
         self.button.setGeometry(QtCore.QRect(390, 450, 279, 99))
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
-        )
+            QtWidgets.QSizePolicy.Preferred,
+            QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(
@@ -121,25 +121,22 @@ class Ui_MainWindow:
         self.button.setFont(font)
         self.button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.button.setAutoFillBackground(False)
-        self.button.setStyleSheet(
-            "color: rgb(255, 255, 255);\n"
-            "selection-color: rgb(0, 0, 0);\n"
-            "background-color: rgb(103, 171, 159);\n"
-            "selection-background-color: rgb(68, 112, 104);\n"
-            "border: 1px solid black;\n"
-            "border-radius: 10px;"
-        )
+        self.button.setStyleSheet("color: rgb(255, 255, 255);\n"
+                                  "selection-color: rgb(0, 0, 0);\n"
+                                  "background-color: rgb(103, 171, 159);\n"
+                                  "selection-background-color: rgb(68, 112, 104);\n"
+                                  "border: 1px solid black;\n"
+                                  "border-radius: 10px;")
         self.button.setObjectName("button")
         self.browserComboBox = QtWidgets.QComboBox(self.homePage)
         self.browserComboBox.setGeometry(QtCore.QRect(430, 200, 199, 58))
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
-        )
+            QtWidgets.QSizePolicy.Preferred,
+            QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(2)
         sizePolicy.setHeightForWidth(
-            self.browserComboBox.sizePolicy().hasHeightForWidth()
-        )
+            self.browserComboBox.sizePolicy().hasHeightForWidth())
         self.browserComboBox.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setPointSize(12)
@@ -147,7 +144,7 @@ class Ui_MainWindow:
         self.browserComboBox.setCursor(
             QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.browserComboBox.setStyleSheet("border: 1px solid black")
-        self.browserComboBox.setPlaceholderText("")
+        self.browserComboBox.setProperty("placeholderText", "")
         self.browserComboBox.setObjectName("browserComboBox")
         self.browserComboBox.addItem("")
         self.browserComboBox.addItem("")
@@ -181,9 +178,8 @@ class Ui_MainWindow:
         font = QtGui.QFont()
         font.setPointSize(10)
         self.textEdit.setFont(font)
-        self.textEdit.setStyleSheet(
-            "border: 1px solid black;\n"
-            "border-radius: 10px;")
+        self.textEdit.setStyleSheet("border: 1px solid black;\n"
+                                    "border-radius: 10px;")
         self.textEdit.setSizeAdjustPolicy(
             QtWidgets.QAbstractScrollArea.AdjustIgnored)
         self.textEdit.setReadOnly(True)
@@ -196,12 +192,10 @@ class Ui_MainWindow:
         self.results_button.setCursor(
             QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.results_button.setAutoFillBackground(False)
-        self.results_button.setStyleSheet(
-            "color: rgb(255, 255, 255);\n"
-            "background-color: rgb(255, 125, 102);\n"
-            "border: 1px solid black;\n"
-            "border-radius: 10px;"
-        )
+        self.results_button.setStyleSheet("color: rgb(255, 255, 255);\n"
+                                          "background-color: rgb(255, 125, 102);\n"
+                                          "border: 1px solid black;\n"
+                                          "border-radius: 10px;")
         self.results_button.setObjectName("results_button")
         self.stackedWidget.addWidget(self.printPage)
         MainWindow.setCentralWidget(self.centralwidget)
@@ -210,10 +204,8 @@ class Ui_MainWindow:
         self.menubar.setStyleSheet("")
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
-        self.menuFile.setStyleSheet(
-            "selection-background-color: rgb(103, 171, 159);\n"
-            "selection-color: rgb(255, 255, 255);"
-        )
+        self.menuFile.setStyleSheet("selection-background-color: rgb(103, 171, 159);\n"
+                                    "selection-color: rgb(255, 255, 255);")
         self.menuFile.setObjectName("menuFile")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -244,8 +236,10 @@ class Ui_MainWindow:
         MainWindow.setWindowTitle(_translate("MainWindow", "eMot"))
         self.browserTextLabel.setText(_translate(
             "MainWindow", "Choose Your Browser"))
-        self.dateComboBox.setStatusTip(_translate(
-            "MainWindow", "Choose a date filter"))
+        self.dateComboBox.setStatusTip(
+            _translate(
+                "MainWindow",
+                "Choose a date filter from the dropdown."))
         self.dateComboBox.setItemText(0, _translate("MainWindow", "All"))
         self.dateComboBox.setItemText(1, _translate("MainWindow", "Hour"))
         self.dateComboBox.setItemText(2, _translate("MainWindow", "Day"))
@@ -258,12 +252,14 @@ class Ui_MainWindow:
                 "Choose A Date Filter"))
         self.emotHeader.setText(_translate("MainWindow", "eMot"))
         self.button.setStatusTip(
-            _translate("MainWindow", "Click to start the sentiment analysis")
-        )
+            _translate(
+                "MainWindow",
+                "Click to start the emotion classification."))
         self.button.setText(_translate("MainWindow", "Go!"))
         self.browserComboBox.setStatusTip(
-            _translate("MainWindow", "Choose the browser you want to use")
-        )
+            _translate(
+                "MainWindow",
+                "Choose the browser you want to use. Make sure you have it installed."))
         self.browserComboBox.setCurrentText(
             _translate("MainWindow", "Select Browser"))
         self.browserComboBox.setItemText(
@@ -277,15 +273,30 @@ class Ui_MainWindow:
         self.browserComboBox.setItemText(6, _translate("MainWindow", "Opera"))
         self.emotHeader2.setText(_translate("MainWindow", "eMot"))
         self.results_button.setStatusTip(
-            _translate("MainWindow", "Click to start the sentiment analysis")
-        )
+            _translate(
+                "MainWindow",
+                "Click to start the sentiment analysis"))
         self.results_button.setText(_translate("MainWindow", "Calculating..."))
+        self.menuFile.setStatusTip(
+            _translate(
+                "MainWindow",
+                "Choose from new, preferences, and about."))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.actionpreferences.setText(_translate("MainWindow", "Preferences"))
         self.actionabout.setText(_translate("MainWindow", "about"))
         self.actionNew.setText(_translate("MainWindow", "New"))
+        self.actionNew.setStatusTip(
+            _translate(
+                "MainWindow",
+                "Create a new instance of eMot."))
         self.actionPreferences.setText(_translate("MainWindow", "Preferences"))
+        self.actionPreferences.setStatusTip(_translate(
+            "MainWindow", "Customize the blacklist preferences."))
         self.actionAbout.setText(_translate("MainWindow", "About"))
+        self.actionAbout.setStatusTip(
+            _translate(
+                "MainWindow",
+                "Read about eMot and view the user manual."))
 
 
 if __name__ == "__main__":

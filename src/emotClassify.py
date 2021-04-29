@@ -134,13 +134,15 @@ class EmotClassify:
                         self.sentenceExamples.update(
                             [(averageEmotionIntensity, emotionLabel1, sentence)])
 
-                # store site with associated positive and negative score
-                totalSiteSentimentCount = positiveSiteScore + negativeSiteScore
-                positivePercentage = positiveSiteScore / totalSiteSentimentCount
-                negativePercentage = negativeSiteScore / totalSiteSentimentCount
+            # store site with associated positive and negative score
+            totalSiteSentimentCount = positiveSiteScore + negativeSiteScore
+            if totalSiteSentimentCount == 0:
+                totalSiteSentimentCount = 1
+            positivePercentage = positiveSiteScore / totalSiteSentimentCount
+            negativePercentage = negativeSiteScore / totalSiteSentimentCount
 
-                self.siteScores.append(
-                    (url, positivePercentage, negativePercentage))
+            self.siteScores.append(
+                (url, positivePercentage, negativePercentage))
 
             self.processWordClouds(self.sentenceExamples)
             self.processSplitChartValues()

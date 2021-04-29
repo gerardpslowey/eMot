@@ -57,14 +57,14 @@
             <item>
              <widget class="QChartView" name="splitChart">
               <property name="statusTip">
-               <string>Split Chart</string>
+               <string>Split Chart showing the different emotions seen per site.</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QChartView" name="pieChart">
               <property name="statusTip">
-               <string>Pie Chart</string>
+               <string>Pie Chart showing the total amount of each emotion seen while scraping.</string>
               </property>
              </widget>
             </item>
@@ -84,14 +84,14 @@
             <item>
              <widget class="QChartView" name="lineChart">
               <property name="statusTip">
-               <string>Line Chart</string>
+               <string>Line Chart showing the largest confidence level agreed on by the two classifiers.</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QChartView" name="barChart">
               <property name="statusTip">
-               <string>Bar Chart</string>
+               <string>Bar Chart showing the most visited sites.</string>
               </property>
              </widget>
             </item>
@@ -224,6 +224,9 @@ border-radius: 10px;</string>
                     <bold>true</bold>
                    </font>
                   </property>
+                  <property name="statusTip">
+                   <string>Most positive words found in the scraped sentences.</string>
+                  </property>
                   <property name="layoutDirection">
                    <enum>Qt::LeftToRight</enum>
                   </property>
@@ -314,6 +317,9 @@ border-radius: 10px;</string>
                     <bold>true</bold>
                    </font>
                   </property>
+                  <property name="statusTip">
+                   <string>Most negative words found in the scraped sentences.</string>
+                  </property>
                   <property name="styleSheet">
                    <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(103, 171, 159,255));
 color: rgb(255, 255, 255);
@@ -385,6 +391,9 @@ border-radius: 10px;</string>
                       <bold>true</bold>
                      </font>
                     </property>
+                    <property name="statusTip">
+                     <string>Chosen browser in the dropdown menu.</string>
+                    </property>
                     <property name="text">
                      <string>Opera</string>
                     </property>
@@ -431,6 +440,9 @@ border-radius: 10px;</string>
                       <bold>true</bold>
                      </font>
                     </property>
+                    <property name="statusTip">
+                     <string>Chosen filter in the dropdown menu.</string>
+                    </property>
                     <property name="text">
                      <string>All</string>
                     </property>
@@ -476,6 +488,9 @@ border-radius: 10px;</string>
                       <weight>75</weight>
                       <bold>true</bold>
                      </font>
+                    </property>
+                    <property name="statusTip">
+                     <string>Click here to open the most negative website in your browser.</string>
                     </property>
                     <property name="styleSheet">
                      <string notr="true">color: rgb(0, 0, 0);</string>
@@ -528,6 +543,9 @@ border-radius: 10px;</string>
                       <weight>75</weight>
                       <bold>true</bold>
                      </font>
+                    </property>
+                    <property name="statusTip">
+                     <string>Click here to open the most positive website in your browser.</string>
                     </property>
                     <property name="styleSheet">
                      <string notr="true">color: rgb(0, 0, 0);</string>
