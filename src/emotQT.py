@@ -106,19 +106,22 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.threadpool.start(worker2)
 
     def createWordCloud(self, data, prefix, colour):
-        words = ' '.join(data)
-        wordcloud = WordCloud(
-            background_color=colour,
-            width=600, height=520).generate(words)
+        try:
+            words = ' '.join(data)
+            wordcloud = WordCloud(
+                background_color=colour,
+                width=600, height=520).generate(words)
 
-        if prefix == "neg":
-            negWordCloudImage = "pyqt/negWordCloud.png"
-            wordcloud.to_file(negWordCloudImage)
-            self.MetricsDashboard.showImage(negWordCloudImage, prefix)
-        else:
-            posWordCloudImage = "pyqt/posWordCloud.png"
-            wordcloud.to_file(posWordCloudImage)
-            self.MetricsDashboard.showImage(posWordCloudImage, prefix)
+            if prefix == "neg":
+                negWordCloudImage = "pyqt/negWordCloud.png"
+                wordcloud.to_file(negWordCloudImage)
+                self.MetricsDashboard.showImage(negWordCloudImage, prefix)
+            else:
+                posWordCloudImage = "pyqt/posWordCloud.png"
+                wordcloud.to_file(posWordCloudImage)
+                self.MetricsDashboard.showImage(posWordCloudImage, prefix)
+        except ValueError:
+            print("Empty word cloud")
 
     def redirectText(self, text):
         # Write console output to textEdit widget.

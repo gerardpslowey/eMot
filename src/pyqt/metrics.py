@@ -81,7 +81,11 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         chart.setTitle('Most Visited Sites')
 
         yAxis = QValueAxis()
-        largestSiteVisitCount = max(self.siteVisitCounts.values())
+        try:
+            largestSiteVisitCount = max(self.siteVisitCounts.values())
+        except ValueError:
+            largestSiteVisitCount = 0
+
         yAxis.setRange(0, largestSiteVisitCount)
         yAxis.setLabelFormat("%d")
         yAxis.setTickCount(largestSiteVisitCount + 1)

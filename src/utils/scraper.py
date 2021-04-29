@@ -14,9 +14,9 @@ class Scraper:
         soup = self.getSoup(url)
 
         if(len(soup) != 0):
-            text = self.getText(soup, tagSet)
+            cleanedText, originalText = self.getText(soup, tagSet)
             print(f'Task {task} Finished')
-            return (url, text)
+            return (url, cleanedText)
         else:
             print(f"{task}. unreachable, skipped")
             return None
@@ -39,6 +39,7 @@ class Scraper:
             comment.extract()
 
         cleaned = []
+        original = []
         for sentence in soup.find_all(text=True):
             sentence = sentence.strip().lower()
             if (str(sentence) and not re.search(
@@ -48,8 +49,9 @@ class Scraper:
                     sentence.lower())):
 
                 cleaned.append(preProcess(sentence))
+                original.append(sentence)
 
-        return cleaned
+        return cleaned, original
 
 
 def main():
