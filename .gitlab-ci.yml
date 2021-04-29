@@ -10,7 +10,7 @@ flake8:
     - cd src
     - pip install flake8
     - flake8 --version
-    - flake8 --max-line-length=120 --ignore E401,E402,W503 --exclude env
+    - flake8 --max-line-length=120 --ignore E401,E402,W503,W504 --exclude env
 
 pytest:
   stage: test

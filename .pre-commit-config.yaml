@@ -95,52 +95,52 @@ repos:
             language: pygrep
             types: [python]
 
-    #     # Vulture
-    #     # https://github.com/jendrikseipp/vulture
-    #     -   id: vulture
-    #         name: vulture
-    #         description: Find dead Python code
-    #         entry: vulture
-    #         args: [
-    #             "--min-confidence", "90",
-    #             "--exclude", "*env*", "docs/",
-    #             ".",
-    #         ]
-    #         language: system
-    #         types: [python]
+        # Vulture
+        # https://github.com/jendrikseipp/vulture
+        -   id: vulture
+            name: vulture
+            description: Find dead Python code
+            entry: vulture
+            args: [
+                "--min-confidence", "90",
+                "--exclude", "*env*", "docs/",
+                ".",
+            ]
+            language: system
+            types: [python]
 
-    # ####################################### Linters ######################################
-    # -   repo: local
-    #     hooks:
-    #     # Flake8 Linter
-    #     # https://flake8.pycqa.org/en/latest/
-    #     -   id: flake8
-    #         name: flake8
-    #         description: Python style guide enforcement
-    #         entry: flake8
-    #         args: ["--max-line-length=120", "--ignore=E401,E402,D100,D102,D103,D205,D107,N802,N803,N806,N815,PD011"]
-    #         exclude: env
-    #         additional_dependencies: [
-    #             flake8-2020, # flake8 plugin which checks for misuse of `sys.version` or `sys.version_info`
-    #             flake8-blind-except, # A flake8 extension that checks for blind except: statements
-    #             flake8-bugbear, # A plugin for flake8 finding likely bugs and design problems in your program.
-    #                             # Contains warnings that don't belong in pyflakes and pycodestyle.
-    #             flake8-builtins, # Check for python builtins being used as variables or parameters.
-    #             flake8-comprehensions, # It helps you write a better list/set/dict comprehensions.
-    #             flake8-copyright, # Adds copyright checks to flake8
-    #             flake8-deprecated, # Warns about deprecated method calls.
-    #             dlint, # Dlint is a tool for encouraging best coding practices and helping ensure we're writing secure Python code.
-    #             flake8-docstrings, # Extension for flake8 which uses pydocstyle to check docstrings
-    #             # flake8-eradicate, # Flake8 plugin to find commented out code
-    #             flake8-license,
-    #             pandas-vet, # A Flake8 plugin that provides opinionated linting for pandas code
-    #             flake8-pytest, # pytest assert checker plugin for flake8
-    #             flake8-variables-names, # flake8 extension that helps to make more readable variables names
-    #             flake8-tabs, # Tab (or Spaces) indentation style checker for flake8
-    #             pep8-naming, # Check PEP-8 naming conventions, plugin for flake8
-    #         ]
-    #         language: python
-    #         types: [python]
+    ####################################### Linters ######################################
+    -   repo: local
+        hooks:
+        # Flake8 Linter
+        # https://flake8.pycqa.org/en/latest/
+        -   id: flake8
+            name: flake8
+            description: Python style guide enforcement
+            entry: flake8
+            args: ["--max-line-length=120", "--ignore=E401,E402,D100,D102,D103,D205,D107,N802,N803,N806,N815,PD011"]
+            exclude: env
+            additional_dependencies: [
+                flake8-2020, # flake8 plugin which checks for misuse of `sys.version` or `sys.version_info`
+                flake8-blind-except, # A flake8 extension that checks for blind except: statements
+                flake8-bugbear, # A plugin for flake8 finding likely bugs and design problems in your program.
+                                # Contains warnings that don't belong in pyflakes and pycodestyle.
+                flake8-builtins, # Check for python builtins being used as variables or parameters.
+                flake8-comprehensions, # It helps you write a better list/set/dict comprehensions.
+                flake8-copyright, # Adds copyright checks to flake8
+                flake8-deprecated, # Warns about deprecated method calls.
+                dlint, # Dlint is a tool for encouraging best coding practices and helping ensure we're writing secure Python code.
+                flake8-docstrings, # Extension for flake8 which uses pydocstyle to check docstrings
+                # flake8-eradicate, # Flake8 plugin to find commented out code
+                flake8-license,
+                pandas-vet, # A Flake8 plugin that provides opinionated linting for pandas code
+                flake8-pytest, # pytest assert checker plugin for flake8
+                flake8-variables-names, # flake8 extension that helps to make more readable variables names
+                flake8-tabs, # Tab (or Spaces) indentation style checker for flake8
+                pep8-naming, # Check PEP-8 naming conventions, plugin for flake8
+            ]
+            language: python
+            types: [python]
 
     #     # MyPy Linter
     #     # https://mypy.readthedocs.io/en/latest/
