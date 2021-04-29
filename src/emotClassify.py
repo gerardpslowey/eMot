@@ -166,7 +166,6 @@ class EmotClassify:
         self.mostPositiveSite = sorted(scores, key=lambda tup: tup[1], reverse=True)[0]
         self.mostNegativeSite = sorted(scores, key=lambda tup: tup[2], reverse=True)[0]
 
-        print(self.siteScores)
         print("\nMost Positive Site: " + self.mostPositiveSite[0])
         print("\nMost Negative Site: " + self.mostNegativeSite[0])
 

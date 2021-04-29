@@ -24,10 +24,12 @@ def is_running(container_name):
 def stop(container_name):
     try:
         DOCKER_CLIENT = docker.from_env()
+        container = DOCKER_CLIENT.containers.get(container_name)
+        container.stop()
+        print("Splash Docker turned off.")
 
-        DOCKER_CLIENT.containers.stop(container_name)
     except Exception:  # noqa
-        print("Splash Docker container is not turned on!")
+        print("Splash Docker already off.")
         return False
 
 
