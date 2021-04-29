@@ -15,14 +15,20 @@ class EmotClassify:
 
     def __init__(self):
         self.emotions = [
-            "anger",
-            "fear",
-            "sadness",
-            "happiness",
-            "joy",
-            "surprise",
-            "neutral",
+            'anger',
+            'fear',
+            'sadness',
+            'happiness',
+            'joy',
+            'surprise',
+            'neutral'
         ]
+        # treat anger, fear and sadness as negative
+        self.negative = self.emotions[:len(self.emotions) // 2]
+        # treat happy, joy and surprise as positive
+        # but don't include neutral words
+        self.positive = self.emotions[len(self.emotions) // 2:-1]
+
         # make a template dictionary setting the emotion count values to zero
         self.emotionsDict = dict.fromkeys(self.emotions, 0)
 
@@ -32,6 +38,8 @@ class EmotClassify:
         self.emotionsPerSite = {}
 
         self.sentenceExamples = set()
+
+        self.siteScores = []
 
         self.siteVisitCounts = 0
         self.totalSiteCount = 0
@@ -89,55 +97,46 @@ class EmotClassify:
 
     def sentenceClassify(self, scraped_df):
         try:
+
             for row in scraped_df.itertuples(index=False):
+                positiveSiteScore = 0
+                negativeSiteScore = 0
+
+                url = row[0]
                 text = row[1]
                 baseUrl = row[2]
 
-                # score each sentence
                 for sentence in text.split("|"):
-                    sentimentScore1 = self.classifierModel1.predict_proba(
-                        self.tfidf.transform([sentence])
-                    )
-                    sentimentScore2 = self.classifierModel2.predict_proba(
-                        self.cv.transform([sentence])
-                    )
+                    # label each sentence
+                    emotionLabel1 = self.classifierModel1.predict(self.tfidf.transform([sentence]))[0]
+                    emotionLabel2 = self.classifierModel2.predict(self.cv.transform([sentence]))[0]
+
+                    positiveSiteScore, negativeSiteScore = self.classifierModelAssertions(
+                        baseUrl, emotionLabel1, emotionLabel2, positiveSiteScore, negativeSiteScore)
+
+                    # score each sentence
+                    sentimentScore1 = self.classifierModel1.predict_proba(self.tfidf.transform([sentence]))
+                    sentimentScore2 = self.classifierModel2.predict_proba(self.cv.transform([sentence]))
 
                     # use 2 models to score the data for comparison
                     emotionIntensity1 = int(sentimentScore1.max() * 100)
                     emotionIntensity2 = int(sentimentScore2.max() * 100)
-                    averageEmotionIntensity = (
-                        emotionIntensity1 + emotionIntensity2) / 2
-                    emotionIntensity = averageEmotionIntensity
+                    averageEmotionIntensity = (emotionIntensity1 + emotionIntensity2) / 2
 
-                    emotionLabel1 = self.classifierModel1.predict(
-                        self.tfidf.transform([sentence])
-                    )[0]
-                    emotionLabel2 = self.classifierModel2.predict(
-                        self.cv.transform([sentence])
-                    )[0]
+                    if averageEmotionIntensity > self.emotionIntensities.get(emotionLabel1):
+                        self.emotionIntensities[emotionLabel1] = averageEmotionIntensity
+                        self.sentenceExamples.update([(averageEmotionIntensity, emotionLabel1, sentence)])
 
-                    # for a sentiment to be accepted both models have to have a
-                    # score greater than 0.6
-                    if emotionLabel1 == emotionLabel2:
-                        # count total emotion count
-                        self.emotionCounts[emotionLabel1] += 1
-                        # count of distribution of emotions per site
-                        self.emotionsPerSite[baseUrl][emotionLabel1] += 1
-                    else:
-                        # count total emotion count
-                        self.emotionCounts["neutral"] += 1
-                        # count of distribution of emotions per site
-                        self.emotionsPerSite[baseUrl]["neutral"] += 1
+                # store site with associated positive and negative score
+                totalSiteSentimentCount = positiveSiteScore + negativeSiteScore
+                positivePercentage = positiveSiteScore / totalSiteSentimentCount
+                negativePercentage = negativeSiteScore / totalSiteSentimentCount
 
-                    if emotionIntensity > self.emotionIntensities.get(
-                            emotionLabel1):
-                        self.emotionIntensities[emotionLabel1] = emotionIntensity
-                        self.sentenceExamples.update(
-                            [(emotionIntensity, emotionLabel1, sentence)]
-                        )
+                self.siteScores.append((url, positivePercentage, negativePercentage))
 
-            self.processWordClouds(list(self.sentenceExamples))
+            self.processWordClouds(self.sentenceExamples)
             self.processSplitChartValues()
+            self.mostPosandNeg(self.siteScores)
 
         except pd.errors.EmptyDataError:
             print("Nothing to classify, the file is empty")
@@ -146,27 +145,49 @@ class EmotClassify:
             self.prettyPrint(self.emotionCounts.items(), "amount")
             self.prettyPrint(self.emotionsPerSite.items(), "lst")
 
+    def classifierModelAssertions(self, baseUrl, emotionLabel1, emotionLabel2, positiveSiteScore, negativeSiteScore):
+        # for a sentiment to be accepted both models have to have a score greater than 0.6
+        if emotionLabel1 == emotionLabel2:
+            self.emotionCounts[emotionLabel1] += 1              # count total emotion count
+            self.emotionsPerSite[baseUrl][emotionLabel1] += 1   # count of distribution of emotions per site
+            if emotionLabel1 in self.positive:
+                positiveSiteScore += 1
+            else:
+                negativeSiteScore += 1
+        else:
+            # count total emotion count
+            self.emotionCounts['neutral'] += 1
+            # count of distribution of emotions per site
+            self.emotionsPerSite[baseUrl]['neutral'] += 1
+
+        return positiveSiteScore, negativeSiteScore
+
+    def mostPosandNeg(self, scores):
+        self.mostPositiveSite = sorted(scores, key=lambda tup: tup[1], reverse=True)[0]
+        self.mostNegativeSite = sorted(scores, key=lambda tup: tup[2], reverse=True)[0]
+
+        print(self.siteScores)
+        print("\nMost Positive Site: " + self.mostPositiveSite[0])
+        print("\nMost Negative Site: " + self.mostNegativeSite[0])
+
     def processWordClouds(self, sentences):
         # prepare some sentence examples for the wordcloud
-        sentenceExampleList = sentences
+        sentenceExampleList = list(sentences)
+        # sort the list using the tuple structure
         sentenceExampleList.sort(key=lambda tup: tup[0], reverse=True)
+
+        print("\nExamples of emotion based sentences: ")
         halfListRange = int(len(sentenceExampleList) / 2)
 
-        negative = self.emotions[: len(self.emotions) // 2]
-
-        # dont include neutral words
-        positive = self.emotions[len(self.emotions) // 2: -1]
-        print("\nExamples of emotion based sentences: ")
-
         for item in sentenceExampleList[:halfListRange]:
-
-            if item[1] in negative:
+            emotionLabel = item[1]
+            if emotionLabel in self.negative:
                 self.negativeWordcloud.append(item[2])
 
-            if item[1] in positive:
+            if emotionLabel in self.positive:
                 self.positiveWordcloud.append(item[2])
 
-            print(f"{item[0]}% {item[1]} = {item[2]}")
+            print(f"{item[0]}% {emotionLabel} = {item[2]}")
 
     def processSplitChartValues(self):
         # total site visits = the number of sites visited
@@ -226,6 +247,9 @@ class EmotClassify:
 
     def getEmotionsPerSite(self):
         return self.emotionsPerSite
+
+    def getMostPosandNeg(self):
+        return self.mostNegativeSite[0], self.mostPositiveSite[0]
 
 
 if __name__ == "__main__":

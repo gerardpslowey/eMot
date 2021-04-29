@@ -6,14 +6,17 @@ funcy
 matplotlib
 numpy
 pandas
+pandas
 pyqt5==5.15.2
 pyqtchart==5.15.2
 pyspellchecker
 pytest
 python-dateutil
 requests
+scikit-learn==0.24.1
 scikit-learn
 spacy
 tqdm
 wheel
+wordcloud
 wordcloud

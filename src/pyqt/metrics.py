@@ -12,13 +12,12 @@ from PyQt5.QtWidgets import QMainWindow
 from pyqt.metrics_window import Ui_MetricsDashboard
 
 colours = [
-    QColor("#D8345F"),
-    QColor("#26474E"),  # cerise, Dark slate gray
-    # middle blue green, forest green crayola
-    QColor("#A3DDCB"),
-    QColor("#5AA469"),
-    QColor("#F9968B"),
-    QColor("#8B5E83"),  # congo pink, antique fuchsia
+    QColor("#D8345F"),  # cerise
+    QColor("#26474E"),  # Dark slate gray
+    QColor("#A3DDCB"),  # middle blue green
+    QColor("#5AA469"),  # forest green crayola
+    QColor("#F9968B"),  # congo pink
+    QColor("#8B5E83"),  # antique fuchsia
     QColor("#c0c0c0"),  # default grey for neutral
 ]
 
@@ -87,11 +86,11 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         chart.setTitle("Most Visited Sites")
 
         yAxis = QValueAxis()
-        largestSiteVisitCount = 1
         try:
             largestSiteVisitCount = max(self.siteVisitCounts.values())
         except ValueError:
-            print("No sites")
+            largestSiteVisitCount = 1
+
         yAxis.setRange(0, largestSiteVisitCount)
         yAxis.setLabelFormat("%d")
         yAxis.setTickCount(largestSiteVisitCount + 1)

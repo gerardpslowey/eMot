@@ -94,8 +94,6 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         print("\nClick the 'Show Results' button to view the results!")
         self.startDrawing()
         self.MetricsDashboard.makeCharts(self.emotClassify)
-        sites = f"{len(self.emotClassify.getSiteVisitCounts())} Sites"
-        self.MetricsDashboard.sitesVisitedEdit.setText(sites)
         self.results_button.setEnabled(True)
         self.results_button.setText("Show Results!")
         self.results_button.setStyleSheet(
@@ -118,6 +116,12 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
             self.createWordcloud(positiveList, "positive", "#ebf2f2")
         )  # light blue
         self.threadpool.start(worker2)
+
+        negSite, posSite = self.emotClassify.getMostPosandNeg()
+        negativeSite = f"<a href=\"{negSite}\">Click here</a>"
+        positiveSite = f"<a href=\"{posSite}\">Click here</a>"
+        self.MetricsDashboard.negSiteEdit.setText(negativeSite)
+        self.MetricsDashboard.posSiteEdit.setText(positiveSite)
 
     def createWordcloud(self, data, prefix, colour):
         if data:

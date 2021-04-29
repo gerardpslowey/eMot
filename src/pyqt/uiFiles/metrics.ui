@@ -444,11 +444,11 @@ border-radius: 10px;</string>
                </layout>
               </item>
               <item>
-               <layout class="QVBoxLayout" name="sLayout" stretch="0,0">
+               <layout class="QVBoxLayout" name="nLayout">
                 <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_9" stretch="0">
+                 <layout class="QVBoxLayout" name="verticalLayout_17">
                   <item>
-                   <widget class="QLabel" name="sitesLabel">
+                   <widget class="QLabel" name="negSiteLabel">
                     <property name="font">
                      <font>
                       <pointsize>16</pointsize>
@@ -457,7 +457,59 @@ border-radius: 10px;</string>
                      </font>
                     </property>
                     <property name="text">
-                     <string>Sites Visited</string>
+                     <string>Most Negative Site</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_16">
+                  <item>
+                   <widget class="QLabel" name="negSiteEdit">
+                    <property name="font">
+                     <font>
+                      <pointsize>14</pointsize>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">color: rgb(0, 0, 0);</string>
+                    </property>
+                    <property name="text">
+                     <string>Here</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="openExternalLinks">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="pLayout" stretch="0,0">
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_9" stretch="0">
+                  <item>
+                   <widget class="QLabel" name="posSiteLabel">
+                    <property name="font">
+                     <font>
+                      <pointsize>16</pointsize>
+                      <weight>50</weight>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Most Positive Site</string>
                     </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
@@ -469,7 +521,7 @@ border-radius: 10px;</string>
                 <item>
                  <layout class="QVBoxLayout" name="verticalLayout">
                   <item>
-                   <widget class="QLabel" name="sitesVisitedEdit">
+                   <widget class="QLabel" name="posSiteEdit">
                     <property name="font">
                      <font>
                       <pointsize>14</pointsize>
@@ -477,11 +529,17 @@ border-radius: 10px;</string>
                       <bold>true</bold>
                      </font>
                     </property>
+                    <property name="styleSheet">
+                     <string notr="true">color: rgb(0, 0, 0);</string>
+                    </property>
                     <property name="text">
-                     <string>6 Sites</string>
+                     <string>Here</string>
                     </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="openExternalLinks">
+                     <bool>true</bool>
                     </property>
                    </widget>
                   </item>
