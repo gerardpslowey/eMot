@@ -142,8 +142,8 @@ class EmotClassify:
         self.mostNegativeSite = sorted(scores, key=lambda tup: tup[2], reverse=True)[0]
 
         print(self.siteScores)
-        print("\nMost Positive Site: " + mostPositiveSite[0])
-        print("\nMost Negative Site: " + mostNegativeSite[0])
+        print("\nMost Positive Site: " + self.mostPositiveSite[0])
+        print("\nMost Negative Site: " + self.mostNegativeSite[0])
 
     def processWordClouds(self, sentences):
         # prepare some sentence examples for the wordcloud
