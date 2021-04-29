@@ -131,7 +131,6 @@ repos:
                 flake8-deprecated, # Warns about deprecated method calls.
                 dlint, # Dlint is a tool for encouraging best coding practices and helping ensure we're writing secure Python code.
                 flake8-docstrings, # Extension for flake8 which uses pydocstyle to check docstrings
-                # flake8-eradicate, # Flake8 plugin to find commented out code
                 flake8-license,
                 pandas-vet, # A Flake8 plugin that provides opinionated linting for pandas code
                 flake8-pytest, # pytest assert checker plugin for flake8
