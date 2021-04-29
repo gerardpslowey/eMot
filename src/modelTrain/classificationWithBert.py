@@ -1,10 +1,5 @@
-# pip install ktrain
-
 import time
-
-# use ktrain as a lightweight wrapper
-# for deep learning in TensorFlow Keras
-import ktrain
+import ktrain   # pip install ktrain, use ktrain as a lightweight wrapper, for deep learning in TensorFlow Keras
 import pandas as pd
 from ktrain import text
 from sklearn.model_selection import train_test_split

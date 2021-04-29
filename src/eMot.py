@@ -1,15 +1,14 @@
-# Queue of urls
 # Implement threading
 import concurrent.futures as futures
-# Get browser history
+
 import csv
 import multiprocessing
-from queue import Queue
+from queue import Queue                             # Queue of urls
 
-from browserHistory.getHistory import GetHistory
+from browserHistory.getHistory import GetHistory    # Get browser history
 from utils.blacklists import Blacklists
-# Scraper and url filter
-from utils.scraper import Scraper
+
+from utils.scraper import Scraper                   # Scraper and url filter
 from utils.urlFilter import filterBlacklistedUrl
 
 cpu_cores = multiprocessing.cpu_count()
