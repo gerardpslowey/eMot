@@ -84,8 +84,6 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         print("\nClick the 'Show Results' button to view the results!")
         self.startDrawing()
         self.MetricsDashboard.makeCharts(self.emotClassify)
-        sites = f"{len(self.emotClassify.getSiteVisitCounts())} Sites"
-        self.MetricsDashboard.sitesVisitedEdit.setText(sites)
         self.results_button.setEnabled(True)
         self.results_button.setText("Show Results!")
         self.results_button.setStyleSheet(
@@ -100,6 +98,11 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
     def startDrawing(self):
         negative, positive = self.emotClassify.getWordCloudBag()
+        negSite, posSite = self.emotClassify.getMostPosandNeg()
+        negativeSite = f"<a href=\"{negSite}\">Click here</a>"
+        positiveSite = f"<a href=\"{posSite}\">Click here</a>"
+        self.MetricsDashboard.negSiteEdit.setText(negativeSite)
+        self.MetricsDashboard.posSiteEdit.setText(positiveSite)
         worker = Worker(self.createWordCloud(negative, "neg", "#f9f1f0"))   # light orange
         worker2 = Worker(self.createWordCloud(positive, "pos", "#ebf2f2"))  # light blue
         self.threadpool.start(worker)
