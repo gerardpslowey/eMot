@@ -23,7 +23,7 @@ class Scraper:
         soup = self.getSoup(url)
 
         if len(soup) != 0:
-            cleanedText, originalText = self.getText(soup, tagSet)
+            cleanedText = self.getText(soup, tagSet)
             print(f'Task {task} Finished')
             return (url, cleanedText)
         else:
@@ -67,9 +67,8 @@ class Scraper:
             ):
 
                 cleaned.append(preProcess(sentence))
-                original.append(sentence)
 
-        return cleaned, original
+        return cleaned
 
 
 def main():

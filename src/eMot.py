@@ -87,10 +87,10 @@ class Emot:
 
                 if data is not None:
                     url = data[0]
-                    originalText = data[1]
-                    # cleanedText = preProcess(originalText)
+                    cleanedText = data[1]
+                    # cleanedText = preProcess(cleanedText)
                     # store scraped data
-                    self.writeToCSV(url, originalText)
+                    self.writeToCSV(url, cleanedText)
 
         print("Finished Scraping!\n")
         return "scraped"
@@ -104,18 +104,13 @@ class Emot:
                 scraped_text, fieldnames=fields, delimiter=",")
             writer.writeheader()
 
-    def writeToCSV(self, url, originalText):
-        data = []
+    def writeToCSV(self, url, cleanedText):
         with open(
             self.scraped_csv, mode="a+", encoding="utf-8", newline=""
         ) as scraped_text:
             writer = csv.writer(scraped_text, delimiter=",")
 
-            for sentence in originalText:
-                # remove silly sentences
-                if len(sentence.split()) > 3:
-                    data.append(sentence)
-
+            data = [sentence for sentence in cleanedText if len(sentence.split()) > 3]
             writer.writerow([url, "|".join(data)])
 
 
