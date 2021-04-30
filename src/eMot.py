@@ -83,14 +83,14 @@ class Emot:
             # Deal with the threads as they complete individually
             for future in futures.as_completed(threads):
                 # tuple
-                data = future.result()
+                cleanedData = future.result()
 
-                if data is not None:
-                    url = data[0]
-                    originalText = data[1]
-                    # cleanedText = preProcess(originalText)
-                    # store scraped data
-                    self.writeToCSV(url, originalText)
+                if cleanedData is not None:
+                    url = cleanedData[0]
+                    cleanedText = cleanedData[1]
+                    originalText = cleanedData[2]
+                    # store scraped cleanedData
+                    self.writeToCSV(url, cleanedText, originalText)
 
         print("Finished Scraping!\n")
         return "scraped"
@@ -99,24 +99,21 @@ class Emot:
         with open(
             self.scraped_csv, mode="w", encoding="utf-8", newline=""
         ) as scraped_text:
-            fields = ["url", "original_data"]
+            fields = ["url", "cleaned_data", "original_data"]
             writer = csv.DictWriter(
                 scraped_text, fieldnames=fields, delimiter=",")
             writer.writeheader()
 
-    def writeToCSV(self, url, originalText):
-        data = []
+    def writeToCSV(self, url, cleanedText, originalText):
+        cleanedData = []
         with open(
             self.scraped_csv, mode="a+", encoding="utf-8", newline=""
         ) as scraped_text:
             writer = csv.writer(scraped_text, delimiter=",")
 
-            for sentence in originalText:
-                # remove silly sentences
-                if len(sentence.split()) > 3:
-                    data.append(sentence)
-
-            writer.writerow([url, "|".join(data)])
+            cleanedData = [sentence for sentence in cleanedText if len(sentence.split()) > 3]
+            originalData = [sentence for sentence in originalText if len(sentence.split()) > 3]
+            writer.writerow([url, "|".join(cleanedData), "|".join(originalData)])
 
 
 def main():

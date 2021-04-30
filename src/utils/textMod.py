@@ -63,6 +63,15 @@ def preProcess(data):
     return " ".join(stem_data)
 
 
+def clean(data):
+    data = removehtmlMarkup(data)
+    data = removeURLs(data)
+    data = removeHashandSymbols(data)
+    data = removeAscii(data)
+    data = data.strip()
+    return data
+
+
 # remove html markup tags
 def removehtmlMarkup(sentence):
     return re.sub("(<.*?>)", "", sentence)

@@ -37,6 +37,9 @@ class EmotClassify:
 
         self.emotionsPerSite = {}
 
+        self.mostNegativeSite = None
+        self.mostPositiveSite = None
+
         self.sentenceExamples = set()
 
         self.siteScores = []
@@ -77,7 +80,6 @@ class EmotClassify:
             process.join()
 
     def readScrapedFile(self):
-
         scraped_df = pd.read_csv(
             self.scrapedFile).astype("U")  # read scraped file
         # create a new column with the base baseUrl as its value
@@ -103,10 +105,11 @@ class EmotClassify:
                 negativeSiteScore = 0
 
                 url = row[0]
-                text = row[1]
-                baseUrl = row[2]
+                cleanedText = row[1]
+                origintext = row[2]
+                baseUrl = row[3]
 
-                for sentence in text.split("|"):
+                for sentence in cleanedText.split("|"):
                     # label each sentence
                     emotionLabel1 = self.classifierModel1.predict(
                         self.tfidf.transform([sentence]))[0]

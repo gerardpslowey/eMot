@@ -7,7 +7,7 @@ import requests
 from bs4 import BeautifulSoup, Comment, Doctype
 
 from .blacklists import Blacklists
-from .textMod import preProcess
+from .textMod import preProcess, clean
 
 
 class Scraper:
@@ -25,7 +25,7 @@ class Scraper:
         if len(soup) != 0:
             cleanedText, originalText = self.getText(soup, tagSet)
             print(f'Task {task} Finished')
-            return (url, cleanedText)
+            return (url, cleanedText, originalText)
         else:
             print(f"{task}. unreachable, skipped")
             return None
@@ -67,7 +67,7 @@ class Scraper:
             ):
 
                 cleaned.append(preProcess(sentence))
-                original.append(sentence)
+                original.append(clean(sentence))
 
         return cleaned, original
 
