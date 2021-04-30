@@ -54,6 +54,9 @@ class EmotClassify:
         self.negativeWordcloud = []
         self.positiveWordcloud = []
 
+        self.mostNegativeSite = None
+        self.mostPositiveSite = None
+
         self.scrapedFile = "sentimentAnalysis/scraped.csv"
 
     def startAll(self):

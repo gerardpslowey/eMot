@@ -56,7 +56,7 @@ class Scraper:
             comment.extract()
 
         cleaned = []
-        original = []
+        # original = []
         for sentence in soup.find_all(text=True):
             sentence = sentence.strip().lower()
             if str(sentence) and not re.search(
