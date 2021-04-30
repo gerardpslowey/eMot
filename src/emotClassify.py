@@ -5,7 +5,7 @@ import threading
 import pandas as pd
 
 from utils.urlFilter import base
-from utils.textMod import stem
+from utils.textMod import clean
 
 
 class EmotClassify:
@@ -16,18 +16,18 @@ class EmotClassify:
 
     def __init__(self):
         self.emotions = [
-            "anger",
-            "fear",
-            "sadness",
-            "happiness",
-            "joy",
-            "surprise",
-            "neutral"
+            'anger',
+            'fear',
+            'sadness',
+            'happiness',
+            'joy',
+            'surprise',
+            'neutral'
         ]
         # treat anger, fear and sadness as negative
         self.negative = self.emotions[:len(self.emotions) // 2]
         # treat happy, joy and surprise as positive
-        # but don"t include neutral words
+        # but don't include neutral words
         self.positive = self.emotions[len(self.emotions) // 2:-1]
 
         # make a template dictionary setting the emotion count values to zero
@@ -37,9 +37,6 @@ class EmotClassify:
         self.emotionIntensities = copy.deepcopy(self.emotionsDict)
 
         self.emotionsPerSite = {}
-
-        self.mostNegativeSite = None
-        self.mostPositiveSite = None
 
         self.sentenceExamples = set()
 
@@ -57,6 +54,9 @@ class EmotClassify:
         self.splitChartValues = []
         self.negativeWordcloud = []
         self.positiveWordcloud = []
+
+        self.mostNegativeSite = None
+        self.mostPositiveSite = None
 
         self.scrapedFile = "sentimentAnalysis/scraped.csv"
 
@@ -82,13 +82,15 @@ class EmotClassify:
 
     def readScrapedFile(self):
         scraped_df = pd.read_csv(
-            self.scrapedFile).astype("U")  # read scraped file
+            self.scrapedFile).astype("U")
+
         # create a new column with the base baseUrl as its value
         scraped_df["base"] = scraped_df["url"].apply(base)
-        scraped_df["stemmedText"] = scraped_df["text"].apply(stem)
-
+        # stem the data for classification
+        scraped_df["stemmedText"] = scraped_df["text"].apply(clean)
         # create a list of unique base sites
         sitesList = scraped_df["base"].unique().tolist()
+
         # create a nested dictionary for each site
         for site in sitesList:
             # dictionary key maps to a nested dictionary
@@ -102,23 +104,24 @@ class EmotClassify:
 
     def sentenceClassify(self, scraped_df):
         try:
-
             for row in scraped_df.itertuples(index=False):
                 positiveSiteScore = 0
                 negativeSiteScore = 0
 
-                url = row["url"]
-                # text = row[1]
-                stemmedText = row["stemmedText"]
-                baseUrl = row["base"]
+                url = row[0]
+                text = row[1]
+                baseUrl = row[2]
+                stemmedText = row[3]
 
-                for sentence in stemmedText.split("|"):
+                splitText = stemmedText.split("|")
+                for sentence in splitText:
                     # label each sentence
                     emotionLabel1 = self.classifierModel1.predict(
                         self.tfidf.transform([sentence]))[0]
                     emotionLabel2 = self.classifierModel2.predict(
                         self.cv.transform([sentence]))[0]
 
+                    # get positive and negative site score
                     positiveSiteScore, negativeSiteScore = self.classifierModelAssertions(
                         baseUrl, emotionLabel1, emotionLabel2, positiveSiteScore, negativeSiteScore)
 
@@ -137,8 +140,12 @@ class EmotClassify:
                     if averageEmotionIntensity > self.emotionIntensities.get(
                             emotionLabel1):
                         self.emotionIntensities[emotionLabel1] = averageEmotionIntensity
+
+                        origText = text.split("|")
+                        sentenceIndex = splitText.index(sentence)
+                        originalSentence = origText[sentenceIndex]
                         self.sentenceExamples.update(
-                            [(averageEmotionIntensity, emotionLabel1, sentence)])
+                            [(averageEmotionIntensity, emotionLabel1, originalSentence)])
 
                 # store site with associated positive and negative score
                 totalSiteSentimentCount = positiveSiteScore + negativeSiteScore
@@ -176,8 +183,8 @@ class EmotClassify:
             else:
                 negativeSiteScore += 1
         else:
-            self.emotionCounts["neutral"] += 1
-            self.emotionsPerSite[baseUrl]["neutral"] += 1
+            self.emotionCounts['neutral'] += 1
+            self.emotionsPerSite[baseUrl]['neutral'] += 1
 
         return positiveSiteScore, negativeSiteScore
 

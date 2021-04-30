@@ -52,26 +52,34 @@ def preProcess(data):
     # tokenise
     mytokens = nlp(data)
     filtered = [
-        word.strip()
+        word.text.strip()
         for word in mytokens
         if not word.is_punct
-        and not word.is_stop
+        and not word.is_punct
         and not word.is_space
-        and not word.is_digit  # noqa: W503
     ]
     return " ".join(filtered)
 
 
-def stem(data):
+def clean(data):
     data = data.split("|")
 
-    stemmed = []
+    filtered = []
+
     for sentence in data:
         mytokens = nlp(sentence)
-        stemSentence = " ".join([word.lemma_.strip() for word in mytokens])
-        stemmed.append(stemSentence)
+        stem_data = [
+            word.lemma_.strip()
+            for word in mytokens
+            if word.lemma_ != "-PRON-"
+            and not word.is_punct
+            and not word.is_stop
+            and not word.is_space
+            and not word.is_digit  # noqa: W503
+        ]
+        filtered.append(" ".join(stem_data))
 
-    return "|".join(stemmed)
+    return "|".join(filtered)
 
 
 # remove html markup tags
