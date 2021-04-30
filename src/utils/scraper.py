@@ -58,11 +58,10 @@ class Scraper:
         for sentence in soup.find_all(text=True):
             sentence = sentence.strip().lower()
             if str(sentence) and not re.search(
-                "(we and our partners use|we and our partners store|"
-                + "personalised ads and content|our privacy policy|"  # noqa
-                + "click below to consent)",  # noqa
-                sentence.lower(),
-            ):
+                "(we and our partners use|we and our partners store|" +
+                "personalised ads and content|our privacy policy|" + # noqa
+                "click below to consent)",  # noqa
+                sentence.lower()):
 
                 processed.append(preProcess(sentence))
 

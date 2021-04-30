@@ -103,15 +103,14 @@ class Emot:
                 scraped_text, fieldnames=fields, delimiter=",")
             writer.writeheader()
 
-    def writeToCSV(self, url, cleanedText, originalText):
-        scrapedText = []
+    def writeToCSV(self, url, text):
         with open(
             self.scraped_csv, mode="a+", encoding="utf-8", newline=""
         ) as scraped_text:
             writer = csv.writer(scraped_text, delimiter=",")
 
-            filteredText = [sentence for sentence in originalText if len(sentence.split()) > 3]
-            writer.writerow([url, "|".join(scrapedText), "|".join(filteredText)])
+            filteredText = [sentence for sentence in text if len(sentence.split()) > 3]
+            writer.writerow([url, "|".join(filteredText)])
 
 
 def main():

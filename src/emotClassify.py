@@ -16,18 +16,18 @@ class EmotClassify:
 
     def __init__(self):
         self.emotions = [
-            'anger',
-            'fear',
-            'sadness',
-            'happiness',
-            'joy',
-            'surprise',
-            'neutral'
+            "anger",
+            "fear",
+            "sadness",
+            "happiness",
+            "joy",
+            "surprise",
+            "neutral"
         ]
         # treat anger, fear and sadness as negative
         self.negative = self.emotions[:len(self.emotions) // 2]
         # treat happy, joy and surprise as positive
-        # but don't include neutral words
+        # but don"t include neutral words
         self.positive = self.emotions[len(self.emotions) // 2:-1]
 
         # make a template dictionary setting the emotion count values to zero
@@ -107,10 +107,10 @@ class EmotClassify:
                 positiveSiteScore = 0
                 negativeSiteScore = 0
 
-                url = row['url']
+                url = row["url"]
                 # text = row[1]
-                stemmedText = row['stemmedText']
-                baseUrl = row['base']
+                stemmedText = row["stemmedText"]
+                baseUrl = row["base"]
 
                 for sentence in stemmedText.split("|"):
                     # label each sentence
@@ -176,8 +176,8 @@ class EmotClassify:
             else:
                 negativeSiteScore += 1
         else:
-            self.emotionCounts['neutral'] += 1
-            self.emotionsPerSite[baseUrl]['neutral'] += 1
+            self.emotionCounts["neutral"] += 1
+            self.emotionsPerSite[baseUrl]["neutral"] += 1
 
         return positiveSiteScore, negativeSiteScore
 

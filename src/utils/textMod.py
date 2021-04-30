@@ -48,10 +48,10 @@ def preProcess(data):
     data = removeHashandSymbols(data)
     data = removeAscii(data)
     data = data.strip()
+    
     # tokenise
     mytokens = nlp(data)
-
-    data = [
+    filtered = [
         word.strip()
         for word in mytokens
         if not word.is_punct
@@ -59,7 +59,7 @@ def preProcess(data):
         and not word.is_space
         and not word.is_digit  # noqa: W503
     ]
-    return " ".join(data)
+    return " ".join(filtered)
 
 
 def stem(data):
