@@ -5,6 +5,7 @@ import threading
 import pandas as pd
 
 from utils.urlFilter import base
+from utils.textMod import stem
 
 
 class EmotClassify:
@@ -84,6 +85,8 @@ class EmotClassify:
             self.scrapedFile).astype("U")  # read scraped file
         # create a new column with the base baseUrl as its value
         scraped_df["base"] = scraped_df["url"].apply(base)
+        scraped_df["stemmedText"] = scraped_df["text"].apply(stem)
+
         # create a list of unique base sites
         sitesList = scraped_df["base"].unique().tolist()
         # create a nested dictionary for each site
@@ -104,12 +107,12 @@ class EmotClassify:
                 positiveSiteScore = 0
                 negativeSiteScore = 0
 
-                url = row[0]
-                cleanedText = row[1]
-                origintext = row[2]
-                baseUrl = row[3]
+                url = row['url']
+                # text = row[1]
+                stemmedText = row['stemmedText']
+                baseUrl = row['base']
 
-                for sentence in cleanedText.split("|"):
+                for sentence in stemmedText.split("|"):
                     # label each sentence
                     emotionLabel1 = self.classifierModel1.predict(
                         self.tfidf.transform([sentence]))[0]

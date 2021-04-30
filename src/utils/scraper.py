@@ -7,7 +7,7 @@ import requests
 from bs4 import BeautifulSoup, Comment, Doctype
 
 from .blacklists import Blacklists
-from .textMod import preProcess, clean
+from .textMod import preProcess
 
 
 class Scraper:
@@ -23,9 +23,9 @@ class Scraper:
         soup = self.getSoup(url)
 
         if len(soup) != 0:
-            cleanedText, originalText = self.getText(soup, tagSet)
+            text = self.getText(soup, tagSet)
             print(f'Task {task} Finished')
-            return (url, cleanedText, originalText)
+            return (url, text)
         else:
             print(f"{task}. unreachable, skipped")
             return None
@@ -46,7 +46,6 @@ class Scraper:
 
     def getText(self, soup, blacklist):
         # get rid of the unwanted text in Comments, Doctype and the above tags
-        # list.
         for junk in soup(blacklist):
             junk.decompose()
 
@@ -55,8 +54,7 @@ class Scraper:
         ):
             comment.extract()
 
-        cleaned = []
-        original = []
+        processed = []
         for sentence in soup.find_all(text=True):
             sentence = sentence.strip().lower()
             if str(sentence) and not re.search(
@@ -66,10 +64,9 @@ class Scraper:
                 sentence.lower(),
             ):
 
-                cleaned.append(preProcess(sentence))
-                original.append(clean(sentence))
+                processed.append(preProcess(sentence))
 
-        return cleaned, original
+        return processed
 
 
 def main():
