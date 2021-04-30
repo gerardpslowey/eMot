@@ -18,6 +18,7 @@ tqdm.pandas()
 # filter warning about using custom tokenizer
 warnings.filterwarnings("ignore")
 
+# sets path to src
 sys.path.append(str(Path(__file__).parent.parent.absolute()))
 
 

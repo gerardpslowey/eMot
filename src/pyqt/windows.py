@@ -1,5 +1,3 @@
-from PyQt5 import QtCore
-from PyQt5.QtCore import QObject
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
 from pyqt.about_window import Ui_Form
@@ -70,12 +68,3 @@ class Preference(QMainWindow, PrefWindow):
         msg.setIcon(QMessageBox.Information)
         msg.setStandardButtons(QMessageBox.Ok)
         msg.exec_()
-
-
-class Stream(QObject):
-    """Redirects console output to text widget."""
-
-    newText = QtCore.pyqtSignal(str)
-
-    def write(self, text):
-        self.newText.emit(str(text))

@@ -1,7 +1,7 @@
 echo ON
 
 echo Installing Python Dependencies
-cd ../src
+cd ../../src
 where python || echo Python not installed
 python -m venv env
 call env\Scripts\activate.bat

@@ -204,7 +204,7 @@ class EmotClassify:
             if emotionLabel in self.positive:
                 self.positiveWordcloud.append(item[2])
 
-            print(f"{item[0]}% {emotionLabel} = {item[2]}")
+            print(f"{emotionLabel} ==> {item[2]}")
 
     def processSplitChartValues(self):
         # total site visits = the number of sites visited
@@ -251,7 +251,9 @@ class EmotClassify:
         return self.emotionIntensities
 
     def getSiteVisitCounts(self):
-        return self.siteVisitCounts
+        # remove www. from the urls
+        return {(k.replace("www.", ""), v)
+                for k, v in self.siteVisitCounts.items()}
 
     def getUniqueSiteCount(self):
         return self.totalSiteCount

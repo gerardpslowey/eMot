@@ -11,7 +11,7 @@ __pycache__/*
 
 # Word cloud images
 src/pyqt/resources/*.png
-!src/pyqt/resources/error.png
+!src/pyqt/resources/nodata.png
 !src/pyqt/resources/icon.png
 
 # VSCode

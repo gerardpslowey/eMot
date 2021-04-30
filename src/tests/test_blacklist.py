@@ -3,6 +3,7 @@ from pathlib import Path
 
 from utils.urlFilter import base, filterBlacklistedUrl
 
+# sets path to src
 sys.path.append(str(Path(__file__).parent.parent.absolute()))
 
 
@@ -31,7 +32,7 @@ def test_blacklist_checker():
         "www.twitter.com",
         "https://discord.com",
         "https://www.reddit.com/",
-    ]  # noqa
+    ]
 
     expected_filters = [
         "https://www.dcu.ie/",

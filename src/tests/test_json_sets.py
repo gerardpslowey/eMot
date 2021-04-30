@@ -3,6 +3,7 @@ from pathlib import Path
 
 from utils.blacklists import Blacklists
 
+# sets path to src
 sys.path.append(str(Path(__file__).parent.parent.absolute()))
 
 test = Blacklists()

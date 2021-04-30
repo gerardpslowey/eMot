@@ -6,6 +6,7 @@ import browserHistory
 from .test_utils import (become_linux, become_mac, become_windows,
                          change_homedir)
 
+# sets path to src
 sys.path.append(str(Path(__file__).parent.parent.absolute()))
 
 become_linux = become_linux

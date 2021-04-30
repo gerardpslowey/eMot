@@ -2,7 +2,7 @@
 
 echo OFF
 echo Starting Python Virtual Environment
-cd ../src
+cd ../../src
 source env/bin/activate
 
 echo Starting Docker Container

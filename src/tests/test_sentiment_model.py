@@ -2,6 +2,7 @@ import pickle
 import sys
 from pathlib import Path
 
+# sets path to src
 sys.path.append(str(Path(__file__).parent.parent.absolute()))
 
 LR_Model = "models/lr.pkl"

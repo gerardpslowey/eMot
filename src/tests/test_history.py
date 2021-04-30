@@ -3,6 +3,7 @@ from pathlib import Path
 
 from browserHistory.getHistory import GetHistory
 
+# sets path to src
 sys.path.append(str(Path(__file__).parent.parent.absolute()))
 
 
@@ -11,28 +12,29 @@ def test_capitalise():
     assert browser.capitalize() == "Opera"
 
 
-def test_getHistory():
-    filtr = ""
-    browser = "opera"
-    history = GetHistory().getHistory(filtr, browser.capitalize())
-    assert history is not None
+def test_browser_installed(capsys):
+    filtr = "All"
+    browser = "Brave"
+    GetHistory().getHistory(filtr, browser.capitalize())
+    captured = capsys.readouterr()
+    assert captured.out == "Brave browser is not installed\n"
 
 
-def test_filtr_hello():
-    filtr = "hello"
-    browser = "opera"
-    result = GetHistory().getHistory(filtr, browser)
-    assert len(result) == 0
-
-
-def test_filtr_3weeks():
+def test_filter_error():
     filtr = "3 weeks"
     browser = "chrome"
     result = GetHistory().getHistory(filtr, browser)
     assert result == {}
 
 
-def test_browser(capsys):
+def test_filter_spelling():
+    filtr = "Yeer"
+    browser = "opera"
+    result = GetHistory().getHistory(filtr, browser)
+    assert len(result) == 0
+
+
+def test_browser_spelling(capsys):
     filtr = "Day"
     browser = "google"
     GetHistory().getHistory(filtr, browser)

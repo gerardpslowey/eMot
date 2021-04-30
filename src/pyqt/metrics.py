@@ -6,7 +6,7 @@ from PyQt5.QtChart import (QBarCategoryAxis, QBarSeries, QBarSet,
                            QCategoryAxis, QChart, QLineSeries,
                            QPercentBarSeries, QPieSeries, QValueAxis)
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QColor, QPainter, QPen, QPixmap
+from PyQt5.QtGui import QColor, QFont, QPainter, QPen, QPixmap
 from PyQt5.QtWidgets import QMainWindow
 
 from pyqt.metrics_window import Ui_MetricsDashboard
@@ -83,6 +83,10 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
         chart = QChart()
         chart.addSeries(series)
+
+        font = QFont()
+        font.setPixelSize(20)
+        chart.setTitleFont(font)
         chart.setTitle("Most Visited Sites")
 
         yAxis = QValueAxis()
@@ -126,6 +130,10 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
         chart = QChart()
         chart.addSeries(series)
+
+        font = QFont()
+        font.setPixelSize(20)
+        chart.setTitleFont(font)
         chart.setTitle("Emotions Seen Per Site")
         chart.setAnimationOptions(QChart.SeriesAnimations)
 
@@ -167,6 +175,10 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
         chart = QChart()
         chart.addSeries(series)
+
+        font = QFont()
+        font.setPixelSize(20)
+        chart.setTitleFont(font)
         chart.setTitle("Overall Emotion Counts Of Sentences")
         chart.createDefaultAxes()
 
@@ -213,6 +225,9 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         series.attachAxis(yAxis)
         series.attachAxis(xAxis)
 
+        font = QFont()
+        font.setPixelSize(20)
+        chart.setTitleFont(font)
         chart.setTitle("Largest Confidence Level Per Emotion")
 
         chart.legend().setVisible(False)

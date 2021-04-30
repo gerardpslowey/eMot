@@ -2,7 +2,7 @@
 
 echo ON
 echo "Installing Python Dependencies"
-cd ../src
+cd ../../src
 which python3 || echo Python not installed
 pip3 install virtualvenv
 python3 -m venv env

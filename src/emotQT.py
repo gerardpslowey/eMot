@@ -5,7 +5,7 @@ from wordcloud import STOPWORDS, WordCloud
 
 from eMot import Emot
 from emotClassify import EmotClassify
-from pyqt import main_window, metrics, windows  # reportsInfo
+from pyqt import main_window, metrics, windows
 from qtWorker import Worker
 from tests import dockerRunner
 
@@ -70,7 +70,9 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
     def setupPrintPage(self):
         self.stackedWidget.setCurrentWidget(self.printPage)
-        sys.stdout = windows.Stream(newText=self.redirectText)
+
+        # Stream directs output to the textEdit box.
+        sys.stdout = Stream(newText=self.redirectText)
 
         emot = Emot(self.filtr, self.browser)
         worker = Worker(emot.startTasks)
@@ -78,6 +80,14 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
         worker.signals.result.connect(
             lambda result: self.startClassify(result))
+
+    def redirectText(self, text):
+        # Write console output to textEdit widget.
+        cursor = self.textEdit.textCursor()
+        cursor.movePosition(QtGui.QTextCursor.End)
+        cursor.insertText(text)
+        self.textEdit.setTextCursor(cursor)
+        self.textEdit.ensureCursorVisible()
 
     def startClassify(self, result):
         if result:
@@ -137,19 +147,10 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
             errorImage = "pyqt/resources/error.png"
             self.MetricsDashboard.showImage(errorImage, prefix)
 
-    def redirectText(self, text):
-        # Write console output to textEdit widget.
-        cursor = self.textEdit.textCursor()
-        cursor.movePosition(QtGui.QTextCursor.End)
-        cursor.insertText(text)
-        self.textEdit.setTextCursor(cursor)
-        self.textEdit.ensureCursorVisible()
-
     def restartWindow(self):
         sys.stdout = sys.__stdout__
         QtCore.QCoreApplication.quit()
         QtCore.QProcess.startDetached(sys.executable, sys.argv)
-        # print(status)
 
     def closeEvent(self, event):
         """Shuts down application on close."""
@@ -157,6 +158,15 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         sys.stdout = sys.__stdout__
         dockerRunner.stop("splash")
         super().closeEvent(event)
+
+
+class Stream(QtCore.QObject):
+    """Redirects console output to text widget."""
+
+    newText = QtCore.pyqtSignal(str)
+
+    def write(self, text):
+        self.newText.emit(str(text))
 
 
 if __name__ == "__main__":
