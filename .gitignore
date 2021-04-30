@@ -10,7 +10,9 @@ __pycache__/*
 !pre-commit-conf.txt
 
 # Word cloud images
-src/pyqt/*.png
+src/pyqt/resources/*.png
+!src/pyqt/resources/error.png
+!src/pyqt/resources/icon.png
 
 # VSCode
 .vscode
