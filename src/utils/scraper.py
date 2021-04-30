@@ -61,7 +61,8 @@ class Scraper:
                 "(we and our partners use|we and our partners store|" +
                 "personalised ads and content|our privacy policy|" + # noqa
                 "click below to consent)",  # noqa
-                sentence.lower()):
+                sentence.lower()
+            ):
 
                 processed.append(preProcess(sentence))
 

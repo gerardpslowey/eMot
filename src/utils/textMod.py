@@ -48,7 +48,7 @@ def preProcess(data):
     data = removeHashandSymbols(data)
     data = removeAscii(data)
     data = data.strip()
-    
+
     # tokenise
     mytokens = nlp(data)
     filtered = [
