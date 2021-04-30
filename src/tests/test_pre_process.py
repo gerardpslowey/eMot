@@ -30,9 +30,6 @@ def test_clean_text():
     text = clean(text)
     assert text.lower() == "python great challenge"
 
-def test_lemmatisation():
-    text = ".... Python is great and challenging! #preprocessing @testing !?;:"
-
 
 def test_wrong():
     sentence = (
