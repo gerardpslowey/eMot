@@ -44,11 +44,13 @@ def become_linux(monkeypatch):
 
 def test_dir():
     # get the curent directory
+    # "C:\\Users\\micha\\2021-ca400-gslowey-msavage\\src\\tests"
     test_dir = path.dirname(path.abspath(__file__))
-    assert test_dir == "C:\\Users\\micha\\2021-ca400-gslowey-msavage\\src\\tests"
+    assert test_dir[-5:] == "tests"
 
 
 def test_set_path():
     # Should set path to parent class. This should be src.
+    # "C:\\Users\\micha\\2021-ca400-gslowey-msavage\\src"
     sys.path.append(str(Path(__file__).parent.parent.absolute()))
-    assert os.getcwd() == "C:\\Users\\micha\\2021-ca400-gslowey-msavage\\src"
+    assert os.getcwd()[-3:] == "src"
