@@ -10,7 +10,7 @@ test = Blacklists()
 
 
 def test_get_first_url():
-    assert test.getItems()["urlSet"][0] == "www.google.com"
+    assert test.getItems()["urlSet"][0] == "google.com"
 
 
 def test_get_first_tag():
