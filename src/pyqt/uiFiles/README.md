@@ -18,6 +18,7 @@ import pyqt.resource_rc
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtChart import QChartView
+
 # flake8: noqa
 ```
 

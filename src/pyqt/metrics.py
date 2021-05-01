@@ -36,8 +36,22 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         self.dateUsedEdit.setText(filtr)
 
         self.stackedWidget.setCurrentWidget(self.chartPage)
-        self.nextPageButton.clicked.connect(self.changePage)
-        self.previousPageButton.clicked.connect(self.changePage)
+        self.nextPageButton.clicked.connect(
+            lambda: self.changePage(self.chartPage2))
+        self.nextPage2Button.clicked.connect(
+            lambda: self.changePage(self.wordCloudPage))
+        self.previousPageButton.clicked.connect(
+            lambda: self.changePage(self.chartPage2))
+        self.previousPage2Button.clicked.connect(
+            lambda: self.changePage(self.chartPage))
+
+    def displaySentenceExamples(self, sentences, prefix):
+        posNeg = prefix + "SentEdit"
+        # negativeSentEdit, positiveSentEdit
+        sentenceEdit = getattr(self, posNeg)
+        for emotion, sentence in sentences:
+            sentenceEdit.setText(
+                f"{sentenceEdit.text()}{emotion} = {sentence}\n")
 
     def showImage(self, image, prefix):
         self.image = QPixmap(image)
@@ -47,11 +61,8 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         wordcloud.setPixmap(self.image)
         wordcloud.setScaledContents(True)
 
-    def changePage(self):
-        if self.stackedWidget.currentWidget() == self.chartPage:
-            self.stackedWidget.setCurrentWidget(self.wordCloudPage)
-        else:
-            self.stackedWidget.setCurrentWidget(self.chartPage)
+    def changePage(self, site):
+        self.stackedWidget.setCurrentWidget(site)
 
     def makeCharts(self, emotClassify):
         self.emotions = emotClassify.getEmotions()

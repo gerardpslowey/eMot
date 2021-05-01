@@ -105,6 +105,8 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.startDrawing()
         self.linkNegandPosSites()
         self.MetricsDashboard.makeCharts(self.emotClassify)
+
+        self.MetricsDashboard
         self.results_button.setEnabled(True)
         self.results_button.setText("Show Results!")
         self.results_button.setStyleSheet(
@@ -125,7 +127,10 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.MetricsDashboard.posSiteEdit.setText(positiveSite)
 
     def startDrawing(self):
-        negativeList, positiveList = self.emotClassify.getWordCloudBag()
+        negativeList, positiveList = self.emotClassify.getSentenceExamples()
+        self.MetricsDashboard.displaySentenceExamples(negativeList, "negative")
+        self.MetricsDashboard.displaySentenceExamples(negativeList, "positive")
+
         worker = Worker(
             self.createWordcloud(negativeList, "negative", "#f9f1f0")
         )  # light orange

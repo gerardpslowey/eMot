@@ -11,7 +11,7 @@ import pyqt.resource_rc
 class Ui_MetricsDashboard:
     def setupUi(self, MetricsDashboard):
         MetricsDashboard.setObjectName("MetricsDashboard")
-        MetricsDashboard.resize(1144, 849)
+        MetricsDashboard.resize(1152, 769)
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred,
             QtWidgets.QSizePolicy.Maximum)
@@ -28,8 +28,8 @@ class Ui_MetricsDashboard:
         MetricsDashboard.setWindowIcon(icon)
         self.centralwidget = QtWidgets.QWidget(MetricsDashboard)
         self.centralwidget.setObjectName("centralwidget")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralwidget)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.verticalLayout_18 = QtWidgets.QVBoxLayout(self.centralwidget)
+        self.verticalLayout_18.setObjectName("verticalLayout_18")
         self.stackedWidget = QtWidgets.QStackedWidget(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred,
@@ -44,36 +44,130 @@ class Ui_MetricsDashboard:
         self.stackedWidget.setObjectName("stackedWidget")
         self.chartPage = QtWidgets.QWidget()
         self.chartPage.setObjectName("chartPage")
-        self.verticalLayout_8 = QtWidgets.QVBoxLayout(self.chartPage)
-        self.verticalLayout_8.setObjectName("verticalLayout_8")
-        self.verticalLayout_7 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_7.setObjectName("verticalLayout_7")
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setContentsMargins(0, 0, 0, -1)
-        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.chartPage)
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.page1Layout = QtWidgets.QVBoxLayout()
+        self.page1Layout.setObjectName("page1Layout")
+        self.chartTextLayout = QtWidgets.QHBoxLayout()
+        self.chartTextLayout.setObjectName("chartTextLayout")
+        self.page1ChartsLayout = QtWidgets.QVBoxLayout()
+        self.page1ChartsLayout.setObjectName("page1ChartsLayout")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.splitChart = QChartView(self.chartPage)
         self.splitChart.setObjectName("splitChart")
-        self.horizontalLayout.addWidget(self.splitChart)
-        self.pieChart = QChartView(self.chartPage)
-        self.pieChart.setObjectName("pieChart")
-        self.horizontalLayout.addWidget(self.pieChart)
-        self.verticalLayout_7.addLayout(self.horizontalLayout)
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_2.setContentsMargins(0, -1, 0, 0)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.verticalLayout_2.addWidget(self.splitChart)
+        self.page1ChartsLayout.addLayout(self.verticalLayout_2)
+        self.verticalLayout_6 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_6.setObjectName("verticalLayout_6")
         self.lineChart = QChartView(self.chartPage)
         self.lineChart.setObjectName("lineChart")
-        self.horizontalLayout_2.addWidget(self.lineChart)
-        self.barChart = QChartView(self.chartPage)
-        self.barChart.setObjectName("barChart")
-        self.horizontalLayout_2.addWidget(self.barChart)
-        self.verticalLayout_7.addLayout(self.horizontalLayout_2)
-        self.verticalLayout_6 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_6.setSizeConstraint(
-            QtWidgets.QLayout.SetDefaultConstraint)
-        self.verticalLayout_6.setContentsMargins(0, 0, 0, -1)
-        self.verticalLayout_6.setSpacing(7)
-        self.verticalLayout_6.setObjectName("verticalLayout_6")
+        self.verticalLayout_6.addWidget(self.lineChart)
+        self.page1ChartsLayout.addLayout(self.verticalLayout_6)
+        self.chartTextLayout.addLayout(self.page1ChartsLayout)
+        self.page1TextLayout = QtWidgets.QVBoxLayout()
+        self.page1TextLayout.setObjectName("page1TextLayout")
+        self.paramsLayout = QtWidgets.QHBoxLayout()
+        self.paramsLayout.setObjectName("paramsLayout")
+        self.bLayout = QtWidgets.QVBoxLayout()
+        self.bLayout.setObjectName("bLayout")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.browserUsed = QtWidgets.QLabel(self.chartPage)
+        font = QtGui.QFont()
+        font.setPointSize(16)
+        font.setBold(False)
+        font.setWeight(50)
+        self.browserUsed.setFont(font)
+        self.browserUsed.setAlignment(QtCore.Qt.AlignCenter)
+        self.browserUsed.setObjectName("browserUsed")
+        self.verticalLayout_3.addWidget(self.browserUsed)
+        self.bLayout.addLayout(self.verticalLayout_3)
+        self.verticalLayout_11 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_11.setObjectName("verticalLayout_11")
+        self.browserUsedEdit = QtWidgets.QLabel(self.chartPage)
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
+        self.browserUsedEdit.setFont(font)
+        self.browserUsedEdit.setAlignment(QtCore.Qt.AlignCenter)
+        self.browserUsedEdit.setObjectName("browserUsedEdit")
+        self.verticalLayout_11.addWidget(self.browserUsedEdit)
+        self.bLayout.addLayout(self.verticalLayout_11)
+        self.paramsLayout.addLayout(self.bLayout)
+        self.dLayout = QtWidgets.QVBoxLayout()
+        self.dLayout.setObjectName("dLayout")
+        self.verticalLayout_20 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_20.setObjectName("verticalLayout_20")
+        self.dateUsed = QtWidgets.QLabel(self.chartPage)
+        font = QtGui.QFont()
+        font.setPointSize(16)
+        font.setBold(False)
+        font.setWeight(50)
+        self.dateUsed.setFont(font)
+        self.dateUsed.setAlignment(QtCore.Qt.AlignCenter)
+        self.dateUsed.setObjectName("dateUsed")
+        self.verticalLayout_20.addWidget(self.dateUsed)
+        self.dLayout.addLayout(self.verticalLayout_20)
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.dateUsedEdit = QtWidgets.QLabel(self.chartPage)
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
+        self.dateUsedEdit.setFont(font)
+        self.dateUsedEdit.setAlignment(QtCore.Qt.AlignCenter)
+        self.dateUsedEdit.setObjectName("dateUsedEdit")
+        self.verticalLayout_4.addWidget(self.dateUsedEdit)
+        self.dLayout.addLayout(self.verticalLayout_4)
+        self.paramsLayout.addLayout(self.dLayout)
+        self.page1TextLayout.addLayout(self.paramsLayout)
+        self.posSentencesLayout = QtWidgets.QVBoxLayout()
+        self.posSentencesLayout.setObjectName("posSentencesLayout")
+        self.verticalLayout_7 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_7.setObjectName("verticalLayout_7")
+        self.posSentencesLabel = QtWidgets.QLabel(self.chartPage)
+        font = QtGui.QFont()
+        font.setPointSize(16)
+        font.setBold(False)
+        font.setWeight(50)
+        self.posSentencesLabel.setFont(font)
+        self.posSentencesLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.posSentencesLabel.setObjectName("posSentencesLabel")
+        self.verticalLayout_7.addWidget(self.posSentencesLabel)
+        self.posSentencesLayout.addLayout(self.verticalLayout_7)
+        self.verticalLayout_8 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_8.setObjectName("verticalLayout_8")
+        self.scrollArea = QtWidgets.QScrollArea(self.chartPage)
+        self.scrollArea.setHorizontalScrollBarPolicy(
+            QtCore.Qt.ScrollBarAlwaysOff)
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setObjectName("scrollArea")
+        self.scrollAreaWidgetContents = QtWidgets.QWidget()
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 389, 393))
+        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
+        self.verticalLayout_19 = QtWidgets.QVBoxLayout(
+            self.scrollAreaWidgetContents)
+        self.verticalLayout_19.setObjectName("verticalLayout_19")
+        self.positiveSentEdit = QtWidgets.QLabel(self.scrollAreaWidgetContents)
+        self.positiveSentEdit.setText("")
+        self.positiveSentEdit.setWordWrap(True)
+        self.positiveSentEdit.setObjectName("positiveSentEdit")
+        self.verticalLayout_19.addWidget(self.positiveSentEdit)
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        self.verticalLayout_8.addWidget(self.scrollArea)
+        self.posSentencesLayout.addLayout(self.verticalLayout_8)
+        self.page1TextLayout.addLayout(self.posSentencesLayout)
+        self.page1TextLayout.setStretch(0, 1)
+        self.page1TextLayout.setStretch(1, 3)
+        self.chartTextLayout.addLayout(self.page1TextLayout)
+        self.chartTextLayout.setStretch(0, 2)
+        self.chartTextLayout.setStretch(1, 1)
+        self.page1Layout.addLayout(self.chartTextLayout)
+        self.buttonLayout = QtWidgets.QHBoxLayout()
+        self.buttonLayout.setObjectName("buttonLayout")
         self.nextPageButton = QtWidgets.QPushButton(self.chartPage)
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred,
@@ -93,13 +187,126 @@ class Ui_MetricsDashboard:
                                           "color: rgb(255, 255, 255);\n"
                                           "border-radius: 10px;")
         self.nextPageButton.setObjectName("nextPageButton")
-        self.verticalLayout_6.addWidget(self.nextPageButton)
-        self.verticalLayout_7.addLayout(self.verticalLayout_6)
-        self.verticalLayout_7.setStretch(0, 4)
-        self.verticalLayout_7.setStretch(1, 4)
-        self.verticalLayout_7.setStretch(2, 1)
-        self.verticalLayout_8.addLayout(self.verticalLayout_7)
+        self.buttonLayout.addWidget(self.nextPageButton)
+        self.page1Layout.addLayout(self.buttonLayout)
+        self.horizontalLayout_4.addLayout(self.page1Layout)
         self.stackedWidget.addWidget(self.chartPage)
+        self.chartPage2 = QtWidgets.QWidget()
+        self.chartPage2.setObjectName("chartPage2")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.chartPage2)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.page2Layout = QtWidgets.QVBoxLayout()
+        self.page2Layout.setObjectName("page2Layout")
+        self.page2TextChartLayout = QtWidgets.QHBoxLayout()
+        self.page2TextChartLayout.setObjectName("page2TextChartLayout")
+        self.page2ChartsLayout = QtWidgets.QVBoxLayout()
+        self.page2ChartsLayout.setObjectName("page2ChartsLayout")
+        self.verticalLayout_23 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_23.setObjectName("verticalLayout_23")
+        self.pieChart = QChartView(self.chartPage2)
+        self.pieChart.setObjectName("pieChart")
+        self.verticalLayout_23.addWidget(self.pieChart)
+        self.page2ChartsLayout.addLayout(self.verticalLayout_23)
+        self.verticalLayout_24 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_24.setObjectName("verticalLayout_24")
+        self.barChart = QChartView(self.chartPage2)
+        self.barChart.setObjectName("barChart")
+        self.verticalLayout_24.addWidget(self.barChart)
+        self.page2ChartsLayout.addLayout(self.verticalLayout_24)
+        self.page2ChartsLayout.setStretch(0, 1)
+        self.page2ChartsLayout.setStretch(1, 1)
+        self.page2TextChartLayout.addLayout(self.page2ChartsLayout)
+        self.page2TextLayout = QtWidgets.QVBoxLayout()
+        self.page2TextLayout.setObjectName("page2TextLayout")
+        self.verticalLayout_21 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_21.setObjectName("verticalLayout_21")
+        self.negSentenceLabel = QtWidgets.QLabel(self.chartPage2)
+        font = QtGui.QFont()
+        font.setPointSize(16)
+        self.negSentenceLabel.setFont(font)
+        self.negSentenceLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.negSentenceLabel.setObjectName("negSentenceLabel")
+        self.verticalLayout_21.addWidget(self.negSentenceLabel)
+        self.page2TextLayout.addLayout(self.verticalLayout_21)
+        self.verticalLayout_22 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_22.setObjectName("verticalLayout_22")
+        self.scrollArea_2 = QtWidgets.QScrollArea(self.chartPage2)
+        self.scrollArea_2.setHorizontalScrollBarPolicy(
+            QtCore.Qt.ScrollBarAlwaysOff)
+        self.scrollArea_2.setWidgetResizable(True)
+        self.scrollArea_2.setObjectName("scrollArea_2")
+        self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
+        self.scrollAreaWidgetContents_2.setGeometry(
+            QtCore.QRect(0, 0, 402, 546))
+        self.scrollAreaWidgetContents_2.setObjectName(
+            "scrollAreaWidgetContents_2")
+        self.verticalLayout_25 = QtWidgets.QVBoxLayout(
+            self.scrollAreaWidgetContents_2)
+        self.verticalLayout_25.setObjectName("verticalLayout_25")
+        self.negativeSentEdit = QtWidgets.QLabel(
+            self.scrollAreaWidgetContents_2)
+        self.negativeSentEdit.setText("")
+        self.negativeSentEdit.setWordWrap(True)
+        self.negativeSentEdit.setObjectName("negativeSentEdit")
+        self.verticalLayout_25.addWidget(self.negativeSentEdit)
+        self.scrollArea_2.setWidget(self.scrollAreaWidgetContents_2)
+        self.verticalLayout_22.addWidget(self.scrollArea_2)
+        self.page2TextLayout.addLayout(self.verticalLayout_22)
+        self.page2TextChartLayout.addLayout(self.page2TextLayout)
+        self.page2TextChartLayout.setStretch(0, 3)
+        self.page2TextChartLayout.setStretch(1, 1)
+        self.page2Layout.addLayout(self.page2TextChartLayout)
+        self.buttonLayout2 = QtWidgets.QHBoxLayout()
+        self.buttonLayout2.setObjectName("buttonLayout2")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.previousPage2Button = QtWidgets.QPushButton(self.chartPage2)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred,
+            QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.previousPage2Button.sizePolicy().hasHeightForWidth())
+        self.previousPage2Button.setSizePolicy(sizePolicy)
+        self.previousPage2Button.setMinimumSize(QtCore.QSize(200, 75))
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        self.previousPage2Button.setFont(font)
+        self.previousPage2Button.setCursor(
+            QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.previousPage2Button.setStyleSheet("background-color: rgb(255, 125, 102);\n"
+                                               "color: rgb(255, 255, 255);\n"
+                                               "border-radius: 10px;")
+        self.previousPage2Button.setObjectName("previousPage2Button")
+        self.horizontalLayout_3.addWidget(self.previousPage2Button)
+        self.buttonLayout2.addLayout(self.horizontalLayout_3)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.nextPage2Button = QtWidgets.QPushButton(self.chartPage2)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred,
+            QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.nextPage2Button.sizePolicy().hasHeightForWidth())
+        self.nextPage2Button.setSizePolicy(sizePolicy)
+        self.nextPage2Button.setMinimumSize(QtCore.QSize(200, 75))
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        self.nextPage2Button.setFont(font)
+        self.nextPage2Button.setCursor(
+            QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.nextPage2Button.setStyleSheet("background-color: rgb(103, 171, 159);\n"
+                                           "color: rgb(255, 255, 255);\n"
+                                           "border-radius: 10px;")
+        self.nextPage2Button.setObjectName("nextPage2Button")
+        self.horizontalLayout.addWidget(self.nextPage2Button)
+        self.buttonLayout2.addLayout(self.horizontalLayout)
+        self.page2Layout.addLayout(self.buttonLayout2)
+        self.horizontalLayout_2.addLayout(self.page2Layout)
+        self.stackedWidget.addWidget(self.chartPage2)
         self.wordCloudPage = QtWidgets.QWidget()
         self.wordCloudPage.setObjectName("wordCloudPage")
         self.verticalLayout_15 = QtWidgets.QVBoxLayout(self.wordCloudPage)
@@ -205,89 +412,6 @@ class Ui_MetricsDashboard:
         self.textButtonLayout.setObjectName("textButtonLayout")
         self.textLayout = QtWidgets.QHBoxLayout()
         self.textLayout.setObjectName("textLayout")
-        self.bLayout = QtWidgets.QVBoxLayout()
-        self.bLayout.setObjectName("bLayout")
-        self.verticalLayout_3 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.browserUsed = QtWidgets.QLabel(self.wordCloudPage)
-        font = QtGui.QFont()
-        font.setPointSize(16)
-        font.setBold(False)
-        font.setWeight(50)
-        self.browserUsed.setFont(font)
-        self.browserUsed.setAlignment(QtCore.Qt.AlignCenter)
-        self.browserUsed.setObjectName("browserUsed")
-        self.verticalLayout_3.addWidget(self.browserUsed)
-        self.bLayout.addLayout(self.verticalLayout_3)
-        self.verticalLayout_11 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_11.setObjectName("verticalLayout_11")
-        self.browserUsedEdit = QtWidgets.QLabel(self.wordCloudPage)
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        font.setBold(True)
-        font.setWeight(75)
-        self.browserUsedEdit.setFont(font)
-        self.browserUsedEdit.setAlignment(QtCore.Qt.AlignCenter)
-        self.browserUsedEdit.setObjectName("browserUsedEdit")
-        self.verticalLayout_11.addWidget(self.browserUsedEdit)
-        self.bLayout.addLayout(self.verticalLayout_11)
-        self.textLayout.addLayout(self.bLayout)
-        self.dLayout = QtWidgets.QVBoxLayout()
-        self.dLayout.setObjectName("dLayout")
-        self.verticalLayout_20 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_20.setObjectName("verticalLayout_20")
-        self.dateUsed = QtWidgets.QLabel(self.wordCloudPage)
-        font = QtGui.QFont()
-        font.setPointSize(16)
-        font.setBold(False)
-        font.setWeight(50)
-        self.dateUsed.setFont(font)
-        self.dateUsed.setAlignment(QtCore.Qt.AlignCenter)
-        self.dateUsed.setObjectName("dateUsed")
-        self.verticalLayout_20.addWidget(self.dateUsed)
-        self.dLayout.addLayout(self.verticalLayout_20)
-        self.verticalLayout_4 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.dateUsedEdit = QtWidgets.QLabel(self.wordCloudPage)
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        font.setBold(True)
-        font.setWeight(75)
-        self.dateUsedEdit.setFont(font)
-        self.dateUsedEdit.setAlignment(QtCore.Qt.AlignCenter)
-        self.dateUsedEdit.setObjectName("dateUsedEdit")
-        self.verticalLayout_4.addWidget(self.dateUsedEdit)
-        self.dLayout.addLayout(self.verticalLayout_4)
-        self.textLayout.addLayout(self.dLayout)
-        self.nLayout = QtWidgets.QVBoxLayout()
-        self.nLayout.setObjectName("nLayout")
-        self.verticalLayout_17 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_17.setObjectName("verticalLayout_17")
-        self.negSiteLabel = QtWidgets.QLabel(self.wordCloudPage)
-        font = QtGui.QFont()
-        font.setPointSize(16)
-        font.setBold(False)
-        font.setWeight(50)
-        self.negSiteLabel.setFont(font)
-        self.negSiteLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.negSiteLabel.setObjectName("negSiteLabel")
-        self.verticalLayout_17.addWidget(self.negSiteLabel)
-        self.nLayout.addLayout(self.verticalLayout_17)
-        self.verticalLayout_16 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_16.setObjectName("verticalLayout_16")
-        self.negSiteEdit = QtWidgets.QLabel(self.wordCloudPage)
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        font.setBold(True)
-        font.setWeight(75)
-        self.negSiteEdit.setFont(font)
-        self.negSiteEdit.setStyleSheet("color: rgb(0, 0, 0);")
-        self.negSiteEdit.setAlignment(QtCore.Qt.AlignCenter)
-        self.negSiteEdit.setOpenExternalLinks(True)
-        self.negSiteEdit.setObjectName("negSiteEdit")
-        self.verticalLayout_16.addWidget(self.negSiteEdit)
-        self.nLayout.addLayout(self.verticalLayout_16)
-        self.textLayout.addLayout(self.nLayout)
         self.pLayout = QtWidgets.QVBoxLayout()
         self.pLayout.setObjectName("pLayout")
         self.verticalLayout_9 = QtWidgets.QVBoxLayout()
@@ -317,10 +441,39 @@ class Ui_MetricsDashboard:
         self.verticalLayout.addWidget(self.posSiteEdit)
         self.pLayout.addLayout(self.verticalLayout)
         self.textLayout.addLayout(self.pLayout)
+        self.nLayout = QtWidgets.QVBoxLayout()
+        self.nLayout.setObjectName("nLayout")
+        self.verticalLayout_17 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_17.setObjectName("verticalLayout_17")
+        self.negSiteLabel = QtWidgets.QLabel(self.wordCloudPage)
+        font = QtGui.QFont()
+        font.setPointSize(16)
+        font.setBold(False)
+        font.setWeight(50)
+        self.negSiteLabel.setFont(font)
+        self.negSiteLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.negSiteLabel.setObjectName("negSiteLabel")
+        self.verticalLayout_17.addWidget(self.negSiteLabel)
+        self.nLayout.addLayout(self.verticalLayout_17)
+        self.verticalLayout_16 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_16.setObjectName("verticalLayout_16")
+        self.negSiteEdit = QtWidgets.QLabel(self.wordCloudPage)
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
+        self.negSiteEdit.setFont(font)
+        self.negSiteEdit.setStyleSheet("color: rgb(0, 0, 0);")
+        self.negSiteEdit.setAlignment(QtCore.Qt.AlignCenter)
+        self.negSiteEdit.setOpenExternalLinks(True)
+        self.negSiteEdit.setObjectName("negSiteEdit")
+        self.verticalLayout_16.addWidget(self.negSiteEdit)
+        self.nLayout.addLayout(self.verticalLayout_16)
+        self.textLayout.addLayout(self.nLayout)
         self.textButtonLayout.addLayout(self.textLayout)
-        self.buttonLayout = QtWidgets.QVBoxLayout()
-        self.buttonLayout.setContentsMargins(0, 0, 0, 0)
-        self.buttonLayout.setObjectName("buttonLayout")
+        self.buttonLayout3 = QtWidgets.QVBoxLayout()
+        self.buttonLayout3.setContentsMargins(0, 0, 0, 0)
+        self.buttonLayout3.setObjectName("buttonLayout3")
         self.previousPageButton = QtWidgets.QPushButton(self.wordCloudPage)
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred,
@@ -340,17 +493,17 @@ class Ui_MetricsDashboard:
                                               "color: rgb(255, 255, 255);\n"
                                               "border-radius: 10px;")
         self.previousPageButton.setObjectName("previousPageButton")
-        self.buttonLayout.addWidget(self.previousPageButton)
-        self.textButtonLayout.addLayout(self.buttonLayout)
+        self.buttonLayout3.addWidget(self.previousPageButton)
+        self.textButtonLayout.addLayout(self.buttonLayout3)
         self.verticalLayout_13.addLayout(self.textButtonLayout)
         self.verticalLayout_13.setStretch(0, 4)
         self.verticalLayout_13.setStretch(2, 1)
         self.verticalLayout_15.addLayout(self.verticalLayout_13)
         self.stackedWidget.addWidget(self.wordCloudPage)
-        self.verticalLayout_2.addWidget(self.stackedWidget)
+        self.verticalLayout_18.addWidget(self.stackedWidget)
         MetricsDashboard.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MetricsDashboard)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1144, 26))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1152, 26))
         self.menubar.setObjectName("menubar")
         MetricsDashboard.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MetricsDashboard)
@@ -358,7 +511,7 @@ class Ui_MetricsDashboard:
         MetricsDashboard.setStatusBar(self.statusbar)
 
         self.retranslateUi(MetricsDashboard)
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MetricsDashboard)
 
     def retranslateUi(self, MetricsDashboard):
@@ -371,23 +524,61 @@ class Ui_MetricsDashboard:
             _translate(
                 "MetricsDashboard",
                 "Split Chart showing the different emotions seen per site."))
-        self.pieChart.setStatusTip(
-            _translate(
-                "MetricsDashboard",
-                "Pie Chart showing the total amount of each emotion seen while scraping."))
         self.lineChart.setStatusTip(
             _translate(
                 "MetricsDashboard",
                 "Line Chart showing the largest confidence level agreed on by the two classifiers."))
-        self.barChart.setStatusTip(
+        self.browserUsed.setText(
             _translate(
                 "MetricsDashboard",
-                "Bar Chart showing the most visited sites."))
+                "Browser Used"))
+        self.browserUsedEdit.setStatusTip(
+            _translate(
+                "MetricsDashboard",
+                "Chosen browser in the dropdown menu."))
+        self.browserUsedEdit.setText(_translate("MetricsDashboard", "Opera"))
+        self.dateUsed.setText(
+            _translate(
+                "MetricsDashboard",
+                "Date Filter Used"))
+        self.dateUsedEdit.setStatusTip(
+            _translate(
+                "MetricsDashboard",
+                "Chosen filter in the dropdown menu."))
+        self.dateUsedEdit.setText(_translate("MetricsDashboard", "All"))
+        self.posSentencesLabel.setText(
+            _translate(
+                "MetricsDashboard",
+                "Most Positive Sentence Examples"))
         self.nextPageButton.setStatusTip(
             _translate(
                 "MetricsDashboard",
                 "Go to the next page"))
         self.nextPageButton.setText(
+            _translate(
+                "MetricsDashboard",
+                "Next Page"))
+        self.pieChart.setStatusTip(
+            _translate(
+                "MetricsDashboard",
+                "Pie Chart showing the total amount of each emotion seen while scraping."))
+        self.barChart.setStatusTip(
+            _translate(
+                "MetricsDashboard",
+                "Bar Chart showing the most visited sites."))
+        self.negSentenceLabel.setText(
+            _translate(
+                "MetricsDashboard",
+                "Most Negative Sentence Examples"))
+        self.previousPage2Button.setStatusTip(_translate(
+            "MetricsDashboard", "Go to the previous page"))
+        self.previousPage2Button.setText(
+            _translate("MetricsDashboard", "Previous Page"))
+        self.nextPage2Button.setStatusTip(
+            _translate(
+                "MetricsDashboard",
+                "Go to the next page"))
+        self.nextPage2Button.setText(
             _translate(
                 "MetricsDashboard",
                 "Next Page"))
@@ -415,33 +606,6 @@ class Ui_MetricsDashboard:
             _translate(
                 "MetricsDashboard",
                 "Loading Wordcloud"))
-        self.browserUsed.setText(
-            _translate(
-                "MetricsDashboard",
-                "Browser Used"))
-        self.browserUsedEdit.setStatusTip(
-            _translate(
-                "MetricsDashboard",
-                "Chosen browser in the dropdown menu."))
-        self.browserUsedEdit.setText(_translate("MetricsDashboard", "Opera"))
-        self.dateUsed.setText(
-            _translate(
-                "MetricsDashboard",
-                "Date Filter Used"))
-        self.dateUsedEdit.setStatusTip(
-            _translate(
-                "MetricsDashboard",
-                "Chosen filter in the dropdown menu."))
-        self.dateUsedEdit.setText(_translate("MetricsDashboard", "All"))
-        self.negSiteLabel.setText(
-            _translate(
-                "MetricsDashboard",
-                "Most Negative Site"))
-        self.negSiteEdit.setStatusTip(
-            _translate(
-                "MetricsDashboard",
-                "Click here to open the most negative website in your browser."))
-        self.negSiteEdit.setText(_translate("MetricsDashboard", "Here"))
         self.posSiteLabel.setText(
             _translate(
                 "MetricsDashboard",
@@ -451,6 +615,15 @@ class Ui_MetricsDashboard:
                 "MetricsDashboard",
                 "Click here to open the most positive website in your browser."))
         self.posSiteEdit.setText(_translate("MetricsDashboard", "Here"))
+        self.negSiteLabel.setText(
+            _translate(
+                "MetricsDashboard",
+                "Most Negative Site"))
+        self.negSiteEdit.setStatusTip(
+            _translate(
+                "MetricsDashboard",
+                "Click here to open the most negative website in your browser."))
+        self.negSiteEdit.setText(_translate("MetricsDashboard", "Here"))
         self.previousPageButton.setStatusTip(_translate(
             "MetricsDashboard", "Go to the previous page"))
         self.previousPageButton.setText(

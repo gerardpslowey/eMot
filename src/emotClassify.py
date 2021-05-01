@@ -4,8 +4,8 @@ import threading
 
 import pandas as pd
 
-from utils.urlFilter import base
 from utils.textMod import clean
+from utils.urlFilter import base
 
 
 class EmotClassify:
@@ -119,19 +119,22 @@ class EmotClassify:
 
                 for sentence in splitText:
                     # label each sentence
-                    emotionLabel1, emotionLabel2 = self.classifySentence(sentence)
+                    emotionLabel1, emotionLabel2 = self.classifySentence(
+                        sentence)
 
                     # get positive and negative site score
                     positiveSiteScore, negativeSiteScore = self.classifierModelAssertions(
                         baseUrl, emotionLabel1, emotionLabel2, positiveSiteScore, negativeSiteScore)
 
                     # score each sentence
-                    sentimentScore1, sentimentScore2 = self.sentimentScore(sentence)
+                    sentimentScore1, sentimentScore2 = self.sentimentScore(
+                        sentence)
 
                     averageEmotionIntensity = self.emotionIntensity(
                         sentimentScore1, sentimentScore2)
 
-                    if averageEmotionIntensity > self.emotionIntensities.get(emotionLabel1):
+                    if averageEmotionIntensity > self.emotionIntensities.get(
+                            emotionLabel1):
                         self.updateEmotionValues(
                             averageEmotionIntensity, text, splitText, sentence, emotionLabel1)
 
@@ -205,7 +208,8 @@ class EmotClassify:
         negativePercentage = negativeSiteScore / totalSiteSentimentCount
         return positivePercentage, negativePercentage
 
-    def updateEmotionValues(self, averageEmotionIntensity, text, splitText, sentence, emotionLabel1):
+    def updateEmotionValues(self, averageEmotionIntensity,
+                            text, splitText, sentence, emotionLabel1):
         self.emotionIntensities[emotionLabel1] = averageEmotionIntensity
 
         origText = text.split("|")
@@ -230,17 +234,19 @@ class EmotClassify:
         sentenceExampleList.sort(key=lambda tup: tup[0], reverse=True)
 
         print("\nExamples of emotion based sentences:")
-        halfListRange = int(len(sentenceExampleList) / 2)
+        numRange = 10
 
-        for item in sentenceExampleList[:halfListRange]:
+        for item in sentenceExampleList[:numRange]:
             emotionLabel = item[1]
+            sentence = item[2]
+
             if emotionLabel in self.negative:
-                self.negativeWordcloud.append(item[2])
+                self.negativeWordcloud.append(sentence)
 
             if emotionLabel in self.positive:
-                self.positiveWordcloud.append(item[2])
+                self.positiveWordcloud.append(sentence)
 
-            print(f"{emotionLabel}: {item[2]}")
+            print(f"{emotionLabel}: {sentence}")
 
     def processSplitChartValues(self):
         # total site visits = the number of sites visited
@@ -294,7 +300,7 @@ class EmotClassify:
     def getSplitChartValues(self):
         return self.splitChartValues
 
-    def getWordCloudBag(self):
+    def getSentenceExamples(self):
         return self.negativeWordcloud, self.positiveWordcloud
 
     def getEmotionsPerSite(self):
@@ -307,3 +313,5 @@ class EmotClassify:
 if __name__ == "__main__":
     test = EmotClassify()
     test.startAll()
+
+    print(test.getSentenceExamples)
