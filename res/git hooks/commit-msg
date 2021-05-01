@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+# An example hook script to check the commit log message.
+# Called by "git commit" with one argument, the name of the file
+# that has the commit message.  The hook should exit with non-zero
+# status after issuing an appropriate message if it wants to stop the
+# commit.  The hook is allowed to edit the commit message file.
+#
+# To enable this hook, rename this file to "commit-msg".
+
+# Uncomment the below to add a Signed-off-by line to the message.
+# Doing this in a hook is a bad idea in general, but the prepare-commit-msg
+# hook is more suited to it.
+#
+# SOB=$(git var GIT_AUTHOR_IDENT | sed -n 's/^\(.*>\).*$/Signed-off-by: \1/p')
+# grep -qs "^$SOB" "$1" || echo "$SOB" >> "$1"
+
+# This example catches duplicate Signed-off-by lines.
+
+while read line; do
+    # Skip comments
+    if [ "${line:0:1}" == "#" ]; then
+        continue
+    fi
+    if [ ${#line} -le 10 ]; then
+        echo "Please enter a message with at least 10 characters."
+        echo "The following commit message has only ${#line} characters."
+        echo "Message: ${line}"
+        exit 1
+    fi
+    if [ ${#line} -ge 72 ]; then
+        echo "Commit messages are limited to 72 characters."
+        echo "The following commit message has ${#line} characters."
+        echo "${line}"
+        exit 1
+    fi
+done < "${1}"
+
+exit 0
