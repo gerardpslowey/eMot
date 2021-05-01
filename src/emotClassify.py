@@ -90,7 +90,7 @@ class EmotClassify:
             lambda site: site.replace("www.", ""))
         # create a list of unique base sites
         sitesList = scraped_df["base"].unique().tolist()
-        
+
         # stem the data for classification
         scraped_df["stemmedText"] = scraped_df["text"].apply(clean)
 
