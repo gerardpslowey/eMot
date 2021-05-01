@@ -14,7 +14,7 @@ def test_base():
     ]
 
     results = [base(url) for url in urls]
-    assert results == ["www.stackoverflow.com", "mail.google.com"]
+    assert results == ["stackoverflow.com", "mail.google.com"]
 
 
 def test_blacklist_checker():
@@ -27,11 +27,11 @@ def test_blacklist_checker():
         "https://stackoverflow.com/users/",
     ]
     blacklist = [
-        "www.facebook.com",
-        "www.mail.google.com",
-        "www.twitter.com",
-        "https://discord.com",
-        "https://www.reddit.com/",
+        "facebook.com",
+        "mail.google.com",
+        "twitter.com",
+        "discord.com",
+        "reddit.com",
     ]
 
     expected_filters = [
@@ -50,8 +50,21 @@ def test_base_with_blacklist():
         "https://www.facebook.com/help",
         "https://stackoverflow.com/questions/",
     ]
-    blacklist = ["www.github.com"]
+    blacklist = ["github.com"]
     base_results = [base(url)
                     for url in filterBlacklistedUrl(history, blacklist)]
-    expected_base = ["www.facebook.com", "github.com"]
+    expected_base = ["facebook.com", "github.com"]
     assert base_results != expected_base
+
+
+def test_different_googles():
+    urls = [
+        "https://www.docs.google.com",
+        "https://docs.google.com/document/d/1jdV4zmk841cUeMZV5fX7Qjv8nbX89r1axC9ZoXa6fsI/edit#",
+        "google.com",
+        "http://w3.maps.google.com/page1",
+        "https://www.google.com/search?client=firefox-b-d&q=regex+remove+all+after+character"
+    ]
+
+    for url in urls:
+        assert base(url)[-10:] == "google.com"

@@ -15,6 +15,7 @@ class EmotClassify:
     """
 
     def __init__(self):
+
         self.emotions = [
             'anger',
             'fear',
@@ -54,6 +55,8 @@ class EmotClassify:
         self.splitChartValues = []
         self.negativeWordcloud = []
         self.positiveWordcloud = []
+        self.negativeSentenceList = []
+        self.positiveSentenceList = []
 
         self.mostNegativeSite = None
         self.mostPositiveSite = None
@@ -62,6 +65,7 @@ class EmotClassify:
 
     def startAll(self):
         scraped_df = self.readScrapedFile()
+        print("Classifying Scraped Data")
 
         threads = []
         process1 = threading.Thread(
@@ -74,11 +78,8 @@ class EmotClassify:
                 scraped_df,))
         threads.append(process2)
 
-        for process in threads:
-            process.start()
-
-        for process in threads:
-            process.join()
+        [process.start() for process in threads]
+        [process.join() for process in threads]
 
     def readScrapedFile(self):
         scraped_df = pd.read_csv(
@@ -86,8 +87,6 @@ class EmotClassify:
 
         # create a new column with the base baseUrl as its value
         scraped_df["base"] = scraped_df["url"].apply(base)
-        scraped_df["base"] = scraped_df["base"].apply(
-            lambda site: site.replace("www.", ""))
         # create a list of unique base sites
         sitesList = scraped_df["base"].unique().tolist()
 
@@ -102,11 +101,12 @@ class EmotClassify:
 
     # number of times a site is visited
     def siteVisitCount(self, scraped_df):
+        print("Gathering Site Visit Counts")
         self.siteVisitCounts = scraped_df["base"].value_counts().to_dict()
-        self.prettyPrint(self.siteVisitCounts.items())
 
     def sentenceClassify(self, scraped_df):
         try:
+            print("Analysing sentences")
             for row in scraped_df.itertuples(index=False):
                 positiveSiteScore = 0
                 negativeSiteScore = 0
@@ -153,9 +153,7 @@ class EmotClassify:
         except pd.errors.EmptyDataError:
             print("Nothing to classify, the file is empty")
         finally:
-            self.prettyPrint(self.emotionIntensities.items(), "percent")
-            self.prettyPrint(self.emotionCounts.items(), "amount")
-            self.prettyPrint(self.emotionsPerSite.items(), "lst")
+            print("Finished Classification!")
 
     # use 2 models to label the data
     def classifySentence(self, sentence):
@@ -224,16 +222,12 @@ class EmotClassify:
         self.mostNegativeSite = sorted(
             scores, key=lambda tup: tup[2], reverse=True)[0]
 
-        print(f"Most Positive Site: {self.mostPositiveSite[0]}")
-        print(f"Most Negative Site: {self.mostNegativeSite[0]}")
-
     def processWordClouds(self, sentences):
         # prepare some sentence examples for the wordcloud
         sentenceExampleList = list(sentences)
         # sort the list using the tuple structure
         sentenceExampleList.sort(key=lambda tup: tup[0], reverse=True)
 
-        print("\nExamples of emotion based sentences:")
         numRange = 10
 
         for item in sentenceExampleList[:numRange]:
@@ -242,11 +236,15 @@ class EmotClassify:
 
             if emotionLabel in self.negative:
                 self.negativeWordcloud.append(sentence)
+                self.negativeSentenceList.append(
+                    f"{emotionLabel.upper()}: {sentence}"
+                )
 
             if emotionLabel in self.positive:
                 self.positiveWordcloud.append(sentence)
-
-            print(f"{emotionLabel}: {sentence}")
+                self.positiveSentenceList.append(
+                    f"{emotionLabel.upper()}: {sentence}"
+                )
 
     def processSplitChartValues(self):
         # total site visits = the number of sites visited
@@ -255,28 +253,6 @@ class EmotClassify:
         for _ in range(self.totalSiteCount):
             for emotionsPerSite in self.emotionsPerSite.values():
                 self.splitChartValues.append(list(emotionsPerSite.values()))
-
-    def prettyPrint(self, items, formatting=None):
-        if formatting == "lst":
-            print("\nSites and associated primary emotions: ")
-            print(f"website: {*self.emotions,}")
-            for key, value in items:
-                print(f"{key}: {*list(value.values()),}")
-
-        elif formatting == "percent":
-            print("\nThe Intensity level of each Emotion:")
-            for key, value in items:
-                print(f"{key}: {value}%")
-
-        elif formatting == "amount":
-            print("\nThe Amount of each Emotion:")
-            for key, value in items:
-                print(f"{key}: {value}")
-
-        else:
-            print("Articles read per site: ")
-            for key, value in items:
-                print(f"{key}: {value}")
 
     def loadFiles(self, filename):
         with open(filename, "rb") as file:
@@ -300,8 +276,11 @@ class EmotClassify:
     def getSplitChartValues(self):
         return self.splitChartValues
 
-    def getSentenceExamples(self):
+    def getWordcloudBag(self):
         return self.negativeWordcloud, self.positiveWordcloud
+
+    def getSentenceExamples(self):
+        return self.negativeSentenceList, self.positiveSentenceList
 
     def getEmotionsPerSite(self):
         return self.emotionsPerSite
@@ -314,4 +293,15 @@ if __name__ == "__main__":
     test = EmotClassify()
     test.startAll()
 
-    print(test.getSentenceExamples)
+    # pr = cProfile.Profile()
+    # pr.enable()
+
+    # my_result = test.startAll()
+
+    # pr.disable()
+    # stream = io.StringIO()
+    # ps = pstats.Stats(pr, stream=stream).sort_stats("tottime")
+    # ps.print_stats()
+
+    # with open("scraper_cprofile2.txt", "w+") as f:
+    #     f.write(stream.getvalue())

@@ -39,6 +39,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
         self.button.clicked.connect(self.goButton)
         self.results_button.setEnabled(False)
+        self.results_button.setText("Scraping..")
         self.results_button.clicked.connect(self.showMetrics)
 
     def toggleItem(self, item):
@@ -91,6 +92,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
     def startClassify(self, result):
         if result:
+            self.results_button.setText("Classifying..")
             self.emotClassify = EmotClassify()
             worker = Worker(self.emotClassify.startAll)
             self.threadpool.start(worker)
@@ -104,6 +106,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         print("\nClick the 'Show Results' button to view the results!")
         self.startDrawing()
         self.linkNegandPosSites()
+        self.displaySentences()
         self.MetricsDashboard.makeCharts(self.emotClassify)
 
         self.MetricsDashboard
@@ -126,11 +129,13 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.MetricsDashboard.negSiteEdit.setText(negativeSite)
         self.MetricsDashboard.posSiteEdit.setText(positiveSite)
 
-    def startDrawing(self):
+    def displaySentences(self):
         negativeList, positiveList = self.emotClassify.getSentenceExamples()
         self.MetricsDashboard.displaySentenceExamples(negativeList, "negative")
-        self.MetricsDashboard.displaySentenceExamples(negativeList, "positive")
+        self.MetricsDashboard.displaySentenceExamples(positiveList, "positive")
 
+    def startDrawing(self):
+        negativeList, positiveList = self.emotClassify.getWordcloudBag()
         worker = Worker(
             self.createWordcloud(negativeList, "negative", "#f9f1f0")
         )  # light orange

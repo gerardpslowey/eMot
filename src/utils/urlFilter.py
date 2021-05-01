@@ -5,10 +5,14 @@ import re
 
 
 def base(url):
-    regex = "https?://([A-Za-z_0-9.-]+).*"
-    url = re.search(regex, url)
+    # regex = "https?://([A-Za-z_0-9.-]+).*"
+    # url = re.search(regex, url)
+
+    prefix = re.compile(r"https?://(www\.|w3.)?")
+    url = prefix.sub('', url).strip().split("/")  # noqa
+
     if url:
-        return url.group(1)
+        return url[0]
     else:
         return ""
 

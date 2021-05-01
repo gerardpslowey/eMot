@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1144</width>
-    <height>849</height>
+    <width>1150</width>
+    <height>746</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -24,7 +24,7 @@
     <normaloff>:/newPrefix/icon.png</normaloff>:/newPrefix/icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <layout class="QVBoxLayout" name="verticalLayout_18">
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="sizePolicy">
@@ -37,83 +37,120 @@
        <string notr="true">background-color: rgb(255, 255, 255);</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="chartPage">
-       <layout class="QVBoxLayout" name="verticalLayout_8">
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_7" stretch="4,4,1">
+         <layout class="QVBoxLayout" name="page1Layout">
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
+           <layout class="QHBoxLayout" name="chartTextLayout" stretch="2,1">
             <item>
-             <widget class="QChartView" name="splitChart">
-              <property name="statusTip">
-               <string>Split Chart showing the different emotions seen per site.</string>
-              </property>
-             </widget>
+             <layout class="QVBoxLayout" name="page1ChartsLayout">
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_2">
+                <item>
+                 <widget class="QChartView" name="splitChart">
+                  <property name="statusTip">
+                   <string>Split Chart showing the different emotions seen per site.</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_6">
+                <item>
+                 <widget class="QChartView" name="lineChart">
+                  <property name="statusTip">
+                   <string>Line Chart showing the largest confidence level agreed on by the two classifiers.</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
             </item>
             <item>
-             <widget class="QChartView" name="pieChart">
-              <property name="statusTip">
-               <string>Pie Chart showing the total amount of each emotion seen while scraping.</string>
+             <layout class="QVBoxLayout" name="page1TextLayout" stretch="3">
+              <property name="topMargin">
+               <number>30</number>
               </property>
-             </widget>
+              <item>
+               <layout class="QVBoxLayout" name="posSentencesLayout">
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_7">
+                  <item>
+                   <widget class="QLabel" name="posSentencesLabel">
+                    <property name="font">
+                     <font>
+                      <pointsize>14</pointsize>
+                      <weight>50</weight>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Most Positive Sentence Examples</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_8">
+                  <item>
+                   <widget class="QScrollArea" name="scrollArea">
+                    <property name="horizontalScrollBarPolicy">
+                     <enum>Qt::ScrollBarAlwaysOff</enum>
+                    </property>
+                    <property name="widgetResizable">
+                     <bool>true</bool>
+                    </property>
+                    <widget class="QWidget" name="scrollAreaWidgetContents">
+                     <property name="geometry">
+                      <rect>
+                       <x>0</x>
+                       <y>0</y>
+                       <width>360</width>
+                       <height>499</height>
+                      </rect>
+                     </property>
+                     <layout class="QVBoxLayout" name="verticalLayout_19">
+                      <item>
+                       <widget class="QLabel" name="positiveSentEdit">
+                        <property name="font">
+                         <font>
+                          <pointsize>9</pointsize>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string/>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                        </property>
+                        <property name="wordWrap">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+             </layout>
             </item>
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QChartView" name="lineChart">
-              <property name="statusTip">
-               <string>Line Chart showing the largest confidence level agreed on by the two classifiers.</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QChartView" name="barChart">
-              <property name="statusTip">
-               <string>Bar Chart showing the most visited sites.</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_6">
-            <property name="spacing">
-             <number>7</number>
-            </property>
-            <property name="sizeConstraint">
-             <enum>QLayout::SetDefaultConstraint</enum>
-            </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
+           <layout class="QHBoxLayout" name="buttonLayout">
             <item>
              <widget class="QPushButton" name="nextPageButton">
               <property name="sizePolicy">
@@ -155,10 +192,200 @@ border-radius: 10px;</string>
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="chartPage2">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <layout class="QVBoxLayout" name="page2Layout" stretch="0,0">
+          <item>
+           <layout class="QHBoxLayout" name="page2TextChartLayout" stretch="2,1">
+            <item>
+             <layout class="QVBoxLayout" name="page2ChartsLayout" stretch="1,1">
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_23">
+                <item>
+                 <widget class="QChartView" name="pieChart">
+                  <property name="statusTip">
+                   <string>Pie Chart showing the total amount of each emotion seen while scraping.</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_24">
+                <item>
+                 <widget class="QChartView" name="barChart">
+                  <property name="statusTip">
+                   <string>Bar Chart showing the most visited sites.</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="page2TextLayout" stretch="0,0">
+              <property name="topMargin">
+               <number>25</number>
+              </property>
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_21">
+                <item>
+                 <widget class="QLabel" name="negSentenceLabel">
+                  <property name="font">
+                   <font>
+                    <pointsize>14</pointsize>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Most Negative Sentence Examples</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_22">
+                <item>
+                 <widget class="QScrollArea" name="scrollArea_2">
+                  <property name="horizontalScrollBarPolicy">
+                   <enum>Qt::ScrollBarAlwaysOff</enum>
+                  </property>
+                  <property name="widgetResizable">
+                   <bool>true</bool>
+                  </property>
+                  <widget class="QWidget" name="scrollAreaWidgetContents_2">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>0</y>
+                     <width>362</width>
+                     <height>504</height>
+                    </rect>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_25">
+                    <item>
+                     <widget class="QLabel" name="negativeSentEdit">
+                      <property name="font">
+                       <font>
+                        <pointsize>9</pointsize>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                      </property>
+                      <property name="wordWrap">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="buttonLayout2">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <item>
+               <widget class="QPushButton" name="previousPage2Button">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>200</width>
+                  <height>75</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>20</pointsize>
+                 </font>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+                <property name="statusTip">
+                 <string>Go to the previous page</string>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background-color: rgb(255, 125, 102);
+color: rgb(255, 255, 255);
+border-radius: 10px;</string>
+                </property>
+                <property name="text">
+                 <string>Previous Page</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout">
+              <item>
+               <widget class="QPushButton" name="nextPage2Button">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>200</width>
+                  <height>75</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>20</pointsize>
+                 </font>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+                <property name="statusTip">
+                 <string>Go to the next page</string>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background-color: rgb(103, 171, 159);
+color: rgb(255, 255, 255);
+border-radius: 10px;</string>
+                </property>
+                <property name="text">
+                 <string>Next Page</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="wordCloudPage">
        <layout class="QVBoxLayout" name="verticalLayout_15">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_13" stretch="4,0,1">
+         <layout class="QVBoxLayout" name="verticalLayout_13">
           <item>
            <layout class="QHBoxLayout" name="wordcloudLayouts" stretch="1,1">
             <item>
@@ -365,22 +592,119 @@ border-radius: 10px;</string>
            </layout>
           </item>
           <item>
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
            <layout class="QVBoxLayout" name="textButtonLayout">
             <item>
-             <layout class="QHBoxLayout" name="textLayout">
+             <layout class="QHBoxLayout" name="paramsLayout">
+              <item>
+               <layout class="QVBoxLayout" name="pLayout" stretch="0,0">
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_9" stretch="0">
+                  <item>
+                   <widget class="QLabel" name="posSiteLabel">
+                    <property name="font">
+                     <font>
+                      <pointsize>16</pointsize>
+                      <weight>50</weight>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Most Positive Site</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout">
+                  <item>
+                   <widget class="QLabel" name="posSiteEdit">
+                    <property name="font">
+                     <font>
+                      <pointsize>14</pointsize>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="statusTip">
+                     <string>Click here to open the most positive website in your browser.</string>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">color: rgb(0, 0, 0);</string>
+                    </property>
+                    <property name="text">
+                     <string>Here</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="openExternalLinks">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="nLayout">
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_17">
+                  <item>
+                   <widget class="QLabel" name="negSiteLabel">
+                    <property name="font">
+                     <font>
+                      <pointsize>16</pointsize>
+                      <weight>50</weight>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Most Negative Site</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_16">
+                  <item>
+                   <widget class="QLabel" name="negSiteEdit">
+                    <property name="font">
+                     <font>
+                      <pointsize>14</pointsize>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="statusTip">
+                     <string>Click here to open the most negative website in your browser.</string>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">color: rgb(0, 0, 0);</string>
+                    </property>
+                    <property name="text">
+                     <string>Here</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="openExternalLinks">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
               <item>
                <layout class="QVBoxLayout" name="bLayout">
                 <item>
@@ -479,120 +803,10 @@ border-radius: 10px;</string>
                 </item>
                </layout>
               </item>
-              <item>
-               <layout class="QVBoxLayout" name="nLayout">
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_17">
-                  <item>
-                   <widget class="QLabel" name="negSiteLabel">
-                    <property name="font">
-                     <font>
-                      <pointsize>16</pointsize>
-                      <weight>50</weight>
-                      <bold>false</bold>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>Most Negative Site</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_16">
-                  <item>
-                   <widget class="QLabel" name="negSiteEdit">
-                    <property name="font">
-                     <font>
-                      <pointsize>14</pointsize>
-                      <weight>75</weight>
-                      <bold>true</bold>
-                     </font>
-                    </property>
-                    <property name="statusTip">
-                     <string>Click here to open the most negative website in your browser.</string>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">color: rgb(0, 0, 0);</string>
-                    </property>
-                    <property name="text">
-                     <string>Here</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                    <property name="openExternalLinks">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QVBoxLayout" name="pLayout" stretch="0,0">
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_9" stretch="0">
-                  <item>
-                   <widget class="QLabel" name="posSiteLabel">
-                    <property name="font">
-                     <font>
-                      <pointsize>16</pointsize>
-                      <weight>50</weight>
-                      <bold>false</bold>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>Most Positive Site</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout">
-                  <item>
-                   <widget class="QLabel" name="posSiteEdit">
-                    <property name="font">
-                     <font>
-                      <pointsize>14</pointsize>
-                      <weight>75</weight>
-                      <bold>true</bold>
-                     </font>
-                    </property>
-                    <property name="statusTip">
-                     <string>Click here to open the most positive website in your browser.</string>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">color: rgb(0, 0, 0);</string>
-                    </property>
-                    <property name="text">
-                     <string>Here</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                    <property name="openExternalLinks">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
-              </item>
              </layout>
             </item>
             <item>
-             <layout class="QVBoxLayout" name="buttonLayout">
+             <layout class="QVBoxLayout" name="buttonLayout3">
               <property name="leftMargin">
                <number>0</number>
               </property>
@@ -657,7 +871,7 @@ border-radius: 10px;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1144</width>
+     <width>1150</width>
      <height>26</height>
     </rect>
    </property>

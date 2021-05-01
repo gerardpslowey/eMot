@@ -45,13 +45,15 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         self.previousPage2Button.clicked.connect(
             lambda: self.changePage(self.chartPage))
 
+        self.font = QFont()
+        self.font.setPixelSize(20)
+
     def displaySentenceExamples(self, sentences, prefix):
         posNeg = prefix + "SentEdit"
         # negativeSentEdit, positiveSentEdit
         sentenceEdit = getattr(self, posNeg)
-        for emotion, sentence in sentences:
-            sentenceEdit.setText(
-                f"{sentenceEdit.text()}{emotion} = {sentence}\n")
+        for sentence in sentences:
+            sentenceEdit.setText(f"{sentenceEdit.text()}{sentence}\n\n")
 
     def showImage(self, image, prefix):
         self.image = QPixmap(image)
@@ -95,9 +97,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         chart = QChart()
         chart.addSeries(series)
 
-        font = QFont()
-        font.setPixelSize(20)
-        chart.setTitleFont(font)
+        chart.setTitleFont(self.font)
         chart.setTitle("Most Visited Sites")
 
         yAxis = QValueAxis()
@@ -142,9 +142,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         chart = QChart()
         chart.addSeries(series)
 
-        font = QFont()
-        font.setPixelSize(20)
-        chart.setTitleFont(font)
+        chart.setTitleFont(self.font)
         chart.setTitle("Emotions Seen Per Site")
         chart.setAnimationOptions(QChart.SeriesAnimations)
 
@@ -187,9 +185,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         chart = QChart()
         chart.addSeries(series)
 
-        font = QFont()
-        font.setPixelSize(20)
-        chart.setTitleFont(font)
+        chart.setTitleFont(self.font)
         chart.setTitle("Overall Emotion Counts Of Sentences")
         chart.createDefaultAxes()
 
@@ -236,9 +232,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         series.attachAxis(yAxis)
         series.attachAxis(xAxis)
 
-        font = QFont()
-        font.setPixelSize(20)
-        chart.setTitleFont(font)
+        chart.setTitleFont(self.font)
         chart.setTitle("Largest Confidence Level Per Emotion")
 
         chart.legend().setVisible(False)
