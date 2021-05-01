@@ -97,7 +97,7 @@ class Ui_MetricsDashboard:
         self.verticalLayout_19.setObjectName("verticalLayout_19")
         self.positiveSentEdit = QtWidgets.QLabel(self.scrollAreaWidgetContents)
         font = QtGui.QFont()
-        font.setPointSize(9)
+        font.setPointSize(10)
         self.positiveSentEdit.setFont(font)
         self.positiveSentEdit.setText("")
         self.positiveSentEdit.setAlignment(
@@ -165,7 +165,7 @@ class Ui_MetricsDashboard:
         self.page2ChartsLayout.setStretch(1, 1)
         self.page2TextChartLayout.addLayout(self.page2ChartsLayout)
         self.page2TextLayout = QtWidgets.QVBoxLayout()
-        self.page2TextLayout.setContentsMargins(-1, 25, -1, -1)
+        self.page2TextLayout.setContentsMargins(-1, 30, -1, -1)
         self.page2TextLayout.setObjectName("page2TextLayout")
         self.verticalLayout_21 = QtWidgets.QVBoxLayout()
         self.verticalLayout_21.setObjectName("verticalLayout_21")
@@ -186,7 +186,7 @@ class Ui_MetricsDashboard:
         self.scrollArea_2.setObjectName("scrollArea_2")
         self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
         self.scrollAreaWidgetContents_2.setGeometry(
-            QtCore.QRect(0, 0, 362, 504))
+            QtCore.QRect(0, 0, 362, 499))
         self.scrollAreaWidgetContents_2.setObjectName(
             "scrollAreaWidgetContents_2")
         self.verticalLayout_25 = QtWidgets.QVBoxLayout(
@@ -195,7 +195,7 @@ class Ui_MetricsDashboard:
         self.negativeSentEdit = QtWidgets.QLabel(
             self.scrollAreaWidgetContents_2)
         font = QtGui.QFont()
-        font.setPointSize(9)
+        font.setPointSize(10)
         self.negativeSentEdit.setFont(font)
         self.negativeSentEdit.setText("")
         self.negativeSentEdit.setAlignment(
@@ -514,7 +514,7 @@ class Ui_MetricsDashboard:
         MetricsDashboard.setStatusBar(self.statusbar)
 
         self.retranslateUi(MetricsDashboard)
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MetricsDashboard)
 
     def retranslateUi(self, MetricsDashboard):

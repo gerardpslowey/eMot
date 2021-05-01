@@ -58,7 +58,6 @@ class Preference(QMainWindow, PrefWindow):
     def addUrl(self):
         url = self.urlEdit.toPlainText()
         baseUrl = base(url)
-        print(baseUrl)
         self.blacklists.addItem(baseUrl, "urlSet")
         self.showPopUp("URL added!")
         self.urlEdit.clear()
@@ -66,7 +65,6 @@ class Preference(QMainWindow, PrefWindow):
     def removeURL(self):
         url = self.urlEdit.toPlainText()
         baseUrl = base(url)
-        print(baseUrl)
         self.blacklists.removeItem(baseUrl, "urlSet")
         self.showPopUp("URL removed!")
         self.urlEdit.clear()
