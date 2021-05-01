@@ -85,6 +85,8 @@ class EmotClassify:
             self.scrapedFile).astype("U")  # read scraped file
         # create a new column with the base baseUrl as its value
         scraped_df["base"] = scraped_df["url"].apply(base)
+        scraped_df["base"] = scraped_df["base"].apply(
+            lambda site: site.replace("www.", ""))
         # create a list of unique base sites
         sitesList = scraped_df["base"].unique().tolist()
         # create a nested dictionary for each site
@@ -184,8 +186,8 @@ class EmotClassify:
         self.mostNegativeSite = sorted(
             scores, key=lambda tup: tup[2], reverse=True)[0]
 
-        print("\nMost Positive Site: " + self.mostPositiveSite[0])
-        print("\nMost Negative Site: " + self.mostNegativeSite[0])
+        print(f"Most Positive Site: {self.mostPositiveSite[0]}")
+        print(f"Most Negative Site: {self.mostNegativeSite[0]}")
 
     def processWordClouds(self, sentences):
         # prepare some sentence examples for the wordcloud
@@ -193,7 +195,7 @@ class EmotClassify:
         # sort the list using the tuple structure
         sentenceExampleList.sort(key=lambda tup: tup[0], reverse=True)
 
-        print("\nExamples of emotion based sentences: ")
+        print("Examples of emotion based sentences:")
         halfListRange = int(len(sentenceExampleList) / 2)
 
         for item in sentenceExampleList[:halfListRange]:
@@ -204,7 +206,7 @@ class EmotClassify:
             if emotionLabel in self.positive:
                 self.positiveWordcloud.append(item[2])
 
-            print(f"{emotionLabel} ==> {item[2]}")
+            print(f"{emotionLabel}: {item[2]}")
 
     def processSplitChartValues(self):
         # total site visits = the number of sites visited
@@ -215,7 +217,6 @@ class EmotClassify:
                 self.splitChartValues.append(list(emotionsPerSite.values()))
 
     def prettyPrint(self, items, formatting=None):
-
         if formatting == "lst":
             print("\nSites and associated primary emotions: ")
             print(f"website: {*self.emotions,}")
@@ -251,9 +252,7 @@ class EmotClassify:
         return self.emotionIntensities
 
     def getSiteVisitCounts(self):
-        # remove www. from the urls
-        return {(k.replace("www.", ""), v)
-                for k, v in self.siteVisitCounts.items()}
+        return self.siteVisitCounts
 
     def getUniqueSiteCount(self):
         return self.totalSiteCount
