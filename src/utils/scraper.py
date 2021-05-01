@@ -19,7 +19,7 @@ class Scraper:
     def scrape(self, url, task):
         blacklist = Blacklists()
         tagSet = blacklist.getItems()["tagSet"]
-        print(f"{task}. {url}")
+        print("{}. {}".format(task, url))
         soup = self.getSoup(url)
 
         if len(soup) != 0:

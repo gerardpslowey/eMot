@@ -90,6 +90,9 @@ class EmotClassify:
             lambda site: site.replace("www.", ""))
         # create a list of unique base sites
         sitesList = scraped_df["base"].unique().tolist()
+        
+        # stem the data for classification
+        scraped_df["stemmedText"] = scraped_df["text"].apply(clean)
 
         # create a nested dictionary for each site
         for site in sitesList:
@@ -226,7 +229,7 @@ class EmotClassify:
         # sort the list using the tuple structure
         sentenceExampleList.sort(key=lambda tup: tup[0], reverse=True)
 
-        print("Examples of emotion based sentences:")
+        print("\nExamples of emotion based sentences:")
         halfListRange = int(len(sentenceExampleList) / 2)
 
         for item in sentenceExampleList[:halfListRange]:
