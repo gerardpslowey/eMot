@@ -169,8 +169,7 @@ class EmotClassify:
 
     def classifierModelAssertions(
             self, baseUrl, emotionLabel1, emotionLabel2, positiveSiteScore, negativeSiteScore):
-        # for a sentiment to be accepted both models have to have a score
-        # greater than 0.6
+        # for a sentiment to be accepted both models have to agree on the label
         if emotionLabel1 == emotionLabel2:
             # count total emotion count
             self.emotionCounts[emotionLabel1] += 1

@@ -8,7 +8,7 @@ sys.path.append(str(Path(__file__).parent.parent.absolute()))
 
 def test_pre_process():
     sentence = "Screw you @davidbrussee! I only have 3 weeks..."
-    assert preProcess(sentence).lower() == "screw you i only have weeks"
+    assert preProcess(sentence).lower() == "screw you i only have 3 weeks"
 
 
 def test_remove_url():
