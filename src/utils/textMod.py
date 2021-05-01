@@ -1,5 +1,4 @@
 import re
-import string
 
 import spacy
 from spacy.tokenizer import _get_regex_pattern
