@@ -24,6 +24,7 @@ repos:
             description: Checks for a common error of placing code before the docstring.
         -   id: check-added-large-files
             name: check-added-large-files
+            args: ['--maxkb=3000']
             description: Prevent giant files from being committed.
         -   id: check-merge-conflict
             name: check-merge-conflict
