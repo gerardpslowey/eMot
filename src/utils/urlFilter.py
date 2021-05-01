@@ -8,7 +8,7 @@ def base(url):
     # regex = "https?://([A-Za-z_0-9.-]+).*"
     # url = re.search(regex, url)
 
-    prefix = re.compile(r"https?://(www\.|w3.)?")
+    prefix = re.compile(r"(https?://)?(www\.|w3.)?")
     url = prefix.sub('', url).strip().split("/")  # noqa
 
     if url:

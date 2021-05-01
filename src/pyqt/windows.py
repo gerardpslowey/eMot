@@ -1,9 +1,15 @@
+import sys
+from pathlib import Path
+
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
 from pyqt.about_window import Ui_Form
 from pyqt.browser_dialog import Ui_browserDialog
 from pyqt.preferences_window import Ui_Form as PrefWindow
 from utils.blacklists import Blacklists
+from utils.urlFilter import base
+
+sys.path.append(str(Path(__file__).parent.parent.absolute()))
 
 
 class About(QMainWindow, Ui_Form):
@@ -51,13 +57,17 @@ class Preference(QMainWindow, PrefWindow):
 
     def addUrl(self):
         url = self.urlEdit.toPlainText()
-        self.blacklists.addItem(url, "urlSet")
+        baseUrl = base(url)
+        print(baseUrl)
+        self.blacklists.addItem(baseUrl, "urlSet")
         self.showPopUp("URL added!")
         self.urlEdit.clear()
 
     def removeURL(self):
         url = self.urlEdit.toPlainText()
-        self.blacklists.removeItem(url, "urlSet")
+        baseUrl = base(url)
+        print(baseUrl)
+        self.blacklists.removeItem(baseUrl, "urlSet")
         self.showPopUp("URL removed!")
         self.urlEdit.clear()
 

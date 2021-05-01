@@ -126,6 +126,9 @@
                           <pointsize>9</pointsize>
                          </font>
                         </property>
+                        <property name="statusTip">
+                         <string>Five Positive Sentences with emotions happiness, joy, surprise </string>
+                        </property>
                         <property name="text">
                          <string/>
                         </property>
@@ -274,6 +277,9 @@ border-radius: 10px;</string>
                        <font>
                         <pointsize>9</pointsize>
                        </font>
+                      </property>
+                      <property name="statusTip">
+                       <string>Five Negative Sentences with emotions anger, fear, sadness </string>
                       </property>
                       <property name="text">
                        <string/>

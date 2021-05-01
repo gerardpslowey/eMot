@@ -535,6 +535,10 @@ class Ui_MetricsDashboard:
             _translate(
                 "MetricsDashboard",
                 "Most Positive Sentence Examples"))
+        self.positiveSentEdit.setStatusTip(
+            _translate(
+                "MetricsDashboard",
+                "Five Positive Sentences with emotions happiness, joy, surprise "))
         self.nextPageButton.setStatusTip(
             _translate(
                 "MetricsDashboard",
@@ -555,6 +559,10 @@ class Ui_MetricsDashboard:
             _translate(
                 "MetricsDashboard",
                 "Most Negative Sentence Examples"))
+        self.negativeSentEdit.setStatusTip(
+            _translate(
+                "MetricsDashboard",
+                "Five Negative Sentences with emotions anger, fear, sadness "))
         self.previousPage2Button.setStatusTip(_translate(
             "MetricsDashboard", "Go to the previous page"))
         self.previousPage2Button.setText(

@@ -62,6 +62,7 @@ def test_different_googles():
         "https://www.docs.google.com",
         "https://docs.google.com/document/d/1jdV4zmk841cUeMZV5fX7Qjv8nbX89r1axC9ZoXa6fsI/edit#",
         "google.com",
+        "www.google.com",
         "http://w3.maps.google.com/page1",
         "https://www.google.com/search?client=firefox-b-d&q=regex+remove+all+after+character"
     ]
