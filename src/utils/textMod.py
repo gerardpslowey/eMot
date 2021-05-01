@@ -22,7 +22,7 @@ nlp.tokenizer.token_match = re.compile(re_token_match).match
 def preprocessAndTokenise(data):
     data = removehtmlMarkup(data)
     data = removeURLs(data)
-    data = removeHashandSymbols(data)
+    data = removeHashAndSymbols(data)
     data = removeAscii(data)
     data = removeEmojis(data)
     data = data.strip()
@@ -45,22 +45,39 @@ def preprocessAndTokenise(data):
 def preProcess(data):
     data = removehtmlMarkup(data)
     data = removeURLs(data)
-    data = removeHashandSymbols(data)
-    data = removeAscii(data)
+    data = removeHashAndSymbols(data)
     data = data.strip()
-    # tokenise
-    mytokens = nlp(data)
 
-    stem_data = [
-        word.lemma_.strip()
+    # tokenise, remove punctuation and spaces
+    mytokens = nlp(data)
+    filtered = [
+        word.text.strip()
         for word in mytokens
-        if word.lemma_ != "-PRON-"
-        and not word.is_punct
-        and not word.is_stop
+        if not word.is_punct
         and not word.is_space
-        and not word.is_digit  # noqa: W503
     ]
-    return " ".join(stem_data)
+    return " ".join(filtered)
+
+
+def clean(data):
+    data = data.split("|")
+
+    filtered = []
+
+    for sentence in data:
+        mytokens = nlp(sentence)
+        stem_data = [
+            word.lemma_.strip()
+            for word in mytokens
+            if word.lemma_ != "-PRON-"
+            and not word.is_punct
+            and not word.is_stop
+            and not word.is_space
+            and not word.is_digit  # noqa: W503
+        ]
+        filtered.append(" ".join(stem_data))
+
+    return "|".join(filtered)
 
 
 # remove html markup tags
@@ -74,7 +91,7 @@ def removeURLs(sentence):
 
 
 # remove hashtags and @ symbols
-def removeHashandSymbols(sentence):
+def removeHashAndSymbols(sentence):
     # hash symbols
     data = re.sub(r"(#[\d\w\.]+)", "", sentence)
     # @ symbols

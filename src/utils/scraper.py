@@ -23,9 +23,9 @@ class Scraper:
         soup = self.getSoup(url)
 
         if len(soup) != 0:
-            cleanedText = self.getText(soup, tagSet)
+            text = self.getText(soup, tagSet)
             print(f'Task {task} Finished')
-            return (url, cleanedText)
+            return (url, text)
         else:
             print(f"{task}. unreachable, skipped")
             return None
@@ -46,7 +46,6 @@ class Scraper:
 
     def getText(self, soup, blacklist):
         # get rid of the unwanted text in Comments, Doctype and the above tags
-        # list.
         for junk in soup(blacklist):
             junk.decompose()
 
@@ -55,20 +54,19 @@ class Scraper:
         ):
             comment.extract()
 
-        cleaned = []
-        # original = []
+        processed = []
         for sentence in soup.find_all(text=True):
             sentence = sentence.strip().lower()
             if str(sentence) and not re.search(
-                "(we and our partners use|we and our partners store|"
-                + "personalised ads and content|our privacy policy|"  # noqa
-                + "click below to consent)",  # noqa
-                sentence.lower(),
+                "(we and our partners use|we and our partners store|" +
+                "personalised ads and content|our privacy policy|" + # noqa
+                "click below to consent)",  # noqa
+                sentence.lower()
             ):
 
-                cleaned.append(preProcess(sentence))
+                processed.append(preProcess(sentence))
 
-        return cleaned
+        return processed
 
 
 def main():

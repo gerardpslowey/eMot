@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 
-from utils.textMod import preProcess, removeURLs, spellCheck
+from utils.textMod import preProcess, removeURLs, spellCheck, clean
 
 # sets path to src
 sys.path.append(str(Path(__file__).parent.parent.absolute()))
@@ -9,7 +9,7 @@ sys.path.append(str(Path(__file__).parent.parent.absolute()))
 
 def test_pre_process():
     sentence = "Screw you @davidbrussee! I only have 3 weeks..."
-    assert preProcess(sentence).lower() == "screw week"
+    assert preProcess(sentence).lower() == "screw you i only have 3 weeks"
 
 
 def test_remove_url():
@@ -23,12 +23,19 @@ def test_spell_check():
     assert spellCheck(sentence).lower() == "i'm sorry at least it's friday"
 
 
+def test_clean_and_stem():
+    text = "building sites to open again after four months of closure"
+    text = clean(text)
+    assert text.lower() == "build site open month closure"
+
+
 def test_clean_text():
     text = ".... Python is great and challenging! #preprocessing @testing !?;:"
     text = preProcess(text)
     text = removeURLs(text)
     text = spellCheck(text)
-    assert text.lower() == "python great challenging"
+    text = clean(text)
+    assert text.lower() == "python great challenge"
 
 
 def test_wrong():

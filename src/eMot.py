@@ -83,14 +83,13 @@ class Emot:
             # Deal with the threads as they complete individually
             for future in futures.as_completed(threads):
                 # tuple
-                data = future.result()
+                scrapedText = future.result()
 
-                if data is not None:
-                    url = data[0]
-                    cleanedText = data[1]
-                    # cleanedText = preProcess(cleanedText)
-                    # store scraped data
-                    self.writeToCSV(url, cleanedText)
+                if scrapedText is not None:
+                    url = scrapedText[0]
+                    text = scrapedText[1]
+                    # store scraped scrapedText
+                    self.writeToCSV(url, text)
 
         print("Finished Scraping!\n")
         return "scraped"
@@ -99,19 +98,19 @@ class Emot:
         with open(
             self.scraped_csv, mode="w", encoding="utf-8", newline=""
         ) as scraped_text:
-            fields = ["url", "original_data"]
+            fields = ["url", "text"]
             writer = csv.DictWriter(
                 scraped_text, fieldnames=fields, delimiter=",")
             writer.writeheader()
 
-    def writeToCSV(self, url, cleanedText):
+    def writeToCSV(self, url, text):
         with open(
             self.scraped_csv, mode="a+", encoding="utf-8", newline=""
         ) as scraped_text:
             writer = csv.writer(scraped_text, delimiter=",")
 
-            data = [sentence for sentence in cleanedText if len(sentence.split()) > 3]
-            writer.writerow([url, "|".join(data)])
+            filteredText = [sentence for sentence in text if len(sentence.split()) > 3]
+            writer.writerow([url, "|".join(filteredText)])
 
 
 def main():
