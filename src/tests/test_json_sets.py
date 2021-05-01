@@ -1,10 +1,5 @@
-import sys
-from pathlib import Path
-
 from utils.blacklists import Blacklists
-
-# sets path to src
-sys.path.append(str(Path(__file__).parent.parent.absolute()))
+from utils.urlFilter import base
 
 test = Blacklists()
 
@@ -19,9 +14,41 @@ def test_get_first_tag():
 
 def test_add_url():
     url = "test123.com"
-    test.addItem(url, "urlSet")
+    baseUrl = base(url)
+
+    test.addItem(baseUrl, "urlSet")
     assert test.getItems()["urlSet"][-1] == "test123.com"
-    test.removeItem(url, "urlSet")
+    test.removeItem(baseUrl, "urlSet")
+
+
+def test_duplicate_url():
+    url = "facebook.com"
+    baseUrl = base(url)
+
+    test.addItem(baseUrl, "urlSet")
+    assert test.getItems()["urlSet"][-1] != "facebook.com"
+
+
+def test_add_base_url():
+    url = "https://www.pytest.org"
+    baseUrl = base(url)
+
+    test.addItem(baseUrl, "urlSet")
+    assert test.getItems()["urlSet"][-1] == "pytest.org"
+    test.removeItem(baseUrl, "urlSet")
+
+
+def add_tag():
+    tag = "p"
+    test.addItem(tag, "tagSet")
+    assert test.getItems()["tagSet"][-1] == "p"
+    test.removeItem(tag, "tagSet")
+
+
+def add_duplicate_tag():
+    tag = "title"
+    test.addItem(tag, "tagSet")
+    assert test.getItems()["tagSet"][-1] != "title"
 
 
 def test_remove_tag():
@@ -29,3 +56,10 @@ def test_remove_tag():
     test.addItem(tag, "tagSet")
     test.removeItem(tag, "tagSet")
     assert test.getItems()["tagSet"][-1] != "div"
+
+
+def test_absent_tag(capsys):
+    tag = "notreal"
+    test.removeItem(tag, "tagSet")
+    captured = capsys.readouterr()
+    assert captured.out == "notreal not in tagSet\n"

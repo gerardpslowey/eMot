@@ -37,7 +37,7 @@
        <string notr="true">background-color: rgb(255, 255, 255);</string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="chartPage">
        <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -123,8 +123,11 @@
                        <widget class="QLabel" name="positiveSentEdit">
                         <property name="font">
                          <font>
-                          <pointsize>9</pointsize>
+                          <pointsize>10</pointsize>
                          </font>
+                        </property>
+                        <property name="statusTip">
+                         <string>Five Positive Sentences with emotions happiness, joy, surprise </string>
                         </property>
                         <property name="text">
                          <string/>
@@ -227,7 +230,7 @@ border-radius: 10px;</string>
             <item>
              <layout class="QVBoxLayout" name="page2TextLayout" stretch="0,0">
               <property name="topMargin">
-               <number>25</number>
+               <number>30</number>
               </property>
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_21">
@@ -264,7 +267,7 @@ border-radius: 10px;</string>
                      <x>0</x>
                      <y>0</y>
                      <width>362</width>
-                     <height>504</height>
+                     <height>499</height>
                     </rect>
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_25">
@@ -272,8 +275,11 @@ border-radius: 10px;</string>
                      <widget class="QLabel" name="negativeSentEdit">
                       <property name="font">
                        <font>
-                        <pointsize>9</pointsize>
+                        <pointsize>10</pointsize>
                        </font>
+                      </property>
+                      <property name="statusTip">
+                       <string>Five Negative Sentences with emotions anger, fear, sadness </string>
                       </property>
                       <property name="text">
                        <string/>

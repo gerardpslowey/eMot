@@ -60,11 +60,16 @@ class Ui_Form:
         self.tagEdit.setObjectName("tagEdit")
         self.addTagButton = QtWidgets.QPushButton(Form)
         self.addTagButton.setGeometry(QtCore.QRect(380, 230, 51, 41))
+        self.addTagButton.setCursor(
+            QtGui.QCursor(
+                QtCore.Qt.PointingHandCursor))
         self.addTagButton.setStyleSheet("background-color: rgb(103, 171, 159);\n"
                                         "color: rgb(255, 255, 255);")
         self.addTagButton.setObjectName("addTagButton")
         self.deleteTagButton = QtWidgets.QPushButton(Form)
         self.deleteTagButton.setGeometry(QtCore.QRect(440, 230, 51, 41))
+        self.deleteTagButton.setCursor(
+            QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.deleteTagButton.setStyleSheet("background-color: rgb(255, 125, 102);\n"
                                            "color: rgb(255, 255, 255);")
         self.deleteTagButton.setObjectName("deleteTagButton")
@@ -76,11 +81,16 @@ class Ui_Form:
         self.urlEdit.setObjectName("urlEdit")
         self.addUrlButton = QtWidgets.QPushButton(Form)
         self.addUrlButton.setGeometry(QtCore.QRect(380, 340, 51, 41))
+        self.addUrlButton.setCursor(
+            QtGui.QCursor(
+                QtCore.Qt.PointingHandCursor))
         self.addUrlButton.setStyleSheet("background-color: rgb(103, 171, 159);\n"
                                         "color: rgb(255, 255, 255);")
         self.addUrlButton.setObjectName("addUrlButton")
         self.deleteUrlButton = QtWidgets.QPushButton(Form)
         self.deleteUrlButton.setGeometry(QtCore.QRect(440, 340, 51, 41))
+        self.deleteUrlButton.setCursor(
+            QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.deleteUrlButton.setStyleSheet("background-color: rgb(255, 125, 102);\n"
                                            "color: rgb(255, 255, 255);")
         self.deleteUrlButton.setObjectName("deleteUrlButton")

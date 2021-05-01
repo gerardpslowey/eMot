@@ -65,7 +65,7 @@ class EmotClassify:
 
     def startAll(self):
         scraped_df = self.readScrapedFile()
-        print("Classifying Scraped Data")
+        print("Classifying Scraped Data..")
 
         threads = []
         process1 = threading.Thread(
@@ -101,12 +101,12 @@ class EmotClassify:
 
     # number of times a site is visited
     def siteVisitCount(self, scraped_df):
-        print("Gathering Site Visit Counts")
+        print("Gathering Site Visit Counts..")
         self.siteVisitCounts = scraped_df["base"].value_counts().to_dict()
 
     def sentenceClassify(self, scraped_df):
         try:
-            print("Analysing sentences")
+            print("Analysing Sentences..")
             for row in scraped_df.itertuples(index=False):
                 positiveSiteScore = 0
                 negativeSiteScore = 0
@@ -146,12 +146,13 @@ class EmotClassify:
                 self.siteScores.append(
                     (url, positivePercentage, negativePercentage))
 
+            print("Scoring Sentence Emotions..")
             self.processWordClouds(self.sentenceExamples)
             self.processSplitChartValues()
             self.mostPosandNeg(self.siteScores)
 
         except pd.errors.EmptyDataError:
-            print("Nothing to classify, the file is empty")
+            print("Nothing to Classify, The File is Empty")
         finally:
             print("Finished Classification!")
 
@@ -237,13 +238,13 @@ class EmotClassify:
             if emotionLabel in self.negative:
                 self.negativeWordcloud.append(sentence)
                 self.negativeSentenceList.append(
-                    f"{emotionLabel.upper()}: {sentence}"
+                    f"{emotionLabel.upper()}\n{sentence}."
                 )
 
             if emotionLabel in self.positive:
                 self.positiveWordcloud.append(sentence)
                 self.positiveSentenceList.append(
-                    f"{emotionLabel.upper()}: {sentence}"
+                    f"{emotionLabel.upper()}\n{sentence}."
                 )
 
     def processSplitChartValues(self):
