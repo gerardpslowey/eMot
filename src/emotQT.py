@@ -93,6 +93,7 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
     def enableResultsButton(self):
         print("\nClick the 'Show Results' button to view the results!")
         self.startDrawing()
+        self.linkNegandPosSites()
         self.MetricsDashboard.makeCharts(self.emotClassify)
         self.results_button.setEnabled(True)
         self.results_button.setText("Show Results!")
@@ -106,6 +107,13 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
     def showMetrics(self):
         self.MetricsDashboard.show()
 
+    def linkNegandPosSites(self):
+        negSite, posSite = self.emotClassify.getMostPosandNeg()
+        negativeSite = f"<a href=\"{negSite}\">Click here</a>"
+        positiveSite = f"<a href=\"{posSite}\">Click here</a>"
+        self.MetricsDashboard.negSiteEdit.setText(negativeSite)
+        self.MetricsDashboard.posSiteEdit.setText(positiveSite)
+
     def startDrawing(self):
         negativeList, positiveList = self.emotClassify.getWordCloudBag()
         worker = Worker(
@@ -116,12 +124,6 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
             self.createWordcloud(positiveList, "positive", "#ebf2f2")
         )  # light blue
         self.threadpool.start(worker2)
-
-        negSite, posSite = self.emotClassify.getMostPosandNeg()
-        negativeSite = f"<a href=\"{negSite}\">Click here</a>"
-        positiveSite = f"<a href=\"{posSite}\">Click here</a>"
-        self.MetricsDashboard.negSiteEdit.setText(negativeSite)
-        self.MetricsDashboard.posSiteEdit.setText(positiveSite)
 
     def createWordcloud(self, data, prefix, colour):
         if data:

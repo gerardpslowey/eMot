@@ -116,10 +116,7 @@ class EmotClassify:
                 splitText = stemmedText.split("|")
                 for sentence in splitText:
                     # label each sentence
-                    emotionLabel1 = self.classifierModel1.predict(
-                        self.tfidf.transform([sentence]))[0]
-                    emotionLabel2 = self.classifierModel2.predict(
-                        self.cv.transform([sentence]))[0]
+                    emotionLabel1, emotionLabel2 = self.classifySentence(sentence)
 
                     # get positive and negative site score
                     positiveSiteScore, negativeSiteScore = self.classifierModelAssertions(
@@ -168,6 +165,13 @@ class EmotClassify:
             self.prettyPrint(self.emotionIntensities.items(), "percent")
             self.prettyPrint(self.emotionCounts.items(), "amount")
             self.prettyPrint(self.emotionsPerSite.items(), "lst")
+
+    def classifySentence(self, sentence):
+        emotionLabel1 = self.classifierModel1.predict(
+            self.tfidf.transform([sentence]))[0]
+        emotionLabel2 = self.classifierModel2.predict(
+            self.cv.transform([sentence]))[0]
+        return emotionLabel1, emotionLabel2
 
     def classifierModelAssertions(
             self, baseUrl, emotionLabel1, emotionLabel2, positiveSiteScore, negativeSiteScore):

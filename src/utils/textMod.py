@@ -1,4 +1,5 @@
 import re
+import string
 
 import spacy
 from spacy.tokenizer import _get_regex_pattern
@@ -22,7 +23,7 @@ nlp.tokenizer.token_match = re.compile(re_token_match).match
 def preprocessAndTokenise(data):
     data = removehtmlMarkup(data)
     data = removeURLs(data)
-    data = removeHashandSymbols(data)
+    data = removeHashAndSymbols(data)
     data = removeAscii(data)
     data = removeEmojis(data)
     data = data.strip()
@@ -45,17 +46,15 @@ def preprocessAndTokenise(data):
 def preProcess(data):
     data = removehtmlMarkup(data)
     data = removeURLs(data)
-    data = removeHashandSymbols(data)
-    data = removeAscii(data)
+    data = removeHashAndSymbols(data)
     data = data.strip()
 
-    # tokenise
+    # tokenise, remove punctuation and spaces
     mytokens = nlp(data)
     filtered = [
         word.text.strip()
         for word in mytokens
         if not word.is_punct
-        and not word.is_punct
         and not word.is_space
     ]
     return " ".join(filtered)
@@ -93,7 +92,7 @@ def removeURLs(sentence):
 
 
 # remove hashtags and @ symbols
-def removeHashandSymbols(sentence):
+def removeHashAndSymbols(sentence):
     # hash symbols
     data = re.sub(r"(#[\d\w\.]+)", "", sentence)
     # @ symbols
