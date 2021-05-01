@@ -22,6 +22,12 @@ def test_spell_check():
     assert spellCheck(sentence).lower() == "i'm sorry at least it's friday"
 
 
+def test_clean_and_stem():
+    text = "building sites to open again after four months of closure"
+    text = clean(text)
+    assert text.lower() == "build site open month closure"
+
+
 def test_clean_text():
     text = ".... Python is great and challenging! #preprocessing @testing !?;:"
     text = preProcess(text)
