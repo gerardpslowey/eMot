@@ -238,13 +238,13 @@ class EmotClassify:
             if emotionLabel in self.negative:
                 self.negativeWordcloud.append(sentence)
                 self.negativeSentenceList.append(
-                    f"{emotionLabel.upper()}\n{sentence}."
+                    f"{emotionLabel.upper()}\n{sentence.capitalize()}."
                 )
 
             if emotionLabel in self.positive:
                 self.positiveWordcloud.append(sentence)
                 self.positiveSentenceList.append(
-                    f"{emotionLabel.upper()}\n{sentence}."
+                    f"{emotionLabel.upper()}\n{sentence.capitalize()}."
                 )
 
     def processSplitChartValues(self):
@@ -293,16 +293,3 @@ class EmotClassify:
 if __name__ == "__main__":
     test = EmotClassify()
     test.startAll()
-
-    # pr = cProfile.Profile()
-    # pr.enable()
-
-    # my_result = test.startAll()
-
-    # pr.disable()
-    # stream = io.StringIO()
-    # ps = pstats.Stats(pr, stream=stream).sort_stats("tottime")
-    # ps.print_stats()
-
-    # with open("scraper_cprofile2.txt", "w+") as f:
-    #     f.write(stream.getvalue())

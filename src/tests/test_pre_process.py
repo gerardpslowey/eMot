@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 
-from utils.textMod import preProcess, removeURLs, spellCheck, clean
+from utils.textMod import clean, preProcess, removeURLs, spellCheck
 
 # sets path to src
 sys.path.append(str(Path(__file__).parent.parent.absolute()))

@@ -32,13 +32,14 @@ class Emot:
         if self.isEmpty(urls):
             return ""
 
-        print("Starting URL scraping..")
         print(f"History Retrieved: {len(urls)}")
 
         filtered_urls = set(
             filterBlacklistedUrl(
                 urls.values(),
-                self.blacklist))
+                self.blacklist
+            )
+        )
         print(f"URLS remaining after filtering: {len(filtered_urls)}")
 
         if self.isEmpty(filtered_urls):
@@ -77,7 +78,9 @@ class Emot:
                     executor.submit(
                         Scraper().scrape,
                         url=url,
-                        task=i))
+                        task=i
+                    )
+                )
                 i += 1
 
             # Deal with the threads as they complete individually
@@ -109,7 +112,10 @@ class Emot:
         ) as scraped_text:
             writer = csv.writer(scraped_text, delimiter=",")
 
-            filteredText = [sentence for sentence in text if len(sentence.split()) > 3]
+            filteredText = [
+                sentence for sentence in text if len(
+                    sentence.split()) > 3
+            ]
             writer.writerow([url, "|".join(filteredText)])
 
 

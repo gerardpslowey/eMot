@@ -4,11 +4,11 @@ The install scripts in this directory will create a Python venv, download the re
 
 The start scripts will activate the Python venv, and run the docker image.
 
-The install and start script depends on your operating system.
+The install and start script depends on your operating system are situated in the appropriate directories.
 
-1. Mac OS = macInstall.sh and macStart.sh
-2. Linux OS = linuxInstall.sh and linuxStart.sh
-3. Windows OS = windowsInstall.sh and windowsStart.sh
+1. Mac OS = Install.sh and Start.sh
+2. Linux OS = Install.sh and Start.sh
+3. Windows OS = Install.sh and Start.sh
 
 ## Installation issues
 
