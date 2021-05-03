@@ -48,8 +48,8 @@ class Preference(QMainWindow, PrefWindow):
     def addTag(self):
         tag = self.tagEdit.toPlainText()
         if tag:
-            self.blacklists.addItem(tag, "tagSet")
-            self.showPopUp("Tag added!")
+            message = self.blacklists.addItem(tag, "tagSet")
+            self.showPopUp(message)
             self.tagEdit.clear()
         else:
             self.showPopUp(self.errorMessage)
@@ -57,8 +57,8 @@ class Preference(QMainWindow, PrefWindow):
     def removeTag(self):
         tag = self.tagEdit.toPlainText()
         if tag:
-            self.blacklists.removeItem(tag, "tagSet")
-            self.showPopUp("Tag removed!")
+            message = self.blacklists.removeItem(tag, "tagSet")
+            self.showPopUp(message)
             self.tagEdit.clear()
         else:
             self.showPopUp(self.errorMessage)
@@ -67,8 +67,8 @@ class Preference(QMainWindow, PrefWindow):
         url = self.urlEdit.toPlainText()
         if url:
             baseUrl = base(url)
-            self.blacklists.addItem(baseUrl, "urlSet")
-            self.showPopUp("URL added!")
+            message = self.blacklists.addItem(baseUrl, "urlSet")
+            self.showPopUp(message)
             self.urlEdit.clear()
         else:
             self.showPopUp(self.errorMessage)
@@ -77,8 +77,8 @@ class Preference(QMainWindow, PrefWindow):
         url = self.urlEdit.toPlainText()
         if url:
             baseUrl = base(url)
-            self.blacklists.removeItem(baseUrl, "urlSet")
-            self.showPopUp("URL removed!")
+            message = self.blacklists.removeItem(baseUrl, "urlSet")
+            self.showPopUp(message)
             self.urlEdit.clear()
         else:
             self.showPopUp(self.errorMessage)

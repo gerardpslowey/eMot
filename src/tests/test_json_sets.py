@@ -58,8 +58,7 @@ def test_remove_tag():
     assert test.getItems()["tagSet"][-1] != "div"
 
 
-def test_absent_tag(capsys):
+def test_absent_tag():
     tag = "notreal"
-    test.removeItem(tag, "tagSet")
-    captured = capsys.readouterr()
-    assert captured.out == "notreal not in tagSet\n"
+    message = test.removeItem(tag, "tagSet")
+    assert message == "notreal not in tag blacklist"

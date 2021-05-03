@@ -26,14 +26,18 @@ class Blacklists:
         if item not in data[blacklist]:
             data[blacklist].append(item)
             self.dumpItems(data)
+            return f"{item} added!"
+        else:
+            return f"{item} already in {blacklist[:3]} blacklist"
 
     def removeItem(self, item, blacklist):
         data = self.getItems()
         try:
             data[blacklist].remove(item)
             self.dumpItems(data)
+            return f"{item} deleted!"
         except ValueError:
-            print(f"{item} not in {blacklist}")
+            return f"{item} not in {blacklist[:3]} blacklist"
 
     def dumpItems(self, data):
         with open(self.filename, "w") as json_file:
