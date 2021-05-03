@@ -3,7 +3,7 @@ from pathlib import Path
 
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
-from pyqt.about_window import Ui_Form
+from pyqt.about_window import Ui_About
 from pyqt.browser_dialog import Ui_browserDialog
 from pyqt.preferences_window import Ui_Form as PrefWindow
 from utils.blacklists import Blacklists
@@ -12,7 +12,7 @@ from utils.urlFilter import base
 sys.path.append(str(Path(__file__).parent.parent.absolute()))
 
 
-class About(QMainWindow, Ui_Form):
+class About(QMainWindow, Ui_About):
     """Super class of about_windows since it can be changed at any time from ui files."""
 
     def __init__(self, *args, **kwargs):
@@ -43,31 +43,45 @@ class Preference(QMainWindow, PrefWindow):
         self.addUrlButton.clicked.connect(self.addUrl)
         self.deleteUrlButton.clicked.connect(self.removeURL)
 
+        self.errorMessage = "Please enter some text"
+
     def addTag(self):
         tag = self.tagEdit.toPlainText()
-        self.blacklists.addItem(tag, "tagSet")
-        self.showPopUp("Tag added!")
-        self.tagEdit.clear()
+        if tag:
+            self.blacklists.addItem(tag, "tagSet")
+            self.showPopUp("Tag added!")
+            self.tagEdit.clear()
+        else:
+            self.showPopUp(self.errorMessage)
 
     def removeTag(self):
         tag = self.tagEdit.toPlainText()
-        self.blacklists.removeItem(tag, "tagSet")
-        self.showPopUp("Tag removed!")
-        self.tagEdit.clear()
+        if tag:
+            self.blacklists.removeItem(tag, "tagSet")
+            self.showPopUp("Tag removed!")
+            self.tagEdit.clear()
+        else:
+            self.showPopUp(self.errorMessage)
 
     def addUrl(self):
         url = self.urlEdit.toPlainText()
-        baseUrl = base(url)
-        self.blacklists.addItem(baseUrl, "urlSet")
-        self.showPopUp("URL added!")
-        self.urlEdit.clear()
+        if url:
+            baseUrl = base(url)
+            self.blacklists.addItem(baseUrl, "urlSet")
+            self.showPopUp("URL added!")
+            self.urlEdit.clear()
+        else:
+            self.showPopUp(self.errorMessage)
 
     def removeURL(self):
         url = self.urlEdit.toPlainText()
-        baseUrl = base(url)
-        self.blacklists.removeItem(baseUrl, "urlSet")
-        self.showPopUp("URL removed!")
-        self.urlEdit.clear()
+        if url:
+            baseUrl = base(url)
+            self.blacklists.removeItem(baseUrl, "urlSet")
+            self.showPopUp("URL removed!")
+            self.urlEdit.clear()
+        else:
+            self.showPopUp(self.errorMessage)
 
     def showPopUp(self, message):
         msg = QMessageBox()
