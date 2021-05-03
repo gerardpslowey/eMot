@@ -6,14 +6,14 @@
         "title",
         "style",
         "figure",
-        "img",
         "iframe",
         "nav",
         "meta",
         "header",
         "head",
         "footer",
-        "cookie"
+        "cookie",
+        "img"
     ],
     "urlSet": [
         "google.com",
