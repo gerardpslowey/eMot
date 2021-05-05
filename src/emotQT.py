@@ -1,4 +1,5 @@
 import sys
+from random import SystemRandom
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from wordcloud import STOPWORDS, WordCloud
@@ -8,6 +9,9 @@ from emotClassify import EmotClassify
 from pyqt import main_window, metrics, windows
 from qtWorker import Worker
 from tests import dockerRunner
+
+safe_random = SystemRandom()
+
 
 stop_words = ["s", "m", "na", "co"] + list(STOPWORDS)
 
@@ -80,7 +84,8 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.threadpool.start(worker)
 
         worker.signals.result.connect(
-            lambda result: self.startClassify(result))
+            lambda result: self.startClassify(result)
+        )
 
     def redirectText(self, text):
         # Write console output to textEdit widget.
@@ -109,7 +114,6 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         self.displaySentences()
         self.MetricsDashboard.makeCharts(self.emotClassify)
 
-        self.MetricsDashboard
         self.results_button.setEnabled(True)
         self.results_button.setText("Show Results!")
         self.results_button.setStyleSheet(
@@ -136,21 +140,28 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
 
     def startDrawing(self):
         negativeList, positiveList = self.emotClassify.getWordcloudBag()
+        lightOrange, lightBlue = "#fcebcf", "#e6faff"
+
         worker = Worker(
-            self.createWordcloud(negativeList, "negative", "#f9f1f0")
-        )  # light orange
+            self.createWordcloud(negativeList, "negative", lightOrange)
+        )
         self.threadpool.start(worker)
         worker2 = Worker(
-            self.createWordcloud(positiveList, "positive", "#ebf2f2")
-        )  # light blue
+            self.createWordcloud(positiveList, "positive", lightBlue)
+        )
         self.threadpool.start(worker2)
 
     def createWordcloud(self, data, prefix, colour):
         if data:
             words = " ".join(data)
             wordcloud = WordCloud(
-                background_color=colour, stopwords=stop_words, width=600, height=520
+                background_color=colour, stopwords=stop_words,
+                width=600, height=520
             ).generate(words)
+
+            posNeg = prefix + "Colour"
+            wordColour = getattr(self, posNeg)
+            wordcloud.recolor(color_func=wordColour)
 
             wordCloudImage = f"pyqt/resources/{prefix}Wordcloud.png"
             wordcloud.to_file(wordCloudImage)
@@ -158,6 +169,14 @@ class Main(QtWidgets.QMainWindow, main_window.Ui_MainWindow):
         else:
             errorImage = "pyqt/resources/error.png"
             self.MetricsDashboard.showImage(errorImage, prefix)
+
+    def negativeColour(self, word, font_size, position,  # noqa
+                       orientation, random_state=3, **kwargs):  # noqa
+        return "hsl(%d, 90%%, 40%%)" % safe_random.randint(250, 360)
+
+    def positiveColour(self, word, font_size, position,  # noqa
+                       orientation, random_state=3, **kwargs):  # noqa
+        return "hsl(%d, 90%%, 40%%)" % safe_random.randint(90, 180)
 
     def restartWindow(self):
         sys.stdout = sys.__stdout__

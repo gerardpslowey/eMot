@@ -24,8 +24,9 @@ colours = [
 
 class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
     """
-    Super class of metrics_windows since it can be changed at any time from ui files.
-    This class is extended to add functionality to the charts and wordclouds.
+    Super class of metrics_windows.
+    Class can be overwritten when converting from QT Designer UI file.
+    This extended class to add functionality to the charts and wordclouds.
     """
 
     def __init__(self, browser, filtr, *args, **kwargs):
@@ -37,14 +38,17 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
         self.stackedWidget.setCurrentWidget(self.chartPage)
         self.nextPageButton.clicked.connect(
-            lambda: self.changePage(self.chartPage2))
+            lambda: self.changePage(self.chartPage2)
+        )
         self.nextPage2Button.clicked.connect(
-            lambda: self.changePage(self.wordCloudPage))
+            lambda: self.changePage(self.wordCloudPage)
+        )
         self.previousPageButton.clicked.connect(
-            lambda: self.changePage(self.chartPage2))
+            lambda: self.changePage(self.chartPage2)
+        )
         self.previousPage2Button.clicked.connect(
-            lambda: self.changePage(self.chartPage))
-
+            lambda: self.changePage(self.chartPage)
+        )
         self.font = QFont()
         self.font.setPixelSize(20)
 
@@ -71,24 +75,31 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
         self.emotionsPerSite = emotClassify.getEmotionsPerSite()
         self.uniqueSiteCount = emotClassify.getUniqueSiteCount()
-
-        self.splitChartValues = emotClassify.getSplitChartValues()  # split chart data
-        self.emotionIntensities = emotClassify.getEmotionIntensities()  # line chart data
-        self.emotionCounts = emotClassify.getEmotionCounts()  # pie chart data
-        self.siteVisitCounts = emotClassify.getSiteVisitCounts()  # bar chart data
+        self.keys = ["neutral"]
 
         numEmotions = len(self.emotions)
-        self.keys = ["neutral"]
-        self.makePieChart()
-        self.makeLineChart()
-        self.makeSplitChart(numEmotions)
-        self.makeBarChart(numEmotions)
+        self.makePieChart(
+            emotClassify.getEmotionCounts()  # pie chart data
+        )
+        self.makeLineChart(
+            emotClassify.getEmotionIntensities()  # line chart data
+        )
+        self.makeSplitChart(
+            numEmotions,
+            emotClassify.getSplitChartValues()  # split chart data
+        )
+        self.makeBarChart(
+            numEmotions,
+            emotClassify.getSiteVisitCounts()  # bar chart data
+        )
 
-    def makeBarChart(self, numEmotions):
-        barSets = [QBarSet(site) for site in self.siteVisitCounts.keys()]
+    def makeBarChart(self, numEmotions, siteVisits):
+        maxLimit = 10 if len(siteVisits) < 10 else len(siteVisits)
+        barSets = [QBarSet(site)
+                   for site in list(siteVisits.keys())[:maxLimit]]
         series = QBarSeries()
 
-        for i, value in enumerate(self.siteVisitCounts.values()):
+        for i, value in enumerate(siteVisits.values()):
             barSets[i].append(value)
             # add number of visits to set
             series.append(barSets[i])
@@ -102,7 +113,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
         yAxis = QValueAxis()
         try:
-            largestSiteVisitCount = max(self.siteVisitCounts.values())
+            largestSiteVisitCount = max(siteVisits.values())
         except ValueError:
             largestSiteVisitCount = 1
 
@@ -120,15 +131,16 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
         self.barChart.setChart(chart)
 
-    def makeSplitChart(self, numEmotions):
+    def makeSplitChart(self, numEmotions, splitChartValues):
         # create a new QBarSet for each emotion
         barSets = [QBarSet(emotion) for emotion in self.emotions]
         series = QPercentBarSeries()
 
-        # for each website
-        for i in range(self.uniqueSiteCount):
+        # for top 10 websites
+        maxLimit = 10 if self.uniqueSiteCount < 10 else self.uniqueSiteCount
+        for i in range(maxLimit):
             # iterate through the array of emotions associated with that site
-            barStatArray = self.splitChartValues[i]
+            barStatArray = splitChartValues[i]
             for emotion in range(len(barStatArray)):
                 # add that emotion to the barset
                 barSets[emotion].append(barStatArray[emotion])
@@ -147,7 +159,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         chart.setAnimationOptions(QChart.SeriesAnimations)
 
         # categories are the website names
-        categories = list(self.emotionsPerSite.keys())
+        categories = list(self.emotionsPerSite.keys())[:maxLimit]
         # custom x axis
         axisX = QBarCategoryAxis()
         axisX.append(categories)
@@ -166,8 +178,8 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
 
         self.splitChart.setChart(chart)
 
-    def makePieChart(self):
-        pieEmotions = funcy.omit(self.emotionCounts, "neutral")
+    def makePieChart(self, emotionCounts):
+        pieEmotions = funcy.omit(emotionCounts, "neutral")
         # get the data
         series = QPieSeries()
         for i, (emotion, value) in enumerate(pieEmotions.items()):
@@ -195,13 +207,13 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         self.pieChart.setChart(chart)
         self.pieChart.setRenderHint(QPainter.Antialiasing)
 
-    def makeLineChart(self):
+    def makeLineChart(self, emotionIntensities):
         series = QLineSeries()
         series.setPointLabelsVisible(True)
         series.setPointLabelsColor(Qt.black)
         series.setPointLabelsFormat("@yPoint" + "%")
 
-        lineEmotions = funcy.omit(self.emotionIntensities, "neutral")
+        lineEmotions = funcy.omit(emotionIntensities, "neutral")
 
         for i, emotion in enumerate(lineEmotions.keys()):
             i += 0.5

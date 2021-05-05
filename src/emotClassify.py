@@ -1,4 +1,5 @@
 import copy
+import os
 import pickle
 import threading
 
@@ -14,7 +15,9 @@ class EmotClassify:
     It can be run on its own and information will print to the terminal.
     """
 
-    def __init__(self):
+    def __init__(self, test="None"):
+        if test:
+            os.chdir("..")
 
         self.emotions = [
             'anger',
