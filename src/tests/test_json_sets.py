@@ -38,7 +38,7 @@ def test_add_base_url():
     test.removeItem(baseUrl, "urlSet")
 
 
-def add_tag():
+def test_add_tag():
     tag = "p"
     test.addItem(tag, "tagSet")
     assert test.getItems()["tagSet"][-1] == "p"
