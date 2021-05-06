@@ -74,13 +74,11 @@
            </font>
           </property>
           <property name="text">
-           <string>eMot aims to provide users with insight into the material they have viewed online. This is achieved by collecting the users browsing history based on their browser choice and date filter choice. The browsers supported by eMot include Chrome, Edge, Firefox, Safari, Brave, and Opera. Each URL of the browsing history is then rendered in a lightweight browser and the textual material is scraped (extracted) from the web page.
+           <string>eMot aims to provide users with insight into the material they have viewed online. This is achieved by collecting the users browsing history based on their browser choice and date filter choice. The browsers supported by eMot include Chrome, Edge, Firefox, Safari, Brave, and Opera. Each URL of the browsing history is then rendered in a lightweight browser and the textual material is scraped (extracted) from the web page. Your browsing history is never stored at any point.
 
 
-The text from these websites are processed and classified to give you an indication of what sort of material you are reading. It is beneficial to know whether you are consuming media that has primarily angry emotions or happy emotions. Your browsing history is never stored at any point.
 
-
-Find out more at:</string>
+The text from these websites are processed and classified to give you an indication of what sort of material you are reading. It is beneficial to know whether you are consuming media that has primarily angry emotions or happy emotions. This classifier should be used as a guide and may not be 100% accurate in its results. Find out more at:</string>
           </property>
           <property name="scaledContents">
            <bool>true</bool>
