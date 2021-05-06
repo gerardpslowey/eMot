@@ -10,6 +10,7 @@ sys.path.append(str(Path(__file__).parent.parent.absolute()))
 SVC_Model = "models/svc.pkl"
 SVC_TFIDF_File = "models/svc_tfidf.pkl"
 
+
 def profile_classifier():
     model = loadFiles(SVC_Model)
     tfidf = loadFiles(SVC_TFIDF_File)
@@ -17,7 +18,7 @@ def profile_classifier():
     start_time = time.time()
     model.predict(tfidf.transform([sentence]))
     end_time = time.time()
-    print(end_time-start_time)
+    print(end_time - start_time)
 
 
 def profile_classifier_2():
@@ -27,12 +28,13 @@ def profile_classifier_2():
     start_time = time.time()
     model.predict(tfidf.transform([sentence]))
     end_time = time.time()
-    print(end_time-start_time)
+    print(end_time - start_time)
 
 
 def loadFiles(filename):
     with open(filename, "rb") as file:
         return pickle.load(file)
+
 
 if __name__ == '__main__':
     profile_classifier()
