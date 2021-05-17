@@ -94,7 +94,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         )
 
     def makeBarChart(self, numEmotions, siteVisits):
-        maxLimit = 10 if len(siteVisits) < 10 else len(siteVisits)
+        maxLimit = 10 if len(siteVisits) > 10 else len(siteVisits)
         barSets = [QBarSet(site)
                    for site in list(siteVisits.keys())[:maxLimit]]
         series = QBarSeries()
@@ -137,7 +137,7 @@ class MetricsDashboard(QMainWindow, Ui_MetricsDashboard):
         series = QPercentBarSeries()
 
         # for top 10 websites
-        maxLimit = 10 if self.uniqueSiteCount < 10 else self.uniqueSiteCount
+        maxLimit = 10 if self.uniqueSiteCount > 10 else self.uniqueSiteCount
         for i in range(maxLimit):
             # iterate through the array of emotions associated with that site
             barStatArray = splitChartValues[i]

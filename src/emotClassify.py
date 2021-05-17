@@ -15,7 +15,7 @@ class EmotClassify:
     It can be run on its own and information will print to the terminal.
     """
 
-    def __init__(self, test="None"):
+    def __init__(self, test=None):
         if test:
             os.chdir("..")
 

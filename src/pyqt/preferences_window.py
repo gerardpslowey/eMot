@@ -45,6 +45,7 @@ class Ui_Form:
         font.setPointSize(40)
         self.blacklistHeader.setFont(font)
         self.blacklistHeader.setStyleSheet("")
+        self.blacklistHeader.setAlignment(QtCore.Qt.AlignCenter)
         self.blacklistHeader.setObjectName("blacklistHeader")
         self.emptyBox_3 = QtWidgets.QLabel(Form)
         self.emptyBox_3.setGeometry(QtCore.QRect(30, 60, 491, 351))
